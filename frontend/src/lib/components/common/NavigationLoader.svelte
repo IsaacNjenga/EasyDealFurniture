@@ -7,7 +7,7 @@
 		class="fixed top-0 right-0 left-0 z-100 h-1 w-full overflow-hidden bg-primary/10 backdrop-blur-xs"
 	>
 		<div
-			class="animate-indeterminate h-full w-full origin-left bg-linear-to-r from-blue-600 via-indigo-500 to-cyan-400"
+			class="animate-indeterminate h-full w-full origin-left bg-linear-to-r from-amber-600 via-yellow-500 to-amber-400"
 		></div>
 
 		<div

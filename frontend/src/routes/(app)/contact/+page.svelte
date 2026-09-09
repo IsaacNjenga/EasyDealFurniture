@@ -1,5 +1,4 @@
 <script lang="ts">
-	import img11 from '$lib/assets/img11.jpg';
 	import StoreMap from '$lib/components/common/StoreMap.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Phone, Clock, MapPin,  } from '@lucide/svelte';
@@ -31,11 +30,11 @@
 
 <!-- Hero Section with Background Overlay -->
 <div
-	class="relative flex min-h-[40vh] w-full items-center justify-center overflow-hidden bg-background pt-20"
+	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url({img11});"
+		style="background-image: url('https://images.unsplash.com/photo-1691036561573-4b76998b60de?w=900');"
 	>
 		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
 	</div>

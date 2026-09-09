@@ -5,30 +5,39 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import herobg1 from '$lib/assets/hero-bg-1.jpg';
-	import herobg2 from '$lib/assets/hero-bg-2.jpg';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import type { Product } from '$lib/types/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import img3 from '$lib/assets/img3.jpg';
-	import img5 from '$lib/assets/img5.jpg';
-	import img6 from '$lib/assets/img6.jpg';
-	import img8 from '$lib/assets/img8.jpg';
-	import img11 from '$lib/assets/img11.jpg';
-	import img13 from '$lib/assets/img13.jpg';
 	import { toast } from 'svelte-sonner';
 	import {
 		bestSellingProducts as bestSellers,
 		freshDesignProducts as freshDesigns
 	} from '$lib/data/data';
 
-	const backgrounds = [herobg1, herobg2, img3, img6];
+	const backgrounds = [
+		'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600',
+		'https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?w=1600',
+		'https://images.unsplash.com/photo-1688578735352-9a6f2ac3b70a?w=1600',
+		'https://images.unsplash.com/photo-1681418659069-eef28d44aeab?w=1600'
+	];
 	const featuredCollection = [
-		{ img: img5, title: 'Modern Living' },
-		{ img: img8, title: 'Office Elegance' },
-		{ img: img13, title: 'Outdoor Comfort' },
-		{ img: img11, title: 'Classic Touch' }
+		{
+			img: 'https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?w=1600',
+			title: 'Modern Living'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1718220216044-006f43e3a9b1?w=1600',
+			title: 'Office Elegance'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1600210492090-a159ffa3aeaf?w=1600',
+			title: 'Outdoor Comfort'
+		},
+		{
+			img: 'https://plus.unsplash.com/premium_photo-1688125414593-391cf90f3103?w=1600',
+			title: 'Classic Touch'
+		}
 	];
 
 	let currentSlide = $state(0);
@@ -212,7 +221,7 @@
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-		style="background-image: url({img11});"
+		style="background-image: url('https://images.unsplash.com/photo-1704655295066-681e61ecca6b?w=1600');"
 	>
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>
@@ -278,7 +287,7 @@
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-		style="background-image: url({img13});"
+		style="background-image: url('https://images.unsplash.com/photo-1705909772783-64f1c22befcf?w=1600');"
 	>
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>

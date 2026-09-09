@@ -2,27 +2,38 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	// import { formatPrice } from '$lib/utils';
 	import { ArrowDown } from '@lucide/svelte';
 
-	import img from '$lib/assets/img.jpg';
-	import img3 from '$lib/assets/img3.jpg';
-	import img4 from '$lib/assets/img4.jpg';
-	import img5 from '$lib/assets/img5.jpg';
-	import img6 from '$lib/assets/img6.jpg';
-	import img8 from '$lib/assets/img8.jpg';
-	import img12 from '$lib/assets/img12.jpg';
-	import img13 from '$lib/assets/img13.jpg';
-
-	const backgrounds = [img8, img12];
+	const backgrounds = [
+		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
+		'https://images.unsplash.com/photo-1787496994477-e260648f7af4?w=1600','https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600'
+	];
 
 	const categories = [
-		{ img: img, title: 'Office Furniture' },
-		{ img: img13, title: 'Bedroom Furniture' },
-		{ img: img3, title: 'Kitchen Furniture' },
-		{ img: img4, title: 'Outdoor Furniture' },
-		{ img: img5, title: 'Living Room Furniture' },
-		{ img: img6, title: 'Second-Hand Items' }
+		{
+			img: 'https://images.unsplash.com/photo-1705909770198-7e83c24e1616?w=1600',
+			title: 'Office Furniture'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1632829401795-2745c905ac77?w=1600',
+			title: 'Bedroom Furniture'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1632583824020-937ae9564495?w=1600',
+			title: 'Kitchen Furniture'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1621506821957-1b50ab7787a4?w=1600',
+			title: 'Outdoor Furniture'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=1600',
+			title: 'Living Room Furniture'
+		},
+		{
+			img: 'https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600',
+			title: 'Second-Hand Items'
+		}
 	];
 
 	let currentSlide = $state(0);
@@ -56,9 +67,9 @@
 
 	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
-			<p class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
+			<span class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
 				Shop Now <span><ArrowDown /></span>
-			</p>
+			</span>
 		</div>
 	</div>
 </div>

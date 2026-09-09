@@ -8,7 +8,7 @@
 	import { toggleMode } from 'mode-watcher';
 	import { Search, ShoppingCart, MoonIcon, SunIcon } from '@lucide/svelte';
 
-	import icon from '$lib/assets/icon.png';
+	import icon from '$lib/assets/icon-white.png';
 
 	// Track scroll state for shrink & opacity animation
 	let isScrolled = $state(false);

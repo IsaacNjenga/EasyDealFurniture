@@ -18,10 +18,10 @@ export const navigationItems: NavigationItem[] = [
 		title: 'Contact',
 		href: '/contact'
 	},
-	{
-		title: 'FAQs',
-		href: '/faqs'
-	},
+	// {
+	// 	title: 'FAQs',
+	// 	href: '/faqs'
+	// },
 	{
 		title: 'My Wishlist',
 		href: '/wishlist'

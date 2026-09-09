@@ -46,8 +46,9 @@
 			},
 			createMarker: () => null, // Suppress default routing markers
 			addWaypoints: false,
-			draggableWaypoints: false
-			// show: false // Hide turn-by-turn instruction panel
+			draggableWaypoints: false,
+			show: false, // Prevents auto-expanding the container
+			containerClassName: 'hidden'
 		}).addTo(map);
 
 		// Fit map bounds to show full route

@@ -79,7 +79,9 @@
 		}
 	};
 </script>
-
+<svelte:head>
+    <title>Home | EasyDeal Furniture</title>
+</svelte:head>
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<!-- Carousel Background Images -->
 	{#each backgrounds as bgUrl, i (i)}

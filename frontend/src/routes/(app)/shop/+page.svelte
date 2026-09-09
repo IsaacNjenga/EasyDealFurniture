@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { ArrowDown } from '@lucide/svelte';
 
 	const backgrounds = [
 		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
@@ -51,8 +50,10 @@
 		if (intervalId) clearInterval(intervalId);
 	});
 </script>
-
-<div class="relative min-h-112 w-full overflow-hidden bg-background sm:min-h-150">
+<svelte:head>
+    <title>Shop | EasyDeal Furniture</title>
+</svelte:head>
+<div class="relative min-h-90 w-full overflow-hidden bg-background sm:min-h-150">
 	{#each backgrounds as bgUrl, i (i)}
 		{#if currentSlide === i}
 			<div
@@ -68,7 +69,7 @@
 	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
 			<span class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
-				Shop Now <span><ArrowDown /></span>
+				Shop Now 
 			</span>
 		</div>
 	</div>

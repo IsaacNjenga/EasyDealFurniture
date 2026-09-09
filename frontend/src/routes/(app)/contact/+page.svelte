@@ -27,7 +27,9 @@
 	const storeLat = -1.276502;
 	const storeLng = 36.826517;
 </script>
-
+<svelte:head>
+    <title>Contact | EasyDeal Furniture</title>
+</svelte:head>
 <!-- Hero Section with Background Overlay -->
 <div
 	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"

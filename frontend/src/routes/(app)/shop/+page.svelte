@@ -41,7 +41,7 @@
 	});
 </script>
 
-<div class="relative min-h-150 w-full overflow-hidden bg-background">
+<div class="relative min-h-112 w-full overflow-hidden bg-background sm:min-h-150">
 	{#each backgrounds as bgUrl, i (i)}
 		{#if currentSlide === i}
 			<div
@@ -56,7 +56,7 @@
 
 	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
-			<p class="mt-70 text-lg font-bold tracking-widest text-primary uppercase">
+			<p class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
 				Shop Now <span><ArrowDown /></span>
 			</p>
 		</div>
@@ -65,12 +65,12 @@
 
 <div>
 	<section class="py-12">
-		<div class="grid grid-cols-6 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+		<div class="grid grid-cols-2 gap-3 px-3 sm:grid-cols-3 lg:grid-cols-6 lg:px-0">
 			{#each categories as item (item.title)}
 				<div class="flex flex-col items-center justify-center">
 					<!-- Circle Image Container -->
 					<div
-						class="group relative flex h-42 w-42 items-center justify-center overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:border-primary hover:shadow-xl sm:h-42 sm:w-42"
+						class="group relative flex aspect-square w-full max-w-42 items-center justify-center overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:border-primary hover:shadow-xl"
 					>
 						<!-- Image with Blur Transition -->
 						<img

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button } from '$lib/components/ui/button';
 	import { ArrowRight } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import { onMount, onDestroy } from 'svelte';
@@ -7,7 +7,9 @@
 	import { cubicInOut } from 'svelte/easing';
 	import herobg1 from '$lib/assets/hero-bg-1.jpg';
 	import herobg2 from '$lib/assets/hero-bg-2.jpg';
-	import { formatPrice } from '$lib/utils';
+	import ProductCard, { type Product } from '$lib/components/common/ProductCard.svelte';
+	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import img from '$lib/assets/img.jpg';
 	import img2 from '$lib/assets/img2.jpg';
 	import img3 from '$lib/assets/img3.jpg';
@@ -21,6 +23,7 @@
 	import img11 from '$lib/assets/img11.jpg';
 	import img12 from '$lib/assets/img12.jpg';
 	import img13 from '$lib/assets/img13.jpg';
+	import { toast } from 'svelte-sonner';
 
 	const backgrounds = [herobg1, herobg2, img3, img6];
 	const featuredCollection = [
@@ -32,7 +35,7 @@
 
 	const bestSellers = [
 		{
-			img: img7,
+			img: [img7, img5],
 			name: 'Ergonomic Office Chair',
 			price: 4600,
 			discount: 10
@@ -59,7 +62,7 @@
 
 	const freshDesigns = [
 		{
-			img: img,
+			img: [img, img11],
 			name: 'Ergonomic Office Chair',
 			price: 4600,
 			discount: 10
@@ -71,7 +74,7 @@
 			discount: 0
 		},
 		{
-			img: img4,
+			img: [img4, img8],
 			name: 'Minimalist Wooden Dining Table',
 			price: 12000,
 			discount: 0
@@ -86,6 +89,7 @@
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
+	let isDetailModalOpen = $state(false);
 
 	const nextSlide = () => {
 		currentSlide = (currentSlide + 1) % backgrounds.length;
@@ -98,6 +102,29 @@
 	onDestroy(() => {
 		if (intervalId) clearInterval(intervalId);
 	});
+
+	let selectedProduct = $state<Product | null>(null);
+
+	const handleQuickView = (product: Product) => {
+		selectedProduct = product;
+		isDetailModalOpen = true;
+	};
+
+	const handleWishlistToggle = (product: Product, isWishlisted: boolean) => {
+		if (isWishlisted) {
+			toast.success(`Added ${product.name} to your wishlist.`);
+		} else {
+			toast.info(`Removed ${product.name} from wishlist.`);
+		}
+	};
+
+	const handleAddToCartToggle = (product: Product, isCarted: boolean) => {
+		if (isCarted) {
+			toast.success(`Added ${product.name} to your cart.`);
+		} else {
+			toast.info(`Removed ${product.name} from cart.`);
+		}
+	};
 </script>
 
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
@@ -116,14 +143,14 @@
 
 	<!-- Both Content Sections Displayed Simultaneously -->
 	<div
-		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-6 pt-40 pb-16 lg:px-8"
+		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-5 pt-32 pb-16 sm:px-6 sm:pt-40 lg:px-8"
 	>
 		<!-- Section 1: Top Left -->
 		<div class="flex max-w-xl flex-col gap-3 self-start text-white">
 			<p class="text-md font-bold tracking-widest text-primary uppercase">
 				MINIMAL MEETS FUNCTIONAL
 			</p>
-			<h1 class="font-roboto text-4xl leading-tight font-extrabold md:text-5xl">
+			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Modern Furniture for Every Space
 			</h1>
 			<p class="text-base text-slate-100 md:text-lg">
@@ -140,9 +167,11 @@
 		</div>
 
 		<!-- Section 2: Bottom Right -->
-		<div class="flex max-w-xl flex-col items-end gap-3 self-end text-right text-white">
+		<div
+			class="flex max-w-xl flex-col items-start gap-3 self-start text-left text-white sm:items-end sm:self-end sm:text-right"
+		>
 			<p class="text-md font-bold tracking-widest text-primary uppercase">TIMELESS ELEGANCE</p>
-			<h1 class="font-roboto text-4xl leading-tight font-extrabold md:text-5xl">
+			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Redefine Comfort and Luxury
 			</h1>
 			<p class="text-base text-slate-100 md:text-lg">
@@ -174,12 +203,12 @@
 			</h2>
 
 			<!-- Grid Container -->
-			<div class="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="mt-10 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
 				{#each featuredCollection as item (item.title)}
 					<div class="flex flex-col items-center justify-center">
 						<!-- Circle Image Container -->
 						<div
-							class="group border-0.5 relative flex h-56 w-56 items-center justify-center overflow-hidden rounded-full shadow-md transition-all duration-300 hover:border-primary hover:shadow-xl sm:h-56 sm:w-56"
+							class="group border-0.5 relative flex aspect-square w-full max-w-56 items-center justify-center overflow-hidden rounded-full shadow-md transition-all duration-300 hover:border-primary hover:shadow-xl"
 						>
 							<!-- Image with Blur Transition -->
 							<img
@@ -224,64 +253,12 @@
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each bestSellers as item (item.name)}
-					{@const hasDiscount = item.discount > 0}
-					{@const discountedPrice = hasDiscount
-						? item.price * (1 - item.discount / 100)
-						: item.price}
-
-					<div
-						class="group relative flex flex-col overflow-hidden border-slate-200/80 bg-card shadow-xs transition-all duration-300 hover:shadow-xl dark:border-slate-800"
-					>
-						<!-- Product Image & Overlay Badges -->
-						<div class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
-							<img
-								src={item.img}
-								alt={item.name}
-								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-							/>
-
-							<!-- Discount Overlay Badge -->
-							{#if hasDiscount}
-								<span
-									class="absolute top-3 left-3 bg-primary px-3 py-1 text-xs font-extrabold tracking-wider text-primary-foreground uppercase shadow-md"
-								>
-									{item.discount}% OFF
-								</span>
-							{/if}
-						</div>
-
-						<!-- Card Body -->
-						<div class="flex flex-1 flex-col justify-between p-5">
-							<div>
-								<h3
-									class="font-roboto text-base font-bold text-slate-900 transition-colors group-hover:text-primary dark:text-slate-100"
-								>
-									{item.name}
-								</h3>
-
-								<!-- Pricing Section -->
-								<div class="mt-1 flex items-baseline gap-2">
-									<span class="text-lg font-extrabold text-slate-900 dark:text-slate-100">
-										{formatPrice(discountedPrice)}
-									</span>
-									{#if hasDiscount}
-										<span class="text-sm font-medium text-slate-400 line-through">
-											{formatPrice(item.price)}
-										</span>
-									{/if}
-								</div>
-							</div>
-
-							<!-- Add to Cart Action Button -->
-							<div class="mt-2">
-								<Button
-									class="w-full gap-2 rounded-lg bg-slate-900 font-semibold text-white transition-colors hover:bg-primary hover:text-primary-foreground dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-primary dark:hover:text-primary-foreground"
-								>
-									Add to Cart
-								</Button>
-							</div>
-						</div>
-					</div>
+					<ProductCard
+						{item}
+						{handleQuickView}
+						onToggleWishlist={handleWishlistToggle}
+						onToggleAddToCart={handleAddToCartToggle}
+					/>
 				{/each}
 			</div>
 		</div>
@@ -297,13 +274,15 @@
 	</div>
 
 	<div
-		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-6 pt-40 pb-16 lg:px-8"
+		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-5 pt-32 pb-16 sm:px-6 sm:pt-40 lg:px-8"
 	>
-		<div class="flex max-w-xl flex-col items-end gap-3 self-end text-right text-white">
+		<div
+			class="flex max-w-xl flex-col items-start gap-3 self-start text-left text-white sm:items-end sm:self-end sm:text-right"
+		>
 			<p class="text-md font-bold tracking-widest text-primary uppercase">
 				PREMIUM QUALITY PRODUCTS
 			</p>
-			<h1 class="font-roboto text-4xl leading-tight font-extrabold md:text-5xl">
+			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Unique Designs For Every Space
 			</h1>
 			<p class="text-base text-slate-100 md:text-lg">
@@ -339,64 +318,12 @@
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each freshDesigns as item (item.name)}
-					{@const hasDiscount = item.discount > 0}
-					{@const discountedPrice = hasDiscount
-						? item.price * (1 - item.discount / 100)
-						: item.price}
-
-					<div
-						class="group relative flex flex-col overflow-hidden border-slate-200/80 bg-card shadow-xs transition-all duration-300 hover:shadow-xl dark:border-slate-800"
-					>
-						<!-- Product Image & Overlay Badges -->
-						<div class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
-							<img
-								src={item.img}
-								alt={item.name}
-								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-							/>
-
-							<!-- Discount Overlay Badge -->
-							{#if hasDiscount}
-								<span
-									class="absolute top-3 left-3 bg-primary px-3 py-1 text-xs font-extrabold tracking-wider text-primary-foreground uppercase shadow-md"
-								>
-									{item.discount}% OFF
-								</span>
-							{/if}
-						</div>
-
-						<!-- Card Body -->
-						<div class="flex flex-1 flex-col justify-between p-5">
-							<div>
-								<h3
-									class="font-roboto text-base font-bold text-slate-900 transition-colors group-hover:text-primary dark:text-slate-100"
-								>
-									{item.name}
-								</h3>
-
-								<!-- Pricing Section -->
-								<div class="mt-1 flex items-baseline gap-2">
-									<span class="text-lg font-extrabold text-slate-900 dark:text-slate-100">
-										{formatPrice(discountedPrice)}
-									</span>
-									{#if hasDiscount}
-										<span class="text-sm font-medium text-slate-400 line-through">
-											{formatPrice(item.price)}
-										</span>
-									{/if}
-								</div>
-							</div>
-
-							<!-- Add to Cart Action Button -->
-							<div class="mt-2">
-								<Button
-									class="w-full gap-2 rounded-lg bg-slate-900 font-semibold text-white transition-colors hover:bg-primary hover:text-primary-foreground dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-primary dark:hover:text-primary-foreground"
-								>
-									Add to Cart
-								</Button>
-							</div>
-						</div>
-					</div>
+					<ProductCard
+						{item}
+						{handleQuickView}
+						onToggleWishlist={handleWishlistToggle}
+						onToggleAddToCart={handleAddToCartToggle}
+					/>
 				{/each}
 			</div>
 		</div>
@@ -412,19 +339,37 @@
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>
 
-	<div class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center">
+	<div
+		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-5 sm:px-6"
+	>
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center text-white">
 			<p class="text-xl font-bold text-primary uppercase">Quality Designs For Modern Living</p>
-			<p class="w-110 text-base font-bold text-slate-100 md:text-lg">
+			<p class="max-w-xl text-base font-bold text-slate-100 md:text-lg">
 				Maximise your space with versatile, sleek furniture.
 				<span>Built to last, styled to impress</span>
 			</p>
 
 			<Button
-				class="border rounded-none border-white bg-transparent px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
+				class="rounded-none border border-white bg-transparent px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
 				href={resolve('/shop')}
 				>Discover now
 			</Button>
 		</div>
 	</div>
 </div>
+
+<Dialog.Root bind:open={isDetailModalOpen}>
+	<Dialog.Content
+		class="flex max-h-[95dvh] max-w-full flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-2rem)]"
+	>
+		{#if selectedProduct}
+			<div class="no-scrollbar min-h-0 overflow-y-auto">
+				<ProductDetails
+					product={selectedProduct}
+					isOpen={isDetailModalOpen}
+					onClose={() => (isDetailModalOpen = false)}
+				/>
+			</div>
+		{/if}
+	</Dialog.Content>
+</Dialog.Root>

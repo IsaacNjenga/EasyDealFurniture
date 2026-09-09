@@ -6,12 +6,13 @@
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import { navigationItems } from '$lib/config/navigation';
 	import { toggleMode } from 'mode-watcher';
-	import { Search, ShoppingCart, MoonIcon, SunIcon } from '@lucide/svelte';
+	import { Search, ShoppingCart, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
 
 	import icon from '$lib/assets/icon-white.png';
 
 	// Track scroll state for shrink & opacity animation
 	let isScrolled = $state(false);
+	let isMobileMenuOpen = $state(false);
 
 	onMount(() => {
 		const handleScroll = () => {
@@ -28,7 +29,7 @@
 		? 'bg-amber-900/30 py-2.5 shadow-md backdrop-blur-md'
 		: 'bg-transparent py-5'}"
 >
-	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8">
+	<div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
 		<!-- Left: Brand Logo & Title -->
 		<a href={resolve('/home')} class="group text-decoration-none flex items-center gap-3">
 			<div
@@ -43,7 +44,7 @@
 				/>
 			</div>
 			<span
-				class="font-sans text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 dark:text-amber-50"
+				class="hidden font-sans text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 sm:block dark:text-amber-50"
 			>
 				EasyDeal <span
 					class="-mt-1 block font-sans text-xl font-extrabold tracking-widest text-amber-600 uppercase"
@@ -53,7 +54,9 @@
 		</a>
 
 		<!-- Center: Navigation Menu -->
-		<NavigationMenu.Root class="relative z-10 flex max-w-max flex-1 items-center justify-center">
+		<NavigationMenu.Root
+			class="relative z-10 hidden max-w-max flex-1 items-center justify-center md:flex"
+		>
 			<NavigationMenu.List
 				class="group flex flex-1 list-none items-center justify-center gap-1 sm:gap-2"
 			>
@@ -85,13 +88,23 @@
 		</NavigationMenu.Root>
 
 		<!-- Right: Action Buttons (Search & Cart) -->
-		<div class="flex items-center gap-2 sm:gap-4">
+		<div class="flex shrink-0 items-center gap-1 sm:gap-4">
 			<button
 				type="button"
 				aria-label="Search"
 				class="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-amber-100/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-slate-800"
 			>
 				<Search class="h-5 w-5 stroke-[2.2]" />
+			</button>
+
+			<button
+				type="button"
+				aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+				aria-expanded={isMobileMenuOpen}
+				onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
+				class="rounded-full p-2 text-slate-700 transition-all hover:bg-amber-100/60 hover:text-amber-600 md:hidden dark:text-slate-200 dark:hover:bg-slate-800"
+			>
+				{#if isMobileMenuOpen}<X class="h-5 w-5" />{:else}<Menu class="h-5 w-5" />{/if}
 			</button>
 
 			<button
@@ -119,4 +132,26 @@
 			>
 		</div>
 	</div>
+	{#if isMobileMenuOpen}
+		<nav
+			class="border-t border-amber-900/10 bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md md:hidden"
+		>
+			<div class="mx-auto flex max-w-7xl flex-col gap-1">
+				{#each navigationItems as item (item.href)}
+					{@const href = resolve(item.href)}
+					{@const isActive =
+						page.url.pathname === item.href || page.url.pathname.startsWith(`${item.href}/`)}
+					<a
+						{href}
+						onclick={() => (isMobileMenuOpen = false)}
+						class="rounded-md px-3 py-3 text-sm font-bold tracking-wider uppercase transition-colors {isActive
+							? 'bg-amber-50 text-amber-600 dark:bg-slate-800'
+							: 'text-foreground hover:bg-muted'}"
+					>
+						{item.title}
+					</a>
+				{/each}
+			</div>
+		</nav>
+	{/if}
 </header>

@@ -7,23 +7,21 @@
 	import { cubicInOut } from 'svelte/easing';
 	import herobg1 from '$lib/assets/hero-bg-1.jpg';
 	import herobg2 from '$lib/assets/hero-bg-2.jpg';
-	import ProductCard, { type Product } from '$lib/components/common/ProductCard.svelte';
+	import ProductCard from '$lib/components/common/ProductCard.svelte';
+	import type { Product } from '$lib/types/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import img from '$lib/assets/img.jpg';
-	import img2 from '$lib/assets/img2.jpg';
 	import img3 from '$lib/assets/img3.jpg';
-	import img4 from '$lib/assets/img4.jpg';
 	import img5 from '$lib/assets/img5.jpg';
 	import img6 from '$lib/assets/img6.jpg';
-	import img7 from '$lib/assets/img7.jpg';
 	import img8 from '$lib/assets/img8.jpg';
-	import img9 from '$lib/assets/img9.jpg';
-	import img10 from '$lib/assets/img10.jpg';
 	import img11 from '$lib/assets/img11.jpg';
-	import img12 from '$lib/assets/img12.jpg';
 	import img13 from '$lib/assets/img13.jpg';
 	import { toast } from 'svelte-sonner';
+	import {
+		bestSellingProducts as bestSellers,
+		freshDesignProducts as freshDesigns
+	} from '$lib/data/data';
 
 	const backgrounds = [herobg1, herobg2, img3, img6];
 	const featuredCollection = [
@@ -31,60 +29,6 @@
 		{ img: img8, title: 'Office Elegance' },
 		{ img: img13, title: 'Outdoor Comfort' },
 		{ img: img11, title: 'Classic Touch' }
-	];
-
-	const bestSellers = [
-		{
-			img: [img7, img5],
-			name: 'Ergonomic Office Chair',
-			price: 4600,
-			discount: 10
-		},
-		{
-			img: img8,
-			name: 'Scandinavian Velvet Sofa',
-			price: 18500,
-			discount: 15
-		},
-		{
-			img: img9,
-			name: 'Minimalist Wooden Dining Table',
-			price: 12000,
-			discount: 0
-		},
-		{
-			img: img10,
-			name: 'Modern Accent Armchair',
-			price: 8900,
-			discount: 5
-		}
-	];
-
-	const freshDesigns = [
-		{
-			img: [img, img11],
-			name: 'Ergonomic Office Chair',
-			price: 4600,
-			discount: 10
-		},
-		{
-			img: img2,
-			name: 'Scandinavian Velvet Sofa',
-			price: 18500,
-			discount: 0
-		},
-		{
-			img: [img4, img8],
-			name: 'Minimalist Wooden Dining Table',
-			price: 12000,
-			discount: 0
-		},
-		{
-			img: img12,
-			name: 'Modern Accent Armchair',
-			price: 8900,
-			discount: 5
-		}
 	];
 
 	let currentSlide = $state(0);
@@ -334,7 +278,7 @@
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-		style="background-image: url({img11});"
+		style="background-image: url({img13});"
 	>
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>

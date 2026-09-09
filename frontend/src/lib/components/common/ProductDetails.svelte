@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Product } from './ProductCard.svelte';
+	import type { Product } from '$lib/types/product.types';
 	import { formatPrice } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import {
@@ -132,12 +132,6 @@
 				</p>
 
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
-					{#if product.dimensions}
-						<p><span class="font-bold text-foreground">Dimensions:</span> {product.dimensions}</p>
-					{/if}
-					{#if product.material}
-						<p><span class="font-bold text-foreground">Material:</span> {product.material}</p>
-					{/if}
 					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
 						<Check class="h-4 w-4" /> In Stock & Ready for Nairobi Delivery
 					</p>

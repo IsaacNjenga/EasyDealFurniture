@@ -4,19 +4,7 @@
 	import { formatPrice } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from '@lucide/svelte';
-
-	export type Product = {
-		id?: string;
-		img: string | string[]; // Accepts a single URL string or an array of image URLs
-		name: string;
-		price: number;
-		discount: number;
-		category?: string;
-		description?: string;
-		dimensions?: string;
-		material?: string;
-		inStock?: boolean;
-	};
+	import type { Product } from '$lib/types/product.types';
 
 	type Props = {
 		item: Product;

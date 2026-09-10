@@ -86,7 +86,7 @@
 </script>
 
 <div
-	class="group relative flex flex-col overflow-hidden rounded-md border border-slate-200/80 bg-card shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-xl dark:border-slate-800"
+	class="group relative flex flex-col overflow-hidden rounded-none border border-slate-100/20 bg-card shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-xl dark:border-slate-800"
 >
 	<!-- Product Image & Carousel Area -->
 	<div
@@ -116,7 +116,7 @@
 					type="button"
 					onclick={prevImage}
 					aria-label="Previous image"
-					class="flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs hover:bg-black"
+					class="flex h-7 w-7 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-xs hover:bg-black"
 				>
 					<ChevronLeft class="h-4 w-4" />
 				</button>
@@ -124,7 +124,7 @@
 					type="button"
 					onclick={nextImage}
 					aria-label="Next image"
-					class="flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs hover:bg-black"
+					class="flex h-7 w-7 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-xs hover:bg-black"
 				>
 					<ChevronRight class="h-4 w-4" />
 				</button>
@@ -145,7 +145,7 @@
 		<!-- Discount Badge (Top Left) -->
 		{#if hasDiscount}
 			<span
-				class="absolute top-3 left-3 z-10 rounded-full bg-primary px-2.5 py-1 text-[11px] font-extrabold tracking-wider text-primary-foreground uppercase shadow-md"
+				class="absolute top-3 left-3 z-10 rounded-md bg-primary px-2.5 py-1 text-[11px] font-extrabold tracking-wider text-primary-foreground uppercase shadow-md"
 			>
 				{item.discount}% OFF
 			</span>
@@ -208,7 +208,7 @@
 			<Button
 				variant="outline"
 				onclick={handleQuickViewClick}
-				class="w-full rounded-md border-slate-300 font-semibold text-slate-900 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary dark:hover:text-primary-foreground"
+				class="w-full rounded-none border-slate-300 font-semibold text-slate-900 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary dark:hover:text-primary-foreground"
 			>
 				View
 			</Button>

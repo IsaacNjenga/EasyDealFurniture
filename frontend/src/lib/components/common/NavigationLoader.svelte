@@ -11,7 +11,7 @@
 		></div>
 
 		<div
-			class="absolute top-0 right-0 h-full w-24 bg-linear-to-r from-transparent via-cyan-300 to-white opacity-80 blur-[2px]"
+			class="absolute top-0 right-0 h-full w-24 bg-linear-to-r from-transparent via-amber-300 to-white opacity-80 blur-[2px]"
 		></div>
 	</div>
 {/if}

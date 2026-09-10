@@ -133,7 +133,7 @@
 	};
 </script>
 
-<div class="relative h-full overflow-hidden rounded-md border border-border bg-card shadow-lg">
+<div class="relative h-auto overflow-hidden rounded-none border border-border bg-card shadow-lg">
 	<div class="absolute top-4 right-4 z-1000">
 		<Button
 			onclick={fetchAndSaveDirections}

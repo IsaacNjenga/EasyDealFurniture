@@ -5,7 +5,8 @@
 
 	const backgrounds = [
 		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
-		'https://images.unsplash.com/photo-1787496994477-e260648f7af4?w=1600','https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600'
+		'https://images.unsplash.com/photo-1787496994477-e260648f7af4?w=1600',
+		'https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600'
 	];
 
 	const categories = [
@@ -50,8 +51,9 @@
 		if (intervalId) clearInterval(intervalId);
 	});
 </script>
+
 <svelte:head>
-    <title>Shop | EasyDeal Furniture</title>
+	<title>Shop | EasyDeal Furniture</title>
 </svelte:head>
 <div class="relative min-h-90 w-full overflow-hidden bg-background sm:min-h-150">
 	{#each backgrounds as bgUrl, i (i)}
@@ -69,7 +71,7 @@
 	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
 			<span class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
-				Shop Now 
+				Shop Now
 			</span>
 		</div>
 	</div>
@@ -77,18 +79,18 @@
 
 <div>
 	<section class="py-12">
-		<div class="grid grid-cols-2 gap-3 px-3 sm:grid-cols-3 lg:grid-cols-6 lg:px-0">
+		<div class="mx-8 grid grid-cols-2 gap-1 px-2 sm:mx-4 sm:grid-cols-3 lg:grid-cols-6 lg:px-10">
 			{#each categories as item (item.title)}
 				<div class="flex flex-col items-center justify-center">
 					<!-- Circle Image Container -->
 					<div
-						class="group relative flex aspect-square w-full max-w-42 items-center justify-center overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:border-primary hover:shadow-xl"
+						class="group relative flex aspect-square w-full max-w-42 items-center justify-center overflow-hidden rounded-md shadow-md transition-all duration-300 hover:cursor-pointer hover:border-primary hover:shadow-xl"
 					>
 						<!-- Image with Blur Transition -->
 						<img
 							src={item.img}
 							alt={item.title}
-							class="h-full w-full object-cover transition-all duration-300 hover:scale-110 hover:blur-md"
+							class="h-full w-full object-cover transition-all duration-300 hover:scale-110 hover:blur-lg"
 						/>
 
 						<!-- Overlay Backdrop + Centered Title -->

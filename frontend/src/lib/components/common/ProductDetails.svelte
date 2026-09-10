@@ -55,11 +55,11 @@
 				<img
 					src={images[selectedImgIndex]}
 					alt={product.name}
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+					class="h-full w-full rounded-none object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
 				/>
 				{#if hasDiscount}
 					<span
-						class="absolute top-3 left-3 rounded-full bg-primary px-3 py-1 text-xs font-extrabold text-primary-foreground uppercase shadow-md"
+						class="absolute top-3 left-3 rounded-md bg-primary px-3 py-1 text-xs font-extrabold text-primary-foreground uppercase shadow-md"
 					>
 						{product.discount}% OFF
 					</span>
@@ -70,7 +70,7 @@
 						onclick={() =>
 							(selectedImgIndex = (selectedImgIndex - 1 + images.length) % images.length)}
 						aria-label="Previous product image"
-						class="absolute top-1/2 left-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition hover:bg-black/75 focus-visible:ring-2 focus-visible:ring-white"
+						class="absolute top-1/2 left-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition hover:bg-black/75 focus-visible:ring-2 focus-visible:ring-white"
 					>
 						<ChevronLeft class="size-4" />
 					</button>
@@ -78,7 +78,7 @@
 						type="button"
 						onclick={() => (selectedImgIndex = (selectedImgIndex + 1) % images.length)}
 						aria-label="Next product image"
-						class="absolute top-1/2 right-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition hover:bg-black/75 focus-visible:ring-2 focus-visible:ring-white"
+						class="absolute top-1/2 right-3 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition hover:bg-black/75 focus-visible:ring-2 focus-visible:ring-white"
 					>
 						<ChevronRight class="size-4" />
 					</button>
@@ -92,7 +92,7 @@
 							type="button"
 							onclick={() => (selectedImgIndex = i)}
 							aria-label={`Show image ${i + 1}`}
-							class="size-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all sm:size-16 {selectedImgIndex ===
+							class="size-14 shrink-0 overflow-hidden rounded-none border-2 transition-all sm:size-16 {selectedImgIndex ===
 							i
 								? 'border-primary'
 								: 'border-transparent opacity-60 hover:opacity-100'}"
@@ -133,7 +133,7 @@
 
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
 					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
-						<Check class="h-4 w-4" /> In Stock & Ready for Nairobi Delivery
+						<Check class="h-4 w-4" /> In Stock & Ready for delivery
 					</p>
 				</div>
 			</div>
@@ -141,7 +141,7 @@
 			<!-- Quantity & Action -->
 			<div class="mt-6 border-t border-border pt-5 sm:pt-6">
 				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-					<div class="flex h-11 w-fit items-center rounded-md border border-border">
+					<div class="flex h-10 w-fit items-center rounded-md border border-border">
 						<button
 							type="button"
 							onclick={() => (quantity = Math.max(1, quantity - 1))}
@@ -159,7 +159,7 @@
 
 					<Button
 						onclick={handleAddToCart}
-						class="flex-1 gap-2 rounded-md bg-primary font-bold text-primary-foreground hover:bg-primary/90"
+						class="flex-1 gap-2 rounded-none bg-primary font-bold text-primary-foreground hover:bg-primary/90"
 					>
 						<ShoppingCart class="h-4 w-4" />
 						Add to Cart

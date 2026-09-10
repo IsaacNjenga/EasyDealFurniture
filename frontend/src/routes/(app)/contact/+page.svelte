@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StoreMap from '$lib/components/common/StoreMap.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Phone, Clock, MapPin,  } from '@lucide/svelte';
+	import { Phone, Clock, MapPin } from '@lucide/svelte';
 
 	const contactInfo = [
 		{
@@ -27,8 +27,9 @@
 	const storeLat = -1.276502;
 	const storeLng = 36.826517;
 </script>
+
 <svelte:head>
-    <title>Contact | EasyDeal Furniture</title>
+	<title>Contact | EasyDeal Furniture</title>
 </svelte:head>
 <!-- Hero Section with Background Overlay -->
 <div
@@ -55,7 +56,7 @@
 	<section class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 		{#each contactInfo as item (item.title)}
 			<div
-				class="group flex flex-col items-center rounded-md border border-border bg-card p-8 text-center shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-xl"
+				class="group flex flex-col items-center rounded-none border border-border bg-card p-8 text-center shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-xl"
 			>
 				<div
 					class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
@@ -76,12 +77,11 @@
 			</div>
 		{/each}
 	</section>
-
 	<!-- Form & Map Side-by-Side Section -->
-	<section class="mt-20 grid grid-cols-1 gap-6 lg:grid-cols-12">
+	<section class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
 		<!-- Contact Form -->
 		<div
-			class="flex flex-col justify-between rounded-md border border-border bg-card p-8 shadow-lg lg:col-span-6"
+			class="flex flex-col justify-between rounded-none border border-border bg-card p-8 shadow-lg lg:col-span-6"
 		>
 			<div>
 				<p class="text-xs font-bold tracking-widest text-primary uppercase">Send An Email</p>

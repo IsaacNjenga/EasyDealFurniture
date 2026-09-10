@@ -14,19 +14,19 @@
 </script>
 
 <Dialog.Root bind:open
-	<Dialog.Content class="flex max-h-[95dvh] w-[calc(100%-1rem)] max-w-5xl flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-2rem)]">
+	><Dialog.Content class="flex max-h-[95vh] flex-col sm:max-w-220">
 		{#if title || description}
-			<Dialog.Header class="border-b border-border px-5 py-4 pr-12 sm:px-8 sm:py-5">
+			<Dialog.Header>
 				{#if title}<Dialog.Title>{title}</Dialog.Title>{/if}
 				{#if description}<Dialog.Description>{description}</Dialog.Description>{/if}
 			</Dialog.Header>
 		{/if}
-		<div class="no-scrollbar min-h-0 overflow-y-auto">
+		<div class="no-scrollbar overflow-y-auto px-4">
 			{@render children?.()}
 		</div>
 
 		{#if footer}
-			<Dialog.Footer class="border-t border-border px-5 py-4 sm:px-8">
+			<Dialog.Footer>
 				{@render footer()}
 			</Dialog.Footer>
 		{/if}

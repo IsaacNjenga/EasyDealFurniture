@@ -8,7 +8,8 @@
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import type { Product } from '$lib/types/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	// import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import Modal from '$lib/components/common/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import {
 		bestSellingProducts as bestSellers,
@@ -65,22 +66,23 @@
 
 	const handleWishlistToggle = (product: Product, isWishlisted: boolean) => {
 		if (isWishlisted) {
-			toast.success(`Added ${product.name} to your wishlist.`);
+			toast.success(`Added to your wishlist.`);
 		} else {
-			toast.info(`Removed ${product.name} from wishlist.`);
+			toast.error(`Removed from wishlist.`);
 		}
 	};
 
 	const handleAddToCartToggle = (product: Product, isCarted: boolean) => {
 		if (isCarted) {
-			toast.success(`Added ${product.name} to your cart.`);
+			toast.success(`Added to your cart.`);
 		} else {
-			toast.info(`Removed ${product.name} from cart.`);
+			toast.error(`Removed from cart.`);
 		}
 	};
 </script>
+
 <svelte:head>
-    <title>Home | EasyDeal Furniture</title>
+	<title>Home | EasyDeal Furniture</title>
 </svelte:head>
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<!-- Carousel Background Images -->
@@ -313,7 +315,34 @@
 	</div>
 </div>
 
-<Dialog.Root bind:open={isDetailModalOpen}>
+<Modal bind:open={isDetailModalOpen}>
+	{#if selectedProduct}
+		<div class="no-scrollbar min-h-0 overflow-y-auto">
+			<ProductDetails
+				product={selectedProduct}
+				isOpen={isDetailModalOpen}
+				onClose={() => (isDetailModalOpen = false)}
+			/>
+		</div>
+	{/if}
+	<!-- {#snippet footer()}
+		<div class="flex w-full flex-row items-center justify-end gap-2">
+			<Button
+				size="xs"
+				variant="default"
+				disabled={transferStore.items.length === 0 || isSubmitting}
+				onclick={executeTransferAction}
+				>{#if isSubmitting}
+					<Loader2Icon class="size-4 animate-spin" /> Transferring...
+				{:else}Initiate Transfer
+				{/if}</Button
+			>
+			<Dialog.Close class={buttonVariants({ variant: 'outline', size: 'xs' })}>Close</Dialog.Close>
+		</div>
+	{/snippet} -->
+</Modal>
+
+<!-- <Dialog.Root bind:open={isDetailModalOpen}>
 	<Dialog.Content
 		class="flex max-h-[95dvh] max-w-full flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-2rem)]"
 	>
@@ -327,4 +356,4 @@
 			</div>
 		{/if}
 	</Dialog.Content>
-</Dialog.Root>
+</Dialog.Root> -->

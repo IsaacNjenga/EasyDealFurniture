@@ -5,35 +5,20 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import type { Product } from '$lib/types/product.types';
+	import { actionStore } from '$lib/stores/actions.svelte';
 
 	type Props = {
 		item: Product;
-		isWishlisted?: boolean;
-		isCarted?: boolean;
-		onToggleAddToCart?: (product: Product, state: boolean) => void;
 		handleQuickView?: (product: Product) => void;
-		onToggleWishlist?: (product: Product, state: boolean) => void;
 	};
 
-	let {
-		item,
-		isWishlisted = false,
-		isCarted = false,
-		handleQuickView,
-		onToggleWishlist,
-		onToggleAddToCart
-	}: Props = $props();
+	let { item, handleQuickView }: Props = $props();
 
 	// Svelte 5 Local Reactive State initialized from props
-	let inWishlist = $state(false);
-	let inCart = $state(false);
+	let isWishlisted = $state(false);
+	let isCarted = $state(false);
 	let activeImgIndex = $state(0);
 	let isCarouselPaused = $state(false);
-
-	$effect(() => {
-		inWishlist = isWishlisted;
-		inCart = isCarted;
-	});
 
 	const images = $derived(Array.isArray(item.img) ? item.img : [item.img]);
 	const hasMultipleImages = $derived(images.length > 1);
@@ -68,17 +53,15 @@
 		activeImgIndex = (activeImgIndex - 1 + images.length) % images.length;
 	};
 
-	const handleWishlistClick = (e: MouseEvent) => {
-		e.stopPropagation();
-		inWishlist = !inWishlist;
-		onToggleWishlist?.(item, inWishlist);
-	};
+	async function toggleWishlist() {
+		isWishlisted = !isWishlisted;
+		await actionStore.handleWishlistToggle(isWishlisted);
+	}
 
-	const handleAddToCartClick = (e: MouseEvent) => {
-		e.stopPropagation();
-		inCart = !inCart;
-		onToggleAddToCart?.(item, inCart);
-	};
+	async function toggleCart() {
+		isCarted = !isCarted;
+		await actionStore.handleAddToCartToggle(isCarted);
+	}
 
 	const handleQuickViewClick = () => {
 		handleQuickView?.(item);
@@ -155,12 +138,12 @@
 		<div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
 			<button
 				type="button"
-				onclick={handleWishlistClick}
+				onclick={toggleWishlist}
 				aria-label="Add to wishlist"
 				class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md backdrop-blur-xs transition-all hover:bg-white hover:text-red-500 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-red-500"
 			>
 				<Heart
-					class="h-4 w-4 transition-colors {inWishlist
+					class="h-4 w-4 transition-colors {isWishlisted
 						? 'fill-red-500 text-red-500'
 						: 'stroke-[2.2]'}"
 				/>
@@ -168,12 +151,12 @@
 
 			<button
 				type="button"
-				onclick={handleAddToCartClick}
+				onclick={toggleCart}
 				aria-label="Add to cart"
 				class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md backdrop-blur-xs transition-all hover:bg-white hover:text-amber-500 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-amber-500"
 			>
 				<ShoppingCart
-					class="h-4 w-4 transition-colors {inCart
+					class="h-4 w-4 transition-colors {isCarted
 						? 'fill-amber-500 text-amber-500'
 						: 'stroke-1.5'}"
 				/>

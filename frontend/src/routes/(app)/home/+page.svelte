@@ -8,9 +8,7 @@
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import type { Product } from '$lib/types/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
-	// import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import Modal from '$lib/components/common/Modal.svelte';
-	import { toast } from 'svelte-sonner';
 	import {
 		bestSellingProducts as bestSellers,
 		freshDesignProducts as freshDesigns
@@ -43,7 +41,9 @@
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
+
 	let isDetailModalOpen = $state(false);
+	let selectedProduct = $state<Product | null>(null);
 
 	const nextSlide = () => {
 		currentSlide = (currentSlide + 1) % backgrounds.length;
@@ -57,27 +57,9 @@
 		if (intervalId) clearInterval(intervalId);
 	});
 
-	let selectedProduct = $state<Product | null>(null);
-
 	const handleQuickView = (product: Product) => {
 		selectedProduct = product;
 		isDetailModalOpen = true;
-	};
-
-	const handleWishlistToggle = (product: Product, isWishlisted: boolean) => {
-		if (isWishlisted) {
-			toast.success(`Added to your wishlist.`);
-		} else {
-			toast.error(`Removed from wishlist.`);
-		}
-	};
-
-	const handleAddToCartToggle = (product: Product, isCarted: boolean) => {
-		if (isCarted) {
-			toast.success(`Added to your cart.`);
-		} else {
-			toast.error(`Removed from cart.`);
-		}
 	};
 </script>
 
@@ -209,13 +191,8 @@
 
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-				{#each bestSellers as item (item.name)}
-					<ProductCard
-						{item}
-						{handleQuickView}
-						onToggleWishlist={handleWishlistToggle}
-						onToggleAddToCart={handleAddToCartToggle}
-					/>
+				{#each bestSellers as item (item._id)}
+					<ProductCard {item} {handleQuickView} />
 				{/each}
 			</div>
 		</div>
@@ -275,12 +252,7 @@
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each freshDesigns as item (item.name)}
-					<ProductCard
-						{item}
-						{handleQuickView}
-						onToggleWishlist={handleWishlistToggle}
-						onToggleAddToCart={handleAddToCartToggle}
-					/>
+					<ProductCard {item} {handleQuickView} />
 				{/each}
 			</div>
 		</div>
@@ -325,35 +297,4 @@
 			/>
 		</div>
 	{/if}
-	<!-- {#snippet footer()}
-		<div class="flex w-full flex-row items-center justify-end gap-2">
-			<Button
-				size="xs"
-				variant="default"
-				disabled={transferStore.items.length === 0 || isSubmitting}
-				onclick={executeTransferAction}
-				>{#if isSubmitting}
-					<Loader2Icon class="size-4 animate-spin" /> Transferring...
-				{:else}Initiate Transfer
-				{/if}</Button
-			>
-			<Dialog.Close class={buttonVariants({ variant: 'outline', size: 'xs' })}>Close</Dialog.Close>
-		</div>
-	{/snippet} -->
 </Modal>
-
-<!-- <Dialog.Root bind:open={isDetailModalOpen}>
-	<Dialog.Content
-		class="flex max-h-[95dvh] max-w-full flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-2rem)]"
-	>
-		{#if selectedProduct}
-			<div class="no-scrollbar min-h-0 overflow-y-auto">
-				<ProductDetails
-					product={selectedProduct}
-					isOpen={isDetailModalOpen}
-					onClose={() => (isDetailModalOpen = false)}
-				/>
-			</div>
-		{/if}
-	</Dialog.Content>
-</Dialog.Root> -->

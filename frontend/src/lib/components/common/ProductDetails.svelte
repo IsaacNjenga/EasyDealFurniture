@@ -1,27 +1,31 @@
 <script lang="ts">
 	import type { Product } from '$lib/types/product.types';
 	import { formatPrice } from '$lib/utils';
-	import Button from '$lib/components/ui/button/button.svelte';
+	// import Button from '$lib/components/ui/button/button.svelte';
 	import {
-		ShoppingCart,
+		// ShoppingCart,
 		Check,
 		Truck,
 		ShieldCheck,
 		ChevronLeft,
 		ChevronRight
 	} from '@lucide/svelte';
+	import ChatButton from '$lib/components/common/ChatButton.svelte';
 
 	type Props = {
 		product: Product | null;
 		isOpen: boolean;
-		onClose: () => void;
-		onAddToCart?: (product: Product, quantity: number) => void;
+		// onClose: () => void;
+		// onAddToCart?: (product: Product, quantity: number) => void;
 	};
 
-	let { product, isOpen, onClose, onAddToCart }: Props = $props();
+	let { product, isOpen, 
+		// onClose,
+		//  onAddToCart
+		 }: Props = $props();
 
 	let selectedImgIndex = $state(0);
-	let quantity = $state(1);
+	// let quantity = $state(1);
 
 	const images = $derived(
 		product ? (Array.isArray(product.img) ? product.img : [product.img]) : []
@@ -34,16 +38,16 @@
 	$effect(() => {
 		if (product) {
 			selectedImgIndex = 0;
-			quantity = 1;
+			// quantity = 1;
 		}
 	});
 
-	const handleAddToCart = () => {
-		if (product) {
-			onAddToCart?.(product, quantity);
-			onClose();
-		}
-	};
+	// const handleAddToCart = () => {
+	// 	if (product) {
+	// 		onAddToCart?.(product, quantity);
+	// 		onClose();
+	// 	}
+	// };
 </script>
 
 {#if isOpen && product}
@@ -141,7 +145,7 @@
 			<!-- Quantity & Action -->
 			<div class="mt-6 border-t border-border pt-5 sm:pt-6">
 				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-					<div class="flex h-10 w-fit items-center rounded-md border border-border">
+					<!-- <div class="flex h-10 w-fit items-center rounded-md border border-border">
 						<button
 							type="button"
 							onclick={() => (quantity = Math.max(1, quantity - 1))}
@@ -163,7 +167,13 @@
 					>
 						<ShoppingCart class="h-4 w-4" />
 						Add to Cart
-					</Button>
+					</Button> -->
+
+					<ChatButton
+						phoneNumber="254740900061"
+						message={`Hi EasyDeal, I'm interested in buying "${product.name}". Is it available?`}
+						label="Inquire via WhatsApp"
+					/>
 				</div>
 
 				<div class="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">

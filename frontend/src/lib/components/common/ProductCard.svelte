@@ -3,7 +3,9 @@
 	import { fade } from 'svelte/transition';
 	import { formatPrice } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from '@lucide/svelte';
+	import { Heart, 
+		// ShoppingCart,
+		 ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import type { Product } from '$lib/types/product.types';
 	import { actionStore } from '$lib/stores/actions.svelte';
 
@@ -16,7 +18,7 @@
 
 	// Svelte 5 Local Reactive State initialized from props
 	let isWishlisted = $state(false);
-	let isCarted = $state(false);
+	// let isCarted = $state(false);
 	let activeImgIndex = $state(0);
 	let isCarouselPaused = $state(false);
 
@@ -58,10 +60,10 @@
 		await actionStore.handleWishlistToggle(isWishlisted);
 	}
 
-	async function toggleCart() {
-		isCarted = !isCarted;
-		await actionStore.handleAddToCartToggle(isCarted);
-	}
+	// async function toggleCart() {
+	// 	isCarted = !isCarted;
+	// 	await actionStore.handleAddToCartToggle(isCarted);
+	// }
 
 	const handleQuickViewClick = () => {
 		handleQuickView?.(item);
@@ -149,7 +151,7 @@
 				/>
 			</button>
 
-			<button
+			<!-- <button
 				type="button"
 				onclick={toggleCart}
 				aria-label="Add to cart"
@@ -160,7 +162,7 @@
 						? 'fill-amber-500 text-amber-500'
 						: 'stroke-1.5'}"
 				/>
-			</button>
+			</button> -->
 		</div>
 	</div>
 

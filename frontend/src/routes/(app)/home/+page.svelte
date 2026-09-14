@@ -6,7 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
-	import type { Product } from '$lib/types/product.types';
+	import type { Product } from '$lib/services/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
 	import {

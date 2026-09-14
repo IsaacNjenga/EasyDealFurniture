@@ -1,4 +1,4 @@
-import type { Product } from '$lib/types/product.types';
+import type { Product } from '$lib/services/product/product.types';
 
 export const productsData: Product[] = [
 	{

@@ -4,10 +4,12 @@
 	import { cubicInOut } from 'svelte/easing';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	// import Loader from '$lib/components/common/Loader.svelte';
-	import { productsData } from '$lib/data/data';
-	import type { Product } from '$lib/types/product.types';
+	// import { productsData } from '$lib/data/data';
+	import type { Product } from '$lib/services/product/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
+	import { toast } from 'svelte-sonner';
+	import type { PageProps } from './$types';
 
 	const backgrounds = [
 		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
@@ -49,6 +51,17 @@
 		}
 	];
 
+	let { data }: PageProps = $props();
+
+	const products = $derived(data.products ?? []);
+	const error = $derived(data.error);
+
+	$effect(() => {
+		if (error) {
+			toast.error('Failed to load shops', { description: error });
+		}
+	});
+
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
 
@@ -58,8 +71,8 @@
 	// Reactive filtering using Svelte 5 $derived
 	let filteredProducts = $derived(
 		selectedCategory === 'All'
-			? productsData
-			: productsData.filter(
+			? products
+			: products.filter(
 					(p) =>
 						p.category?.toLowerCase() === selectedCategory.toLowerCase() ||
 						p.category?.toLowerCase().includes(selectedCategory.toLowerCase())
@@ -209,11 +222,7 @@
 <Modal bind:open={isDetailModalOpen}>
 	{#if selectedProduct}
 		<div class="no-scrollbar min-h-0 overflow-y-auto">
-			<ProductDetails
-				product={selectedProduct}
-				isOpen={isDetailModalOpen}
-				// onClose={() => (isDetailModalOpen = false)}
-			/>
+			<ProductDetails product={selectedProduct} isOpen={isDetailModalOpen} />
 		</div>
 	{/if}
 </Modal>

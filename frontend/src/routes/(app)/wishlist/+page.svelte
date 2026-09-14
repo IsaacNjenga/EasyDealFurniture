@@ -3,17 +3,27 @@
 	import { productsData } from '$lib/data/data';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import { resolve } from '$app/paths';
+	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
+	import type { Product } from '$lib/services/product.types';
+	import Modal from '$lib/components/common/Modal.svelte';
 
 	// Derive favorited items dynamically
 	let favoritedProducts = $derived(
 		productsData.filter((product) => wishlist.items.includes(product._id))
 	);
+
+	let selectedProduct = $state<Product | null>(null);
+	let isDetailModalOpen = $state(false);
+
+	const handleQuickView = (product: Product) => {
+		selectedProduct = product;
+		isDetailModalOpen = true;
+	};
 </script>
 
 <svelte:head>
 	<title>Wishlist | EasyDeal Furniture</title>
 </svelte:head>
-<!-- https://images.unsplash.com/photo-1762731411174-c32be7811ab3?w=1600 -->
 
 <div
 	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
@@ -36,7 +46,7 @@
 	{#if favoritedProducts.length > 0}
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each favoritedProducts as item (item._id)}
-				<ProductCard {item} />
+				<ProductCard {item} {handleQuickView} />
 			{/each}
 		</div>
 	{:else}
@@ -51,3 +61,11 @@
 		</div>
 	{/if}
 </div>
+
+<Modal bind:open={isDetailModalOpen}>
+	{#if selectedProduct}
+		<div class="no-scrollbar min-h-0 overflow-y-auto">
+			<ProductDetails product={selectedProduct} isOpen={isDetailModalOpen} />
+		</div>
+	{/if}
+</Modal>

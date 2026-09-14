@@ -6,7 +6,7 @@
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import { navigationItems } from '$lib/config/navigation';
 	import { toggleMode } from 'mode-watcher';
-	import { Search, ShoppingCart, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
+	import { Search, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
 
 	import icon from '$lib/assets/icon-white.png';
 
@@ -107,20 +107,19 @@
 				{#if isMobileMenuOpen}<X class="h-5 w-5" />{:else}<Menu class="h-5 w-5" />{/if}
 			</button>
 
-			<button
+			<!-- <button
 				type="button"
 				aria-label="Shopping Cart"
 				class="relative rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-amber-100/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-slate-800"
 			>
 				<ShoppingCart class="h-5 w-5 stroke-[2.2]" />
-				<!-- Optional Cart Badge Indicator -->
 				<span class="absolute top-1 right-1 flex h-2 w-2">
 					<span
 						class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"
 					></span>
 					<span class="relative inline-flex h-2 w-2 rounded-full bg-amber-600"></span>
 				</span>
-			</button>
+			</button> -->
 
 			<button class="cursor-pointer gap-2" onclick={toggleMode}>
 				<div class="relative flex size-4 shrink-0 items-center justify-center">

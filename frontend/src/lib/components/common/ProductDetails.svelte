@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Product } from '$lib/types/product.types';
+	import type { Product } from '$lib/services/product/product.types';
 	import { formatPrice } from '$lib/utils';
 	// import Button from '$lib/components/ui/button/button.svelte';
 	import {
@@ -28,7 +28,7 @@
 	// let quantity = $state(1);
 
 	const images = $derived(
-		product ? (Array.isArray(product.img) ? product.img : [product.img]) : []
+		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
 	);
 	const hasDiscount = $derived(product ? product.discount > 0 : false);
 	const discountedPrice = $derived(

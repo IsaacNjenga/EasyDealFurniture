@@ -9,7 +9,7 @@
 		ChevronLeft,
 		ChevronRight
 	} from '@lucide/svelte';
-	import type { Product } from '$lib/types/product.types';
+	import type { Product } from '$lib/services/product/product.types';
 	// import { actionStore } from '$lib/stores/actions.svelte';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
 
@@ -28,7 +28,7 @@
 
 	const isLiked = $derived(wishlist.isFavorited(item._id));
 
-	const images = $derived(Array.isArray(item.img) ? item.img : [item.img]);
+	const images = $derived(Array.isArray(item.image) ? item.image : [item.image]);
 	const hasMultipleImages = $derived(images.length > 1);
 	const hasDiscount = $derived(item.discount > 0);
 	const discountedPrice = $derived(

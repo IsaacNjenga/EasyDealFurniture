@@ -171,14 +171,14 @@
 
 					<ChatButton
 						phoneNumber="254740900061"
-						message={`Hi EasyDeal, I'm interested in buying "${product.name}". Is it available?`}
+						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
 						label="Inquire via WhatsApp"
 					/>
 				</div>
 
 				<div class="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">
 					<span class="flex items-center gap-1"
-						><Truck class="size-3.5 shrink-0 text-primary" /> Fast Doorstep Delivery</span
+						><Truck class="size-3.5 shrink-0 text-primary" /> Fast Delivery</span
 					>
 					<span class="flex items-center gap-1"
 						><ShieldCheck class="size-3.5 shrink-0 text-primary" /> Quality Guarantee</span

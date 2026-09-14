@@ -3,11 +3,15 @@
 	import { fade } from 'svelte/transition';
 	import { formatPrice } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Heart, 
+	import {
+		Heart,
 		// ShoppingCart,
-		 ChevronLeft, ChevronRight } from '@lucide/svelte';
+		ChevronLeft,
+		ChevronRight
+	} from '@lucide/svelte';
 	import type { Product } from '$lib/types/product.types';
-	import { actionStore } from '$lib/stores/actions.svelte';
+	// import { actionStore } from '$lib/stores/actions.svelte';
+	import { wishlist } from '$lib/stores/wishlist.svelte';
 
 	type Props = {
 		item: Product;
@@ -17,10 +21,12 @@
 	let { item, handleQuickView }: Props = $props();
 
 	// Svelte 5 Local Reactive State initialized from props
-	let isWishlisted = $state(false);
+	// let isWishlisted = $state(false);
 	// let isCarted = $state(false);
 	let activeImgIndex = $state(0);
 	let isCarouselPaused = $state(false);
+
+	const isLiked = $derived(wishlist.isFavorited(item._id));
 
 	const images = $derived(Array.isArray(item.img) ? item.img : [item.img]);
 	const hasMultipleImages = $derived(images.length > 1);
@@ -55,10 +61,10 @@
 		activeImgIndex = (activeImgIndex - 1 + images.length) % images.length;
 	};
 
-	async function toggleWishlist() {
-		isWishlisted = !isWishlisted;
-		await actionStore.handleWishlistToggle(isWishlisted);
-	}
+	// async function toggleWishlist() {
+	// 	isWishlisted = !isWishlisted;
+	// 	await actionStore.handleWishlistToggle(isWishlisted);
+	// }
 
 	// async function toggleCart() {
 	// 	isCarted = !isCarted;
@@ -140,14 +146,13 @@
 		<div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
 			<button
 				type="button"
-				onclick={toggleWishlist}
+				// onclick={toggleWishlist}
+				onclick={() => wishlist.toggleFavorite(item._id)}
 				aria-label="Add to wishlist"
 				class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md backdrop-blur-xs transition-all hover:bg-white hover:text-red-500 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-red-500"
 			>
 				<Heart
-					class="h-4 w-4 transition-colors {isWishlisted
-						? 'fill-red-500 text-red-500'
-						: 'stroke-[2.2]'}"
+					class="h-4 w-4 transition-colors {isLiked ? 'fill-red-500 text-red-500' : 'stroke-[2.2]'}"
 				/>
 			</button>
 

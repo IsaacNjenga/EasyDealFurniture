@@ -212,7 +212,7 @@
 			<ProductDetails
 				product={selectedProduct}
 				isOpen={isDetailModalOpen}
-				onClose={() => (isDetailModalOpen = false)}
+				// onClose={() => (isDetailModalOpen = false)}
 			/>
 		</div>
 	{/if}

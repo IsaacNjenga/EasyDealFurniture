@@ -31,13 +31,14 @@
 <svelte:head>
 	<title>Contact | EasyDeal Furniture</title>
 </svelte:head>
-<!-- Hero Section with Background Overlay -->
+<!-- https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?w=1600 -->
+
 <div
 	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('https://images.unsplash.com/photo-1691036561573-4b76998b60de?w=900');"
+		style="background-image: url('https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?w=1600');"
 	>
 		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
 	</div>

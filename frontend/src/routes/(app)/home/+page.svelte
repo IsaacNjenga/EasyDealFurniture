@@ -299,7 +299,7 @@
 
 <Modal bind:open={isDetailModalOpen}>
 	{#if selectedProduct}
-		<div class="no-scrollbar min-h-0 overflow-y-auto">
+		<div>
 			<ProductDetails
 				product={selectedProduct}
 				isOpen={isDetailModalOpen}

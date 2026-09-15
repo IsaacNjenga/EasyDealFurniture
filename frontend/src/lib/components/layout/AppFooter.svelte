@@ -1,7 +1,12 @@
 <script lang="ts">
-	import { MapPin, Phone, Mail, Clock, 
-        // Send
-     } from '@lucide/svelte';
+	import {
+		MapPin,
+		Phone,
+		Mail,
+		Clock,
+		Smartphone
+		// Send
+	} from '@lucide/svelte';
 	// import Button from '$lib/components/ui/button/button.svelte';
 	import { resolve } from '$app/paths';
 	// import { toast } from 'svelte-sonner';
@@ -32,7 +37,7 @@
 	// ];
 </script>
 
-<footer class="border-t border-border bg-slate-980 text-slate-200">
+<footer class="bg-slate-980 border-t border-border text-slate-200">
 	<!-- Main Footer Content -->
 	<div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 		<div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -112,12 +117,20 @@
 				<ul class="mt-4 space-y-3 text-sm text-slate-400">
 					<li class="flex items-start gap-2.5">
 						<MapPin class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-						<span>Ngara Road, Opp. Ngara Post Office, Nairobi</span>
+						<div class="flex flex-col">
+							<span>Ngara Road</span>
+							<span>Opp. Ngara Post Office, Nairobi</span>
+						</div>
 					</li>
 					<li class="flex items-center gap-2.5">
 						<Phone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
 							<a href="tel:+254118091020" class="hover:text-white">+254 118 091-020</a>
+						</div>
+					</li>
+					<li class="flex items-center gap-2.5">
+						<Smartphone class="h-4 w-4 shrink-0 text-primary" />
+						<div class="flex flex-col">
 							<a href="tel:+254720731982" class="hover:text-white">+254 720 731-982</a>
 							<a href="tel:+254793953833" class="hover:text-white">+254 793 953-833</a>
 						</div>

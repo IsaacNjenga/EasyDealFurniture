@@ -5,8 +5,8 @@
 	import {
 		// ShoppingCart,
 		Check,
-		Truck,
-		ShieldCheck,
+		// Truck,
+		// ShieldCheck,
 		ChevronLeft,
 		ChevronRight
 	} from '@lucide/svelte';
@@ -19,10 +19,12 @@
 		// onAddToCart?: (product: Product, quantity: number) => void;
 	};
 
-	let { product, isOpen, 
+	let {
+		product,
+		isOpen
 		// onClose,
 		//  onAddToCart
-		 }: Props = $props();
+	}: Props = $props();
 
 	let selectedImgIndex = $state(0);
 	// let quantity = $state(1);
@@ -51,10 +53,10 @@
 </script>
 
 {#if isOpen && product}
-	<div class="relative grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8 md:grid-cols-2">
+	<div class="relative grid grid-cols-1 gap-3 p-2 sm:gap-8 sm:p-4 md:grid-cols-2">
 		<div class="flex min-w-0 flex-col gap-3">
 			<div
-				class="group relative aspect-4/3 w-full overflow-hidden rounded-xl bg-slate-100 shadow-inner dark:bg-slate-800"
+				class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-slate-100 shadow-inner dark:bg-slate-800"
 			>
 				<img
 					src={images[selectedImgIndex]}
@@ -135,6 +137,14 @@
 						'Elevate your living space with this expertly crafted piece from EasyDeal Furniture. Modern design meets durable ergonomics.'}
 				</p>
 
+				<p class="mt-4 text-xs leading-relaxed text-muted-foreground">
+					Available Colours:
+					<span class="capitalize"
+						>{#each product.colours as color, i (color)}{color}{#if i < product.colours.length - 1},
+							{/if}{/each}</span
+					>
+				</p>
+
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
 					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
 						<Check class="h-4 w-4" /> In Stock & Ready for delivery
@@ -143,7 +153,7 @@
 			</div>
 
 			<!-- Quantity & Action -->
-			<div class="mt-6 border-t border-border pt-5 sm:pt-6">
+			<div class="mt-4 border-t border-border pt-5 sm:pt-6">
 				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
 					<!-- <div class="flex h-10 w-fit items-center rounded-md border border-border">
 						<button
@@ -176,14 +186,14 @@
 					/>
 				</div>
 
-				<div class="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+				<!-- <div class="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">
 					<span class="flex items-center gap-1"
 						><Truck class="size-3.5 shrink-0 text-primary" /> Fast Delivery</span
 					>
 					<span class="flex items-center gap-1"
 						><ShieldCheck class="size-3.5 shrink-0 text-primary" /> Quality Guarantee</span
 					>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

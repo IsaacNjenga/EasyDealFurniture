@@ -25,7 +25,7 @@
 	href={whatsappUrl}
 	target="_blank"
 	rel="noopener noreferrer"
-	class="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-[#20ba59] hover:shadow-lg focus:ring-2 focus:ring-[#25D366]/50 focus:outline-hidden active:scale-95"
+	class="inline-flex items-center gap-2 rounded-sm bg-[#20ba59] px-2 py-1.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg focus:focus:outline-hidden active:scale-95"
 >
 	<!-- WhatsApp Icon (SVG) -->
 	<svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

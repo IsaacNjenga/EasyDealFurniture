@@ -55,7 +55,7 @@
 
 		<!-- Center: Navigation Menu -->
 		<NavigationMenu.Root
-			class="relative z-10 hidden max-w-max flex-1 items-center justify-center md:flex"
+			class="relative z-10000 hidden max-w-max flex-1 items-center justify-center md:flex"
 		>
 			<NavigationMenu.List
 				class="group flex flex-1 list-none items-center justify-center gap-1 sm:gap-2"

@@ -21,7 +21,7 @@
 				{#if description}<Dialog.Description>{description}</Dialog.Description>{/if}
 			</Dialog.Header>
 		{/if}
-		<div class="no-scrollbar overflow-y-auto px-4">
+		<div class="no-scrollbar overflow-y-auto">
 			{@render children?.()}
 		</div>
 

@@ -1,15 +1,26 @@
 <script lang="ts">
 	import { wishlist } from '$lib/stores/wishlist.svelte';
-	import { productsData } from '$lib/data/data';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import { resolve } from '$app/paths';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
-	import type { Product } from '$lib/services/product.types';
+	import type { Product } from '$lib/services/product/product.types';
 	import Modal from '$lib/components/common/Modal.svelte';
+	import { toast } from 'svelte-sonner';
+	import type { PageProps } from './$types';
 
-	// Derive favorited items dynamically
+	let { data }: PageProps = $props();
+
+	const products = $derived(data.products ?? []);
+	const error = $derived(data.error);
+
+	$effect(() => {
+		if (error) {
+			toast.error('Failed to load items', { description: error });
+		}
+	});
+
 	let favoritedProducts = $derived(
-		productsData.filter((product) => wishlist.items.includes(product._id))
+		products.filter((product) => wishlist.items.includes(product._id))
 	);
 
 	let selectedProduct = $state<Product | null>(null);

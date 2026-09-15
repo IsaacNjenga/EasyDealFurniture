@@ -12,8 +12,10 @@
 		},
 		{
 			title: 'Call Us',
-			info: '+254 720 731-982',
-			info2: '+254 722 528-672',
+			info: '+254 118 091-020',
+			href: 'tel:+254118091020',
+			info2: '+254 720 731-982',
+			href2: 'tel:+254720731982',
 			icon: Phone
 		},
 		{
@@ -69,12 +71,25 @@
 					{item.title}
 				</h3>
 
-				<p class="mt-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-					{item.info}
-				</p>
-				<p class="text-xs text-muted-foreground">
-					{item.info2}
-				</p>
+				<!-- First Info Line -->
+				{#if item.href}
+					<a href={item.href} class="block text-sm text-muted-foreground hover:text-foreground">
+						{item.info}
+					</a>
+				{:else}
+					<p class="text-sm text-muted-foreground">{item.info}</p>
+				{/if}
+
+				<!-- Second Info Line -->
+				{#if item.info2}
+					{#if item.href2}
+						<a href={item.href2} class="block text-sm text-muted-foreground hover:text-foreground">
+							{item.info2}
+						</a>
+					{:else}
+						<p class="text-sm text-muted-foreground">{item.info2}</p>
+					{/if}
+				{/if}
 			</div>
 		{/each}
 	</section>

@@ -117,8 +117,9 @@
 					<li class="flex items-center gap-2.5">
 						<Phone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
+							<a href="tel:+254118091020" class="hover:text-white">+254 118 091-020</a>
 							<a href="tel:+254720731982" class="hover:text-white">+254 720 731-982</a>
-							<a href="tel:+254722528672" class="hover:text-white">+254 722 528-672</a>
+							<a href="tel:+254793953833" class="hover:text-white">+254 793 953-833</a>
 						</div>
 					</li>
 					<li class="flex items-center gap-2.5">

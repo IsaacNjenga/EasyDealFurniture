@@ -6,13 +6,11 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
-	import type { Product } from '$lib/services/product.types';
+	import type { Product } from '$lib/services/product/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
-	import {
-		bestSellingProducts as bestSellers,
-		freshDesignProducts as freshDesigns
-	} from '$lib/data/data';
+	import { toast } from 'svelte-sonner';
+	import type { PageProps } from './$types';
 
 	const backgrounds = [
 		'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600',
@@ -38,6 +36,18 @@
 			title: 'Classic Touch'
 		}
 	];
+
+	let { data }: PageProps = $props();
+
+	const bestSellers = $derived(data.bestSellers ?? []);
+	const freshDesigns = $derived(data.freshDesigns ?? []);
+	const error = $derived(data.error);
+
+	$effect(() => {
+		if (error) {
+			toast.error('Failed to load shops', { description: error });
+		}
+	});
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
@@ -293,7 +303,6 @@
 			<ProductDetails
 				product={selectedProduct}
 				isOpen={isDetailModalOpen}
-				onClose={() => (isDetailModalOpen = false)}
 			/>
 		</div>
 	{/if}

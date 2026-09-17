@@ -7,12 +7,15 @@
 	import { navigationItems } from '$lib/config/navigation';
 	import { toggleMode } from 'mode-watcher';
 	import { Search, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
+	import Modal from '$lib/components/common/Modal.svelte';
 
 	import icon from '$lib/assets/icon-white.png';
+	import SearchModal from '../common/SearchModal.svelte';
 
 	// Track scroll state for shrink & opacity animation
 	let isScrolled = $state(false);
 	let isMobileMenuOpen = $state(false);
+	let isSearchModalOpen = $state(false);
 
 	onMount(() => {
 		const handleScroll = () => {
@@ -92,6 +95,7 @@
 			<button
 				type="button"
 				aria-label="Search"
+				onclick={() => (isSearchModalOpen = true)}
 				class="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-amber-100/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-slate-800"
 			>
 				<Search class="h-5 w-5 stroke-[2.2]" />
@@ -154,3 +158,11 @@
 		</nav>
 	{/if}
 </header>
+
+<Modal bind:open={isSearchModalOpen}>
+	{#if isSearchModalOpen}
+		<div>
+			<SearchModal />
+		</div>
+	{/if}
+</Modal>

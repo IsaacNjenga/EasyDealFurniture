@@ -7,10 +7,12 @@
 		Check,
 		// Truck,
 		// ShieldCheck,
+		Tag,
 		ChevronLeft,
 		ChevronRight
 	} from '@lucide/svelte';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
+	import { Badge } from '$lib/components/ui/badge/index.js';
 
 	type Props = {
 		product: Product | null;
@@ -53,10 +55,10 @@
 </script>
 
 {#if isOpen && product}
-	<div class="relative grid grid-cols-1 gap-3 p-2 sm:gap-8 sm:p-4 md:grid-cols-2">
-		<div class="flex min-w-0 flex-col gap-3">
+	<div class="relative grid grid-cols-1 gap-3 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
+		<div class="flex h-full min-w-0 flex-col gap-3">
 			<div
-				class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-slate-100 shadow-inner dark:bg-slate-800"
+				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-slate-100 shadow-inner dark:bg-slate-800"
 			>
 				<img
 					src={images[selectedImgIndex]}
@@ -125,7 +127,7 @@
 						{formatPrice(discountedPrice)}
 					</span>
 					{#if hasDiscount}
-						<span class="text-base text-muted-foreground line-through">
+						<span class="text-base text-red-400 line-through">
 							{formatPrice(product.price)}
 						</span>
 					{/if}
@@ -180,20 +182,26 @@
 					</Button> -->
 
 					<ChatButton
-						phoneNumber="254740900061"
+						phoneNumber="254714738997"
 						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
 						label="Inquire via WhatsApp"
 					/>
 				</div>
 
-				<!-- <div class="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">
-					<span class="flex items-center gap-1"
-						><Truck class="size-3.5 shrink-0 text-primary" /> Fast Delivery</span
-					>
-					<span class="flex items-center gap-1"
-						><ShieldCheck class="size-3.5 shrink-0 text-primary" /> Quality Guarantee</span
-					>
-				</div> -->
+					<div class="mt-4">
+						<div class="flex items-center gap-1.5 text-sm font-medium text-foreground">
+							<Tag class="size-3.5 shrink-0 text-primary" />
+							<span>Tags</span>
+						</div>
+
+						<div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+							{#each product.tags as tag (tag)}
+								<Badge variant="outline" class="whitespace-nowrap">
+									{tag}
+								</Badge>
+							{/each}
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>

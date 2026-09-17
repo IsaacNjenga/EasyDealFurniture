@@ -7,6 +7,7 @@ export type Product = {
 	category?: string;
 	description?: string;
 	colours: string[];
+	tags:string[];
 	inStock?: boolean;
 	isBestSeller?: boolean;
 	isNewArrival?: boolean;

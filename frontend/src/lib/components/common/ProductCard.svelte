@@ -15,10 +15,13 @@
 
 	type Props = {
 		item: Product;
-		handleQuickView?: (product: Product) => void;
+		// handleQuickView?: (product: Product) => void;
 	};
 
-	let { item, handleQuickView }: Props = $props();
+	let {
+		item
+		// handleQuickView
+	}: Props = $props();
 
 	// Svelte 5 Local Reactive State initialized from props
 	// let isWishlisted = $state(false);
@@ -71,9 +74,9 @@
 	// 	await actionStore.handleAddToCartToggle(isCarted);
 	// }
 
-	const handleQuickViewClick = () => {
-		handleQuickView?.(item);
-	};
+	// const handleQuickViewClick = () => {
+	// 	handleQuickView?.(item);
+	// };
 </script>
 
 <div
@@ -197,7 +200,8 @@
 		<div class="mt-4">
 			<Button
 				variant="outline"
-				onclick={handleQuickViewClick}
+				// onclick={handleQuickViewClick}
+				href={`/shop/${item._id}`}
 				class="w-full rounded-none border-slate-300 font-semibold text-slate-900 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary dark:hover:text-primary-foreground"
 			>
 				View

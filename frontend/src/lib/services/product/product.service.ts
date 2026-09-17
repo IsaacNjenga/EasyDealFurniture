@@ -7,6 +7,10 @@ export const ProductService = {
 		return response.webProducts ?? [];
 	},
 
+	async get(id: string): Promise<Product> {
+		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
+	},
+
 	async getBestSelling(): Promise<Product[]> {
 		return await apiClient.get<Product[]>('/web-product/get-best-selling-product');
 	},

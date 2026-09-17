@@ -3,6 +3,9 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Phone, Clock, MapPin } from '@lucide/svelte';
 
+	let message = $state('');
+	let name = $state('');
+
 	const contactInfo = [
 		{
 			title: 'Location',
@@ -28,12 +31,22 @@
 
 	const storeLat = -1.276502;
 	const storeLng = 36.826517;
+
+	async function sendMessage(event: SubmitEvent) {
+		event.preventDefault();
+
+		const phoneNumber = '254740900061';
+		const payload = `Hi EasyDeal Furniture, my name is ${name}. ${message}`;
+
+		const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(payload)}`;
+
+		window.open(whatsappUrl, '_blank');
+	}
 </script>
 
 <svelte:head>
 	<title>Contact | EasyDeal Furniture</title>
 </svelte:head>
-<!-- https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?w=1600 -->
 
 <div
 	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
@@ -100,7 +113,7 @@
 			class="flex flex-col justify-between rounded-none border border-border bg-card p-8 shadow-lg lg:col-span-6"
 		>
 			<div>
-				<p class="text-xs font-bold tracking-widest text-primary uppercase">Send An Email</p>
+				<p class="text-xs font-bold tracking-widest text-primary uppercase">Reach Out to us</p>
 				<h2 class="mt-1 font-roboto text-3xl font-extrabold tracking-tight text-foreground">
 					Drop Us a Message
 				</h2>
@@ -110,20 +123,21 @@
 				</p>
 			</div>
 
-			<form class="mt-8 flex flex-col gap-4" onsubmit={(e) => e.preventDefault()}>
+			<form class="mt-3 flex flex-col gap-6" onsubmit={sendMessage}>
 				<div>
 					<label for="name" class="block text-xs font-bold text-foreground uppercase"
 						>Full Name</label
 					>
 					<input
 						id="name"
+						bind:value={name}
 						type="text"
 						class="mt-1.5 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required
 					/>
 				</div>
 
-				<div>
+				<!-- <div>
 					<label for="email" class="block text-xs font-bold text-foreground uppercase"
 						>Email Address</label
 					>
@@ -133,7 +147,7 @@
 						class="mt-1.5 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required
 					/>
-				</div>
+				</div> -->
 
 				<div>
 					<label for="message" class="block text-xs font-bold text-foreground uppercase"
@@ -142,6 +156,7 @@
 					<textarea
 						id="message"
 						rows="4"
+						bind:value={message}
 						placeholder="Tell us what you're looking for..."
 						class="mt-1.5 w-full resize-none rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required></textarea>

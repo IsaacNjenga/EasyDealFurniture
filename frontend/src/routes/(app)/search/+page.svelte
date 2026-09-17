@@ -6,7 +6,7 @@
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
 	import Loader from '$lib/components/common/Loader.svelte';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
+	// import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	let searchTerm = $state('');
 
@@ -36,7 +36,7 @@
 	<title>Search | EasyDeal Furniture</title>
 </svelte:head>
 <div
-	class="relative flex min-h-90 w-full items-center justify-center overflow-hidden bg-background pt-20"
+	class="relative flex min-h-110 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
@@ -61,12 +61,12 @@
 				<Loader size="sm" />
 			</div>
 		{:else}
-			<Separator class="mb-4" />
+			<!-- <Separator class="mb-4" /> -->
 			{#if searchTerm}
 				<div class="mb-2 text-sm text-muted-foreground">
 					Showing results for <b>"{searchTerm}"</b>
 				</div>
-			{/if}
+		
 			<section class="px-4 pb-16">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					{#if filteredProducts.length > 0}
@@ -81,9 +81,9 @@
 								No products found in "{searchTerm}".
 							</p>
 						</div>
-					{/if}
+					{/if}	
 				</div>
-			</section>
+			</section>{/if}
 		{/if}
 	</div>
 </div>

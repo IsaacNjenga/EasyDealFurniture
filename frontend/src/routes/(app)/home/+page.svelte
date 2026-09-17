@@ -92,7 +92,7 @@
 
 	<!-- Both Content Sections Displayed Simultaneously -->
 	<div
-		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-5 pt-32 pb-16 sm:px-6 sm:pt-40 lg:px-8"
+		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-5 pt-32 pb-16 sm:px-6 sm:pt-28 lg:px-8"
 	>
 		<!-- Section 1: Top Left -->
 		<div class="flex max-w-xl flex-col gap-3 self-start text-white">
@@ -116,9 +116,7 @@
 		</div>
 
 		<!-- Section 2: Bottom Right -->
-		<div
-			class="flex max-w-xl flex-col items-start gap-3 self-start text-left text-white sm:items-end sm:self-end sm:text-right"
-		>
+		<div class="flex max-w-xl flex-col items-end self-end text-right text-white sm:mt-10">
 			<p class="text-md font-bold tracking-widest text-primary uppercase">TIMELESS ELEGANCE</p>
 			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Redefine Comfort and Luxury
@@ -300,10 +298,7 @@
 <Modal bind:open={isDetailModalOpen}>
 	{#if selectedProduct}
 		<div>
-			<ProductDetails
-				product={selectedProduct}
-				isOpen={isDetailModalOpen}
-			/>
+			<ProductDetails product={selectedProduct} isOpen={isDetailModalOpen} />
 		</div>
 	{/if}
 </Modal>

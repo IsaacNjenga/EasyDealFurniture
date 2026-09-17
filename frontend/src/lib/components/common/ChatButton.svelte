@@ -14,7 +14,6 @@
 		label = 'Chat on WhatsApp'
 	}: Props = $props();
 
-	// Clean phone number (strips spaces, dashes, and '+' signs if present)
 	const cleanNumber = $derived(phoneNumber.replace(/[^0-9]/g, ''));
 
 	// Build encoded deep link URL

@@ -7,8 +7,7 @@
 		Smartphone
 		// Send
 	} from '@lucide/svelte';
-	// import Button from '$lib/components/ui/button/button.svelte';
-	import { resolve } from '$app/paths';
+	import Button from '$lib/components/ui/button/button.svelte';
 	// import { toast } from 'svelte-sonner';
 
 	// let newsletterEmail = $state('');
@@ -80,15 +79,16 @@
 			<!-- Column 2: Quick Links -->
 			<div>
 				<h3 class="text-xs font-extrabold tracking-widest text-primary uppercase">Quick Links</h3>
-				<ul class="mt-4 space-y-2.5 text-sm">
+				<ul class="mt-1 text-sm">
 					{#each quickLinks as link (link.name)}
 						<li>
-							<a
-								href={resolve(link.href)}
-								class="text-slate-400 transition-colors hover:text-white"
+							<Button
+								variant="ghost"
+								href={link.href}
+								class="text-slate-400 transition-colors  hover:text-white "
 							>
 								{link.name}
-							</a>
+							</Button>
 						</li>
 					{/each}
 				</ul>

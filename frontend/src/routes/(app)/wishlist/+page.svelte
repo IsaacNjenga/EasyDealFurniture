@@ -25,11 +25,6 @@
 
 	let selectedProduct = $state<Product | null>(null);
 	let isDetailModalOpen = $state(false);
-
-	const handleQuickView = (product: Product) => {
-		selectedProduct = product;
-		isDetailModalOpen = true;
-	};
 </script>
 
 <svelte:head>
@@ -57,7 +52,7 @@
 	{#if favoritedProducts.length > 0}
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each favoritedProducts as item (item._id)}
-				<ProductCard {item} {handleQuickView} />
+				<ProductCard {item} />
 			{/each}
 		</div>
 	{:else}

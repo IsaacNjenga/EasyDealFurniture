@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { formatPrice } from '$lib/utils';
-	import { Tag, ChevronLeft, ChevronRight, ArrowLeft } from '@lucide/svelte';
+	import { Tag, ChevronLeft, ChevronRight,  } from '@lucide/svelte';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { toast } from 'svelte-sonner';
-	import { resolve } from '$app/paths';
 
 	let { data }: PageProps = $props();
 
@@ -56,23 +55,14 @@
 </svelte:head>
 
 <main class="container mx-auto max-w-6xl px-4 py-6 sm:py-10">
-	<!-- Back Navigation -->
-	<div class="mb-6">
-		<a
-			href={resolve("/shop")}
-			class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-		>
-			<ArrowLeft class="size-4" />
-			Back to products
-		</a>
-	</div>
+	<div class="relative min-h-20 w-full overflow-hidden bg-background sm:min-h-20"></div>
 
 	{#if product}
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
 			<!-- Media Section -->
 			<div class="flex h-full min-w-0 flex-col gap-4">
 				<div
-					class="group relative aspect-4/3 w-full overflow-hidden rounded-lg bg-slate-100 shadow-inner dark:bg-slate-800 md:aspect-square"
+					class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-slate-100 shadow-inner md:aspect-square dark:bg-slate-800"
 				>
 					<img
 						src={images[selectedImgIndex]}
@@ -134,13 +124,15 @@
 						<span class="text-xs font-bold tracking-widest text-primary uppercase">
 							{product.category || 'Furniture'}
 						</span>
-						<h1 class="mt-1 font-roboto text-2xl font-extrabold text-foreground sm:text-3xl lg:text-4xl">
+						<h1
+							class="mt-1 font-roboto text-2xl font-extrabold text-foreground sm:text-3xl lg:text-4xl"
+						>
 							{product.name}
 						</h1>
 					</div>
 
 					<!-- Pricing -->
-					<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-border pb-4">
+					<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
 						<span class="text-3xl font-black text-foreground sm:text-4xl">
 							{formatPrice(discountedPrice)}
 						</span>
@@ -190,7 +182,7 @@
 				</div>
 
 				<!-- Call to Action -->
-				<div class="mt-8 border-t border-border pt-6">
+				<div class="mt-2 border-t border-border pt-4">
 					<ChatButton
 						phoneNumber="254714738997"
 						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}

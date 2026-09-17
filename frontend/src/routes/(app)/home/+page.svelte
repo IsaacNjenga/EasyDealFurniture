@@ -66,11 +66,6 @@
 	onDestroy(() => {
 		if (intervalId) clearInterval(intervalId);
 	});
-
-	const handleQuickView = (product: Product) => {
-		selectedProduct = product;
-		isDetailModalOpen = true;
-	};
 </script>
 
 <svelte:head>
@@ -200,7 +195,7 @@
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each bestSellers as item (item._id)}
-					<ProductCard {item} {handleQuickView} />
+					<ProductCard {item} />
 				{/each}
 			</div>
 		</div>
@@ -260,7 +255,7 @@
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each freshDesigns as item (item.name)}
-					<ProductCard {item} {handleQuickView} />
+					<ProductCard {item} />
 				{/each}
 			</div>
 		</div>

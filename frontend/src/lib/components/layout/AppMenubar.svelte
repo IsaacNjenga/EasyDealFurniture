@@ -9,10 +9,10 @@
 	import { Search, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
 
+	import { Button } from '$lib/components/ui/button/index.js';
 	import icon from '$lib/assets/icon-white.png';
-	import SearchModal from '../common/SearchModal.svelte';
+	import SearchModal from '../common/Search.svelte';
 
-	// Track scroll state for shrink & opacity animation
 	let isScrolled = $state(false);
 	let isMobileMenuOpen = $state(false);
 	let isSearchModalOpen = $state(false);
@@ -92,14 +92,15 @@
 
 		<!-- Right: Action Buttons (Search & Cart) -->
 		<div class="flex shrink-0 items-center gap-1 sm:gap-4">
-			<button
-				type="button"
+			<Button
+				href="/search"
 				aria-label="Search"
-				onclick={() => (isSearchModalOpen = true)}
+				variant="ghost"
+				// onclick={() => (isSearchModalOpen = true)}
 				class="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-amber-100/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-slate-800"
 			>
 				<Search class="h-5 w-5 stroke-[2.2]" />
-			</button>
+			</Button>
 
 			<button
 				type="button"

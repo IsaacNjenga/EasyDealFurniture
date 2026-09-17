@@ -4,7 +4,6 @@
 	// import Button from '$lib/components/ui/button/button.svelte';
 	import {
 		// ShoppingCart,
-		Check,
 		// Truck,
 		// ShieldCheck,
 		Tag,
@@ -55,7 +54,7 @@
 </script>
 
 {#if isOpen && product}
-	<div class="relative grid grid-cols-1 gap-3 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
+	<div class="relative grid grid-cols-1 gap-2 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
 		<div class="flex h-full min-w-0 flex-col gap-3">
 			<div
 				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-slate-100 shadow-inner dark:bg-slate-800"
@@ -63,7 +62,7 @@
 				<img
 					src={images[selectedImgIndex]}
 					alt={product.name}
-					class="h-full w-full rounded-none object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+					class="h-full w-full rounded-none object-cover transition-transform duration-600 group-hover:scale-105 motion-reduce:transition-none"
 				/>
 				{#if hasDiscount}
 					<span
@@ -94,13 +93,13 @@
 			</div>
 
 			{#if images.length > 1}
-				<div class="flex gap-2 overflow-x-auto pb-1" aria-label="Product images">
+				<div class="flex gap-2 overflow-x-none pb-1" aria-label="Product images">
 					{#each images as img, i (img)}
 						<button
 							type="button"
 							onclick={() => (selectedImgIndex = i)}
 							aria-label={`Show image ${i + 1}`}
-							class="size-14 shrink-0 overflow-hidden rounded-none border-2 transition-all sm:size-16 {selectedImgIndex ===
+							class="size-12 shrink-0 overflow-hidden rounded-none border-2 transition-all sm:size-12 {selectedImgIndex ===
 							i
 								? 'border-primary'
 								: 'border-transparent opacity-60 hover:opacity-100'}"
@@ -139,6 +138,20 @@
 						'Elevate your living space with this expertly crafted piece from EasyDeal Furniture. Modern design meets durable ergonomics.'}
 				</p>
 
+				<div class="mt-4 flex flex-wrap items-center gap-2">
+					<div class="flex items-center gap-1.5 text-sm font-medium text-foreground">
+						<Tag class="size-3.5 shrink-0 text-primary" />
+					</div>
+
+					<div class=" flex flex-wrap items-center gap-2 text-xs">
+						{#each product.tags as tag (tag)}
+							<Badge variant="outline" class="whitespace-nowrap">
+								{tag}
+							</Badge>
+						{/each}
+					</div>
+				</div>
+
 				<p class="mt-4 text-xs leading-relaxed text-muted-foreground">
 					Available Colours:
 					<span class="capitalize"
@@ -149,14 +162,14 @@
 
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
 					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
-						<Check class="h-4 w-4" /> In Stock & Ready for delivery
+						In Stock & Ready for delivery
 					</p>
 				</div>
 			</div>
 
 			<!-- Quantity & Action -->
 			<div class="mt-4 border-t border-border pt-5 sm:pt-6">
-				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+				<div class="flex-end flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
 					<!-- <div class="flex h-10 w-fit items-center rounded-md border border-border">
 						<button
 							type="button"
@@ -187,21 +200,6 @@
 						label="Inquire via WhatsApp"
 					/>
 				</div>
-
-					<div class="mt-4">
-						<div class="flex items-center gap-1.5 text-sm font-medium text-foreground">
-							<Tag class="size-3.5 shrink-0 text-primary" />
-							<span>Tags</span>
-						</div>
-
-						<div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
-							{#each product.tags as tag (tag)}
-								<Badge variant="outline" class="whitespace-nowrap">
-									{tag}
-								</Badge>
-							{/each}
-						</div>
-					</div>
 			</div>
 		</div>
 	</div>

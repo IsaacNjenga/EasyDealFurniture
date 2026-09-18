@@ -11,6 +11,9 @@ export const ProductService = {
 		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
 	},
 
+	async search(query: string): Promise<Product[]> {
+		return await apiClient.get<Product[]>(`/web-product/search?query=${encodeURIComponent(query)}`);
+	},
 	async getBestSelling(): Promise<Product[]> {
 		return await apiClient.get<Product[]>('/web-product/get-best-selling-product');
 	},

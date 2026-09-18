@@ -1,0 +1,1 @@
+function e(e){return e<.5?4*e*e*e:.5*(2*e-2)**3+1}export{e as t};

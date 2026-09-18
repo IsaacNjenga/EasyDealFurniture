@@ -93,7 +93,7 @@
 			</div>
 
 			{#if images.length > 1}
-				<div class="flex gap-2 overflow-x-none pb-1" aria-label="Product images">
+				<div class="overflow-x-none flex gap-2 pb-1" aria-label="Product images">
 					{#each images as img, i (img)}
 						<button
 							type="button"
@@ -145,7 +145,7 @@
 
 					<div class=" flex flex-wrap items-center gap-2 text-xs">
 						{#each product.tags as tag (tag)}
-							<Badge variant="outline" class="whitespace-nowrap">
+							<Badge variant="outline" class="cursor-pointer whitespace-nowrap">
 								{tag}
 							</Badge>
 						{/each}

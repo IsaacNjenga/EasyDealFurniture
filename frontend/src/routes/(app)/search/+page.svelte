@@ -11,6 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import { SvelteURL } from 'svelte/reactivity';
 
 	let searchTerm = $state(page.url.searchParams.get('query') ?? '');
 	let isSearching = $state(false);
@@ -56,7 +57,7 @@
 		isSearching = true;
 
 		debounceTimer = setTimeout(() => {
-			const searchUrl = new URL(page.url);
+			const searchUrl = new SvelteURL(page.url);
 			searchUrl.pathname = resolve('/search');
 			searchUrl.searchParams.set('query', query);
 			goto(searchUrl, { replaceState: true, keepFocus: true, noScroll: true });

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { formatPrice } from '$lib/utils';
-	import { Tag, ChevronLeft, ChevronRight,  } from '@lucide/svelte';
+	import { Tag, ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
 	import { Badge } from '$lib/components/ui/badge/index.js';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { toast } from 'svelte-sonner';
 
 	let { data }: PageProps = $props();
@@ -155,7 +157,11 @@
 							<Tag class="size-4 text-primary" />
 							<div class="flex flex-wrap items-center gap-1.5">
 								{#each product.tags as tag (tag)}
-									<Badge variant="outline" class="whitespace-nowrap">
+									<Badge
+										variant="outline"
+										class="cursor-pointer whitespace-nowrap"
+										onclick={() => goto(resolve(`/search?query=${tag}`))}
+									>
 										{tag}
 									</Badge>
 								{/each}

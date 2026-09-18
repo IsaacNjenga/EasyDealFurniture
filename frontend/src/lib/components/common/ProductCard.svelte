@@ -80,11 +80,11 @@
 </script>
 
 <div
-	class="group relative flex flex-col overflow-hidden rounded-none border border-slate-100/20 bg-card shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-xl dark:border-slate-800"
+	class="group relative flex flex-col overflow-hidden rounded-none border border-border bg-card shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-xl"
 >
 	<!-- Product Image & Carousel Area -->
 	<div
-		class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 dark:bg-slate-900"
+		class="relative aspect-4/3 w-full overflow-hidden bg-muted"
 		role="group"
 		aria-label={`${item.name} image carousel`}
 		onmouseenter={() => (isCarouselPaused = true)}
@@ -152,7 +152,7 @@
 				// onclick={toggleWishlist}
 				onclick={() => wishlist.toggleFavorite(item._id)}
 				aria-label="Add to wishlist"
-				class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md backdrop-blur-xs transition-all hover:bg-white hover:text-red-500 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-red-500"
+				class="flex h-7 w-7 items-center justify-center rounded-full bg-card/90 text-foreground shadow-md backdrop-blur-xs transition-all hover:bg-card hover:text-red-500"
 			>
 				<Heart
 					class="h-4 w-4 transition-colors {isLiked ? 'fill-red-500 text-red-500' : 'stroke-[2.2]'}"
@@ -163,7 +163,7 @@
 				type="button"
 				onclick={toggleCart}
 				aria-label="Add to cart"
-				class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md backdrop-blur-xs transition-all hover:bg-white hover:text-amber-500 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-amber-500"
+				class="flex h-7 w-7 items-center justify-center rounded-full bg-card/90 text-foreground shadow-md backdrop-blur-xs transition-all hover:bg-card hover:text-amber-500"
 			>
 				<ShoppingCart
 					class="h-4 w-4 transition-colors {isCarted
@@ -178,18 +178,18 @@
 	<div class="flex flex-1 flex-col justify-between p-5">
 		<div>
 			<h3
-				class="line-clamp-1 font-roboto text-base font-bold text-slate-900 transition-colors group-hover:text-primary dark:text-slate-100"
+				class="line-clamp-1 font-roboto text-base font-bold text-foreground transition-colors group-hover:text-primary"
 			>
 				{item.name}
 			</h3>
 
 			<!-- Pricing Section -->
 			<div class="mt-2 flex items-baseline gap-2">
-				<span class="text-lg font-extrabold text-slate-900 dark:text-slate-100">
+				<span class="text-lg font-extrabold text-foreground">
 					{formatPrice(discountedPrice)}
 				</span>
 				{#if hasDiscount}
-					<span class="text-sm font-medium text-slate-400 line-through">
+					<span class="text-sm font-medium text-muted-foreground line-through">
 						{formatPrice(item.price)}
 					</span>
 				{/if}
@@ -202,7 +202,7 @@
 				variant="outline"
 				// onclick={handleQuickViewClick}
 				href={`/shop/${item._id}`}
-				class="w-full rounded-none border-slate-300 font-semibold text-slate-900 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary dark:hover:text-primary-foreground"
+				class="w-full rounded-none border-border font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
 				View
 			</Button>

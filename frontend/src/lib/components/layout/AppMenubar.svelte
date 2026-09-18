@@ -29,8 +29,8 @@
 
 <header
 	class="w-full transition-all duration-300 ease-in-out {isScrolled
-		? 'bg-amber-900/30 py-2.5 shadow-md backdrop-blur-md'
-		: 'bg-transparent py-5'}"
+		? 'border-b border-border/70 bg-background/90 py-2.5 shadow-md backdrop-blur-md'
+		: 'border-b border-transparent bg-transparent py-5'}"
 >
 	<div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
 		<!-- Left: Brand Logo & Title -->
@@ -47,10 +47,10 @@
 				/>
 			</div>
 			<span
-				class="hidden font-sans text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-amber-600 sm:block dark:text-amber-50"
+				class="hidden font-sans text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary sm:block"
 			>
 				EasyDeal <span
-					class="-mt-1 block font-sans text-xl font-extrabold tracking-widest text-amber-600 uppercase"
+					class="-mt-1 block font-sans text-xl font-extrabold tracking-widest text-primary uppercase"
 					>Furniture</span
 				>
 			</span>
@@ -76,7 +76,7 @@
 								class="relative inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-bold tracking-wider uppercase transition-all duration-200 ease-in-out hover:text-amber-600
                                 {isActive
 									? 'font-extrabold text-amber-600'
-									: 'text-slate-800 hover:bg-amber-50/50 dark:text-slate-200 dark:hover:bg-slate-800/50'}"
+									: 'text-foreground hover:bg-accent'}"
 							>
 								<span>{item.title}</span>
 								{#if isActive}
@@ -97,7 +97,7 @@
 				aria-label="Search"
 				variant="ghost"
 				// onclick={() => (isSearchModalOpen = true)}
-				class="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-amber-100/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-slate-800"
+				class="rounded-full p-2 text-foreground transition-all duration-200 hover:bg-accent hover:text-primary"
 			>
 				<Search class="h-5 w-5 stroke-[2.2]" />
 			</Button>
@@ -107,7 +107,7 @@
 				aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				aria-expanded={isMobileMenuOpen}
 				onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
-				class="rounded-full p-2 text-slate-700 transition-all hover:bg-amber-100/60 hover:text-amber-600 md:hidden dark:text-slate-200 dark:hover:bg-slate-800"
+				class="rounded-full p-2 text-foreground transition-all hover:bg-accent hover:text-primary md:hidden"
 			>
 				{#if isMobileMenuOpen}<X class="h-5 w-5" />{:else}<Menu class="h-5 w-5" />{/if}
 			</button>
@@ -138,7 +138,7 @@
 	</div>
 	{#if isMobileMenuOpen}
 		<nav
-			class="border-t border-amber-900/10 bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md md:hidden"
+			class="border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md md:hidden"
 		>
 			<div class="mx-auto flex max-w-7xl flex-col gap-1">
 				{#each navigationItems as item (item.href)}
@@ -149,7 +149,7 @@
 						{href}
 						onclick={() => (isMobileMenuOpen = false)}
 						class="rounded-md px-3 py-3 text-sm font-bold tracking-wider uppercase transition-colors {isActive
-							? 'bg-amber-50 text-amber-600 dark:bg-slate-800'
+							? 'bg-accent text-primary'
 							: 'text-foreground hover:bg-muted'}"
 					>
 						{item.title}

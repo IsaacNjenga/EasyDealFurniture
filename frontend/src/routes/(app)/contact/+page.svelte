@@ -46,6 +46,10 @@
 
 <svelte:head>
 	<title>Contact | EasyDeal Furniture</title>
+	<meta
+		name="description"
+		content="Contact EasyDeal Furniture in Nairobi for showroom visits, custom furniture, delivery, pricing, and directions."
+	/>
 </svelte:head>
 
 <div
@@ -59,7 +63,7 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<p class="text-lg font-extrabold tracking-widest text-primary uppercase">Get In Touch</p>
+		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Get In Touch</h1>
 		<p class="mt-4 text-base text-slate-200 sm:text-lg">
 			Have questions about custom pieces, delivery, or pricing? Reach out to our team or visit our
 			showroom.
@@ -164,7 +168,7 @@
 
 				<Button
 					type="submit"
-					class="mt-2 gap-2 rounded-lg bg-black py-6 text-sm font-bold text-white shadow-md hover:bg-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-primary"
+					class="mt-2 gap-2 rounded-lg bg-primary py-6 text-sm font-bold text-primary-foreground shadow-md hover:bg-primary/90"
 				>
 					Send
 				</Button>

@@ -138,7 +138,7 @@
 		<Button
 			onclick={fetchAndSaveDirections}
 			disabled={isLocating}
-			class="gap-2 rounded-full bg-slate-900 font-semibold text-white shadow-md hover:bg-primary hover:text-primary-foreground dark:bg-slate-100 dark:text-slate-900"
+			class="gap-2 rounded-full bg-foreground font-semibold text-background shadow-md hover:bg-primary hover:text-primary-foreground"
 		>
 			<Navigation class="h-4 w-4 {isLocating ? 'animate-spin' : ''}" />
 			{isLocating

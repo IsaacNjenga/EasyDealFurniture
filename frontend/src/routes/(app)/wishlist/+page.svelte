@@ -29,6 +29,11 @@
 
 <svelte:head>
 	<title>Wishlist | EasyDeal Furniture</title>
+	<meta
+		name="description"
+		content="Review your saved EasyDeal Furniture favorites and continue browsing furniture in Nairobi."
+	/>
+	<meta name="robots" content="noindex, follow" />
 </svelte:head>
 
 <div
@@ -42,9 +47,9 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<p class="text-lg font-extrabold tracking-widest text-primary uppercase">
+		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
 			Your Saved Favorites
-		</p>
+		</h1>
 	</div>
 </div>
 

@@ -57,7 +57,7 @@
 	<div class="relative grid grid-cols-1 gap-2 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
 		<div class="flex h-full min-w-0 flex-col gap-3">
 			<div
-				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-slate-100 shadow-inner dark:bg-slate-800"
+				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-muted shadow-inner"
 			>
 				<img
 					src={images[selectedImgIndex]}

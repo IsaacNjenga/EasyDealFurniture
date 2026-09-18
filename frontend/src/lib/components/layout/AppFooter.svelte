@@ -36,18 +36,18 @@
 	// ];
 </script>
 
-<footer class="bg-slate-980 border-t border-border text-slate-200">
+<footer class="border-t border-border bg-card text-foreground">
 	<!-- Main Footer Content -->
 	<div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 		<div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
 			<!-- Column 1: Brand Info -->
 			<div class="lg:col-span-2">
 				<div class="flex items-center gap-2">
-					<span class="font-sans text-2xl font-black tracking-tight text-white">
+					<span class="font-sans text-2xl font-black tracking-tight text-foreground">
 						EASYDEAL <span class="text-primary">FURNITURE</span>
 					</span>
 				</div>
-				<p class="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
+				<p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
 					Crafting premium ergonomic office chairs, velvet living room sets, and handcrafted dining
 					tables in Nairobi. Quality furniture engineered for comfort and modern aesthetic.
 				</p>
@@ -85,7 +85,7 @@
 							<Button
 								variant="ghost"
 								href={link.href}
-								class="text-slate-400 transition-colors  hover:text-white "
+								class="text-muted-foreground transition-colors hover:text-foreground"
 							>
 								{link.name}
 							</Button>
@@ -114,7 +114,7 @@
 			<!-- Column 4: Contact & Store Details -->
 			<div>
 				<h3 class="text-xs font-extrabold tracking-widest text-primary uppercase">Showroom Info</h3>
-				<ul class="mt-4 space-y-3 text-sm text-slate-400">
+				<ul class="mt-4 space-y-3 text-sm text-muted-foreground">
 					<li class="flex items-start gap-2.5">
 						<MapPin class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
@@ -125,27 +125,27 @@
 					<li class="flex items-center gap-2.5">
 						<Phone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
-							<a href="tel:+254118091020" class="hover:text-white">+254 118 091-020</a>
+							<a href="tel:+254118091020" class="hover:text-foreground">+254 118 091-020</a>
 						</div>
 					</li>
 					<li class="flex items-center gap-2.5">
 						<Smartphone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
-							<a href="tel:+254720731982" class="hover:text-white">+254 720 731-982</a>
-							<a href="tel:+254793953833" class="hover:text-white">+254 793 953-833</a>
+							<a href="tel:+254720731982" class="hover:text-foreground">+254 720 731-982</a>
+							<a href="tel:+254793953833" class="hover:text-foreground">+254 793 953-833</a>
 						</div>
 					</li>
 					<li class="flex items-center gap-2.5">
 						<Mail class="h-4 w-4 shrink-0 text-primary" />
-						<a href="mailto:info@easydealfurniture.co.ke" class="hover:text-white"
+						<a href="mailto:info@easydealfurniture.co.ke" class="hover:text-foreground"
 							>info@easydealfurniture.co.ke</a
 						>
 					</li>
 					<li class="flex items-start gap-2.5 pt-1">
 						<Clock class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
 						<div class="text-xs leading-tight">
-							<p class="font-semibold text-slate-300">Mon - Sat: 8:00 AM - 6:00 PM</p>
-							<p class="mt-0.5 text-slate-400">Holidays: 9:00 AM - 5:00 PM</p>
+							<p class="font-semibold text-foreground">Mon - Sat: 8:00 AM - 6:00 PM</p>
+							<p class="mt-0.5 text-muted-foreground">Holidays: 9:00 AM - 5:00 PM</p>
 						</div>
 					</li>
 				</ul>
@@ -154,9 +154,9 @@
 
 		<!-- Bottom Bar: Socials & Rights -->
 		<div
-			class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-800/80 pt-8 sm:flex-row"
+			class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row"
 		>
-			<p class="text-xs text-slate-500">
+			<p class="text-xs text-muted-foreground">
 				&copy; {new Date().getFullYear()} EasyDeal Furniture. All rights reserved.
 			</p>
 

@@ -64,7 +64,7 @@
 			<!-- Media Section -->
 			<div class="flex h-full min-w-0 flex-col gap-4">
 				<div
-					class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-slate-100 shadow-inner md:aspect-square dark:bg-slate-800"
+					class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-muted shadow-inner md:aspect-square"
 				>
 					<img
 						src={images[selectedImgIndex]}

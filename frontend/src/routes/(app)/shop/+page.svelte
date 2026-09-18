@@ -105,6 +105,10 @@
 
 <svelte:head>
 	<title>Shop | EasyDeal Furniture</title>
+	<meta
+		name="description"
+		content="Browse EasyDeal Furniture's curated living room, bedroom, office, dining, and outdoor furniture in Nairobi."
+	/>
 </svelte:head>
 
 <div class="relative min-h-90 w-full overflow-hidden bg-background sm:min-h-150">
@@ -122,9 +126,7 @@
 
 	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
 		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
-			<span class="mt-56 text-lg font-bold tracking-widest text-primary uppercase sm:mt-70">
-				Shop Now
-			</span>
+			<h1 class="mt-56 text-3xl font-bold tracking-tight text-white sm:mt-70">Shop Now</h1>
 		</div>
 	</div>
 </div>

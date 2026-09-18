@@ -21,8 +21,8 @@ export const load: PageServerLoad = async () => {
 	} catch (err) {
 		if (err instanceof ApiError) {
 			return {
-				bestSellingProducts: [],
-				newArrivalProducts: [],
+				bestSellers: [],
+				freshDesigns: [],
 				error: err.message
 			};
 		}
@@ -30,7 +30,8 @@ export const load: PageServerLoad = async () => {
 		console.error('Failed to fetch items:', err);
 
 		return {
-			warehouses: [],
+			bestSellers: [],
+			freshDesigns: [],
 			error: 'Failed to load items.'
 		};
 	}

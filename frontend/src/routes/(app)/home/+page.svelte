@@ -70,6 +70,10 @@
 
 <svelte:head>
 	<title>Home | EasyDeal Furniture</title>
+	<meta
+		name="description"
+		content="Discover modern furniture for every space from EasyDeal Furniture in Nairobi, with curated living, office, bedroom, dining, and outdoor pieces."
+	/>
 </svelte:head>
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<!-- Carousel Background Images -->
@@ -102,7 +106,7 @@
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-black px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
+					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
 					href={resolve('/shop')}
 				>
 					Explore <ArrowRight class="ml-2 h-4 w-4" />
@@ -113,15 +117,15 @@
 		<!-- Section 2: Bottom Right -->
 		<div class="flex max-w-xl flex-col items-end self-end text-right text-white sm:mt-10">
 			<p class="text-md font-bold tracking-widest text-primary uppercase">TIMELESS ELEGANCE</p>
-			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
+			<h2 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Redefine Comfort and Luxury
-			</h1>
+			</h2>
 			<p class="text-base text-slate-100 md:text-lg">
 				Thoughtfully designed pieces that evoke sophistication and emotional depth.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-black px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
+					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
 					href={resolve('/shop')}
 				>
 					Shop the Collection
@@ -219,15 +223,15 @@
 			<p class="text-md font-bold tracking-widest text-primary uppercase">
 				PREMIUM QUALITY PRODUCTS
 			</p>
-			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
+			<h2 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
 				Unique Designs For Every Space
-			</h1>
+			</h2>
 			<p class="text-base text-slate-100 md:text-lg">
 				Elevate your style with our curated essentials. Limited-time offers on new arrivals.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-black px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
+					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
 					href={resolve('/shop')}
 				>
 					View Items <ArrowRight class="ml-2 h-4 w-4" />

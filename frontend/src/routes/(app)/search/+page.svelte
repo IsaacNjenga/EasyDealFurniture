@@ -92,7 +92,16 @@
 </script>
 
 <svelte:head>
-	<title>Search | EasyDeal Furniture</title>
+	<title
+		>{searchTerm
+			? `${searchTerm} | Search | EasyDeal Furniture`
+			: 'Search | EasyDeal Furniture'}</title
+	>
+	<meta
+		name="description"
+		content="Search EasyDeal Furniture by product name, category, or tag and find pieces available in Nairobi."
+	/>
+	<meta name="robots" content="noindex, follow" />
 </svelte:head>
 
 <div
@@ -106,6 +115,7 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
+		<h1 class="mb-6 text-3xl font-extrabold tracking-tight sm:text-4xl">Search furniture</h1>
 		<div class="w-120 max-w-2xl">
 			<InputGroup.Root class="w-full">
 				<InputGroup.Input

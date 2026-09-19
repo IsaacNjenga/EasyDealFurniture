@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import type { Product } from '$lib/services/product/product.types';
 	import { formatPrice } from '$lib/utils';
 	import { Tag, ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
@@ -7,6 +8,9 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { toast } from 'svelte-sonner';
+	import ProductCard from '$lib/components/common/ProductCard.svelte';
+	import { ApiError } from '$lib/services/api/errors';
+	import { ProductService } from '$lib/services/product/product.service';
 
 	let { data }: PageProps = $props();
 
@@ -14,6 +18,9 @@
 	let error = $derived(data.error);
 
 	let selectedImgIndex = $state(0);
+	let relatedProducts = $state<Product[]>([]);
+	let isLoadingRelated = $state(false);
+	let relatedQueryId = 0;
 
 	const images = $derived(
 		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
@@ -32,8 +39,25 @@
 	$effect(() => {
 		if (product) {
 			selectedImgIndex = 0;
+			loadRelatedProducts(product);
 		}
 	});
+
+	async function loadRelatedProducts(currentProduct: Product) {
+		const queryId = ++relatedQueryId;
+		isLoadingRelated = true;
+
+		try {
+			const results = await ProductService.getRelated(currentProduct);
+			if (queryId === relatedQueryId) relatedProducts = results;
+		} catch (err) {
+			if (queryId !== relatedQueryId) return;
+			relatedProducts = [];
+			if (!(err instanceof ApiError)) console.error('Failed to fetch related items:', err);
+		} finally {
+			if (queryId === relatedQueryId) isLoadingRelated = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -197,6 +221,36 @@
 				</div>
 			</div>
 		</div>
+
+		{#if isLoadingRelated || relatedProducts.length > 0}
+			<section class="mt-16 border-t border-border pt-10" aria-labelledby="related-items-heading">
+				<div class="flex items-end justify-between gap-4">
+					<div>
+						<p class="text-xs font-bold tracking-widest text-primary uppercase">Keep browsing</p>
+						<h2 id="related-items-heading" class="mt-1 text-2xl font-extrabold text-foreground">
+							More related items
+						</h2>
+					</div>
+				</div>
+
+				{#if isLoadingRelated}
+					<div
+						class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4"
+						aria-label="Loading related items"
+					>
+						{#each Array(4) as _}
+							<div class="aspect-4/3 animate-pulse bg-muted motion-reduce:animate-none"></div>
+						{/each}
+					</div>
+				{:else if relatedProducts.length > 0}
+					<div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+						{#each relatedProducts as item (item._id)}
+							<ProductCard {item} />
+						{/each}
+					</div>
+				{/if}
+			</section>
+		{/if}
 	{:else if !error}
 		<div class="flex min-h-100 flex-col items-center justify-center text-center">
 			<p class="text-lg font-medium text-muted-foreground">Loading product details...</p>

@@ -12,6 +12,48 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { SvelteURL } from 'svelte/reactivity';
+	import { getCookie, setCookie } from '$lib/stores/cookies';
+
+	const SEARCH_HISTORY_COOKIE = 'easydeal_search_history';
+	const MAX_SEARCH_HISTORY = 5;
+	let searchHistory = $state<string[]>([]);
+
+	function loadSearchHistory() {
+		const raw = getCookie(SEARCH_HISTORY_COOKIE);
+		if (!raw) return;
+
+		try {
+			const history = JSON.parse(raw);
+			if (Array.isArray(history)) {
+				searchHistory = history.filter((item): item is string => typeof item === 'string');
+			}
+		} catch {
+			searchHistory = [];
+		}
+	}
+
+	function saveSearch(query: string) {
+		const normalizedQuery = query.trim();
+		if (!normalizedQuery) return;
+
+		searchHistory = [
+			normalizedQuery,
+			...searchHistory.filter((item) => item.toLowerCase() !== normalizedQuery.toLowerCase())
+		].slice(0, MAX_SEARCH_HISTORY);
+		setCookie(SEARCH_HISTORY_COOKIE, JSON.stringify(searchHistory));
+	}
+
+	function useSearchHistory(query: string) {
+		searchTerm = query;
+		const searchUrl = new SvelteURL(page.url);
+		searchUrl.pathname = resolve('/search');
+		searchUrl.searchParams.set('query', query);
+		goto(searchUrl, { replaceState: true, keepFocus: true, noScroll: true });
+	}
+
+	$effect(() => {
+		if (typeof document !== 'undefined') loadSearchHistory();
+	});
 
 	let searchTerm = $state(page.url.searchParams.get('query') ?? '');
 	let isSearching = $state(false);
@@ -66,6 +108,7 @@
 
 	async function executeSearch(query: string) {
 		const currentQueryId = ++activeQueryId;
+		saveSearch(query);
 
 		try {
 			const res = await ProductService.search(query);
@@ -133,6 +176,20 @@
 				</InputGroup.Addon>
 			</InputGroup.Root>
 		</div>
+		{#if !searchTerm.trim() && searchHistory.length > 0}
+			<div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-left">
+				<span class="text-xs font-semibold text-white/70">Recent</span>
+				{#each searchHistory as query (query)}
+					<button
+						type="button"
+						onclick={() => useSearchHistory(query)}
+						class="rounded-full border border-white/30 bg-black/20 px-3 py-1 text-xs text-white transition hover:bg-white/20"
+					>
+						{query}
+					</button>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>
 

@@ -2,7 +2,7 @@
 	import type { PageProps } from './$types';
 	import type { Product } from '$lib/services/product/product.types';
 	import { formatPrice } from '$lib/utils';
-	import { Tag, ChevronLeft, ChevronRight } from '@lucide/svelte';
+	import { Tag, ChevronLeft, ChevronRight, Heart } from '@lucide/svelte';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { goto } from '$app/navigation';
@@ -11,6 +11,8 @@
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import { ApiError } from '$lib/services/api/errors';
 	import { ProductService } from '$lib/services/product/product.service';
+	import { Button } from '$lib/components/ui/button';
+	import { wishlist } from '$lib/stores/wishlist.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -21,6 +23,8 @@
 	let relatedProducts = $state<Product[]>([]);
 	let isLoadingRelated = $state(false);
 	let relatedQueryId = 0;
+
+	const isLiked = $derived(wishlist.isFavorited(product._id));
 
 	const images = $derived(
 		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
@@ -93,7 +97,7 @@
 					<img
 						src={images[selectedImgIndex]}
 						alt={product.name}
-						class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+						class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
 					/>
 					{#if hasDiscount}
 						<span
@@ -159,7 +163,7 @@
 
 					<!-- Pricing -->
 					<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-						<span class="text-3xl font-black text-foreground sm:text-4xl">
+						<span class="text-4xl font-black text-primary sm:text-4xl">
 							{formatPrice(discountedPrice)}
 						</span>
 						{#if hasDiscount}
@@ -170,15 +174,15 @@
 					</div>
 
 					<!-- Description -->
-					<p class="text-base leading-relaxed text-muted-foreground">
+					<p class="text-justify text-base leading-relaxed text-muted-foreground">
 						{product.description ||
 							'Elevate your living space with this expertly crafted piece from EasyDeal Furniture. Modern design meets durable ergonomics.'}
 					</p>
 
 					<!-- Key features -->
 					{#if product.keyFeatures && product.keyFeatures.length > 0}
-						<p class="mb-0 pb-0 text-sm leading-relaxed text-primary">Key Features</p>
-						<ul class="list-disc pl-4 text-sm leading-relaxed text-muted-foreground">
+						<p class="mb-0 pb-0 text-base leading-relaxed text-primary">Key Features</p>
+						<ul class="list-disc pl-4 text-base leading-relaxed text-muted-foreground">
 							{#each product.keyFeatures as feature (feature)}
 								<li>{feature}</li>
 							{/each}
@@ -188,7 +192,7 @@
 					<!-- Colors -->
 					{#if product.colours && product.colours.length > 0}
 						<div class="space-y-2">
-							<p class="text-sm leading-relaxed text-primary">Available Colours</p>
+							<p class="text-base leading-relaxed text-primary">Available Colours</p>
 
 							<div class="flex flex-wrap items-center gap-2">
 								{#each product.colours as colour (colour)}
@@ -211,44 +215,53 @@
 
 					<!-- Tags -->
 					{#if product.tags && product.tags.length > 0}
-						<div class="flex flex-wrap items-center gap-2 ">
+						<div class="flex flex-wrap items-center gap-2">
 							<!-- <Tag class="size-4 text-primary" /> -->
-							<p class="text-sm leading-relaxed text-primary">Tags</p>
+							<p class="text-base leading-relaxed text-primary">Tags</p>
 							<div class="flex flex-wrap items-center gap-1.5">
 								{#each product.tags as tag (tag)}
 									<Badge
 										variant="outline"
 										class="cursor-pointer whitespace-nowrap"
 										onclick={() => goto(resolve(`/search?query=${tag}`))}
-									> <Tag class="size-3 text-foreground" />
+									>
+										<Tag class="size-3 text-foreground" />
 										{tag}
 									</Badge>
 								{/each}
 							</div>
 						</div>
 					{/if}
-
-					<!-- Stock Status -->
-					<!-- <div class="pt-2 text-sm">
-						<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
-							In Stock & Ready for delivery
-						</p>
-					</div> -->
 				</div>
 
-				<!-- Call to Action -->
-				<div class="mt-2 flex items-end justify-end border-t border-border pt-4">
+				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->
+				<div class="mt-2 flex w-full flex-col items-center gap-2 pt-4 sm:flex-row">
 					<ChatButton
 						phoneNumber="254714738997"
 						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
 						label="Inquire via WhatsApp"
 					/>
+
+					<Button
+						variant="outline"
+						onclick={() => wishlist.toggleFavorite(product._id)}
+						class="inline-flex w-full items-center justify-center gap-2 rounded-sm border border-primary px-3 py-2 text-sm font-semibold transition-all active:scale-95 sm:w-auto sm:flex-1"
+					>
+						<Heart
+							class="h-4 w-4 transition-colors {isLiked
+								? 'fill-red-500 text-red-500'
+								: 'stroke-[2.2] text-primary'}"
+						/>
+						<span class="text-primary">
+							{isLiked ? 'Added to Wishlist' : 'Add to Wishlist'}
+						</span>
+					</Button>
 				</div>
 			</div>
 		</div>
 
 		{#if isLoadingRelated || relatedProducts.length > 0}
-			<section class="mt-16 border-t border-border pt-10" aria-labelledby="related-items-heading">
+			<section class="mt-8 border-t border-border pt-10" aria-labelledby="related-items-heading">
 				<div class="flex items-end justify-between gap-4">
 					<div>
 						<p class="text-xs font-bold tracking-widest text-primary uppercase">Keep browsing</p>

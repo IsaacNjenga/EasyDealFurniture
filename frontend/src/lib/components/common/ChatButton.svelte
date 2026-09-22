@@ -25,7 +25,7 @@
 	target="_blank"
 	rel="noopener noreferrer"
 	variant="outline"
-	class="inline-flex items-center gap-2 rounded-sm border border-primary px-2 py-1.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg focus:focus:outline-hidden active:scale-95"
+	class="inline-flex w-full items-center gap-2 rounded-sm border border-primary px-2 py-1.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg focus:focus:outline-hidden active:scale-95 sm:flex-1"
 >
 	<!-- WhatsApp Icon (SVG) -->
 	<svg class="h-5 w-5 fill-primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

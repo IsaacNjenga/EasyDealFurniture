@@ -84,7 +84,7 @@
 >
 	<!-- Product Image & Carousel Area -->
 	<div
-		class="relative aspect-4/3 w-full overflow-hidden bg-muted"
+		class="relative aspect-4/4 w-full overflow-hidden bg-muted"
 		role="group"
 		aria-label={`${item.name} image carousel`}
 		onmouseenter={() => (isCarouselPaused = true)}
@@ -175,17 +175,17 @@
 	</div>
 
 	<!-- Card Body -->
-	<div class="flex flex-1 flex-col justify-between p-5">
+	<div class="flex flex-1 flex-col justify-between p-3">
 		<div>
 			<h3
-				class="line-clamp-1 font-roboto text-base font-bold text-foreground transition-colors group-hover:text-primary"
+				class="line-clamp-1 font-roboto text-base font-bold capitalize text-foreground transition-colors group-hover:text-primary"
 			>
 				{item.name}
 			</h3>
 
 			<!-- Pricing Section -->
 			<div class="mt-2 flex items-baseline gap-2">
-				<span class="text-lg font-extrabold text-foreground">
+				<span class="text-lg font-extrabold text-primary">
 					{formatPrice(discountedPrice)}
 				</span>
 				{#if hasDiscount}
@@ -202,7 +202,7 @@
 				variant="outline"
 				// onclick={handleQuickViewClick}
 				href={`/shop/${item._id}`}
-				class="w-full rounded-none border-border font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
+				class="w-full rounded-none bg-transparent border-border font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
 				View
 			</Button>

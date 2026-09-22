@@ -151,7 +151,7 @@
 							{product.category || 'Furniture'}
 						</span>
 						<h1
-							class="mt-1 font-roboto text-2xl font-extrabold text-foreground sm:text-3xl lg:text-4xl"
+							class="mt-1 font-roboto text-2xl font-extrabold text-foreground capitalize sm:text-3xl lg:text-4xl"
 						>
 							{product.name}
 						</h1>
@@ -175,17 +175,52 @@
 							'Elevate your living space with this expertly crafted piece from EasyDeal Furniture. Modern design meets durable ergonomics.'}
 					</p>
 
+					<!-- Key features -->
+					{#if product.keyFeatures && product.keyFeatures.length > 0}
+						<p class="mb-0 pb-0 text-sm leading-relaxed text-primary">Key Features</p>
+						<ul class="list-disc pl-4 text-sm leading-relaxed text-muted-foreground">
+							{#each product.keyFeatures as feature (feature)}
+								<li>{feature}</li>
+							{/each}
+						</ul>
+					{/if}
+
+					<!-- Colors -->
+					{#if product.colours && product.colours.length > 0}
+						<div class="space-y-2">
+							<p class="text-sm leading-relaxed text-primary">Available Colours</p>
+
+							<div class="flex flex-wrap items-center gap-2">
+								{#each product.colours as colour (colour)}
+									<div
+										class="group relative flex items-center gap-2 rounded-md border bg-muted/40 px-2.5 py-1 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+									>
+										<!-- Visual Swatch Dot -->
+										<span
+											class="size-4 rounded-lg border border-black/10 shadow-sm transition-transform group-hover:scale-110 dark:border-white/20"
+											style="background-color: {colour.toLowerCase().replace(/\s+/g, '')};"
+										></span>
+
+										<!-- Colour Name Label -->
+										<span class="capitalize">{colour}</span>
+									</div>
+								{/each}
+							</div>
+						</div>
+					{/if}
+
 					<!-- Tags -->
 					{#if product.tags && product.tags.length > 0}
-						<div class="flex flex-wrap items-center gap-2 pt-2">
-							<Tag class="size-4 text-primary" />
+						<div class="flex flex-wrap items-center gap-2 ">
+							<!-- <Tag class="size-4 text-primary" /> -->
+							<p class="text-sm leading-relaxed text-primary">Tags</p>
 							<div class="flex flex-wrap items-center gap-1.5">
 								{#each product.tags as tag (tag)}
 									<Badge
 										variant="outline"
 										class="cursor-pointer whitespace-nowrap"
 										onclick={() => goto(resolve(`/search?query=${tag}`))}
-									>
+									> <Tag class="size-3 text-foreground" />
 										{tag}
 									</Badge>
 								{/each}
@@ -193,26 +228,16 @@
 						</div>
 					{/if}
 
-					<!-- Colors -->
-					{#if product.colours && product.colours.length > 0}
-						<p class="text-sm leading-relaxed text-muted-foreground">
-							Available Colours:
-							<span class="font-medium text-foreground capitalize">
-								{product.colours.join(', ')}
-							</span>
-						</p>
-					{/if}
-
 					<!-- Stock Status -->
-					<div class="pt-2 text-sm">
+					<!-- <div class="pt-2 text-sm">
 						<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
 							In Stock & Ready for delivery
 						</p>
-					</div>
+					</div> -->
 				</div>
 
 				<!-- Call to Action -->
-				<div class="mt-2 border-t border-border pt-4">
+				<div class="mt-2 flex items-end justify-end border-t border-border pt-4">
 					<ChatButton
 						phoneNumber="254714738997"
 						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
@@ -238,6 +263,7 @@
 						class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4"
 						aria-label="Loading related items"
 					>
+						<!-- eslint-disable-next-line -->
 						{#each Array(4) as _}
 							<div class="aspect-4/3 animate-pulse bg-muted motion-reduce:animate-none"></div>
 						{/each}

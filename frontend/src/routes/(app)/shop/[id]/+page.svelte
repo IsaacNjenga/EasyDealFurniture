@@ -167,7 +167,7 @@
 							{formatPrice(discountedPrice)}
 						</span>
 						{#if hasDiscount}
-							<span class="text-lg text-muted-foreground line-through">
+							<span class="text-lg text-red-400 line-through">
 								{formatPrice(product.price)}
 							</span>
 						{/if}

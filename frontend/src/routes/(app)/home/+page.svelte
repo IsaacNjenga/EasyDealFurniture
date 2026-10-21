@@ -72,7 +72,7 @@
 	<title>Home</title>
 	<meta
 		name="description"
-		content="Discover modern furniture for every space from EasyDeal Furniture in Nairobi, with curated living, office, bedroom, dining, and outdoor pieces."
+		content="Discover modern furniture for every space from EasyDeal Furniture in Nairobi, with curated living, office, bedroom, dining, outdoor and second-hand pieces."
 	/>
 </svelte:head>
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
@@ -82,7 +82,7 @@
 			<div
 				class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
 				style="background-image: url({bgUrl});"
-				transition:fade={{ duration: 1200, easing: cubicInOut }}
+				transition:fade={{ duration: 1250, easing: cubicInOut }}
 			>
 				<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 			</div>

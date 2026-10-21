@@ -201,7 +201,7 @@
 			<Button
 				variant="outline"
 				// onclick={handleQuickViewClick}
-				href={`/shop/${item._id}`}
+				href={`/shop/${item.slug}`}
 				class="w-full rounded-none bg-transparent border-border font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
 				View

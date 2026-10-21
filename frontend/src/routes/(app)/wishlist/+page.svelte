@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-	<title>Wishlist | EasyDeal Furniture</title>
+	<title>Wishlist</title>
 	<meta
 		name="description"
 		content="Review your saved EasyDeal Furniture favorites and continue browsing furniture in Nairobi."

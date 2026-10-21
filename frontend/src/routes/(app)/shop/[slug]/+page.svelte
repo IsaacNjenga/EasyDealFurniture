@@ -66,21 +66,31 @@
 
 <svelte:head>
 	{#if product}
-		<title>{product.name} | EasyDeal Furniture</title>
-		<meta
-			name="description"
-			content={product.description || `Buy ${product.name} at EasyDeal Furniture.`}
-		/>
-		<meta property="og:title" content={product.name} />
-		<meta
-			property="og:description"
-			content={product.description || `Buy ${product.name} at EasyDeal Furniture.`}
-		/>
+		{@const pageTitle =
+			product.metaTitle ||
+			`${product.name} | Easy Deal Furniture`}
+			
+			{@const pageDescription =
+			product.metaDescription ||
+			`Buy ${product.name} at Easy Deal Furniture.`}
+			
+			{@const canonicalUrl =
+			`https://easydealfurniture.co.ke/shop/${product.slug}`}
+
+		<title>{pageTitle}</title>
+		<meta name="description" content={pageDescription} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<meta property="og:type" content="product" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={pageDescription} />
+		<meta property="og:url" content={canonicalUrl} />
+
 		{#if images.length > 0}
 			<meta property="og:image" content={images[0]} />
 		{/if}
 	{:else}
-		<title>Product Details | EasyDeal Furniture</title>
+		<title>Product Details | Easy Deal Furniture</title>
 	{/if}
 </svelte:head>
 

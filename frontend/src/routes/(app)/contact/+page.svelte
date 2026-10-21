@@ -45,7 +45,7 @@
 </script>
 
 <svelte:head>
-	<title>Contact | EasyDeal Furniture</title>
+	<title>Contact</title>
 	<meta
 		name="description"
 		content="Contact EasyDeal Furniture in Nairobi for showroom visits, custom furniture, delivery, pricing, and directions."

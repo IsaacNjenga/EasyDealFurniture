@@ -69,7 +69,7 @@
 </script>
 
 <svelte:head>
-	<title>Home | EasyDeal Furniture</title>
+	<title>Home</title>
 	<meta
 		name="description"
 		content="Discover modern furniture for every space from EasyDeal Furniture in Nairobi, with curated living, office, bedroom, dining, and outdoor pieces."

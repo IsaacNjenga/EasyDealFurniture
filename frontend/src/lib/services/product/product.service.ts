@@ -1,4 +1,5 @@
 import { apiClient } from '$lib/services/api/client';
+import { ApiError } from '$lib/services/api/errors';
 import type { Product, ProductListResponse } from './product.types';
 
 export const ProductService = {
@@ -9,6 +10,17 @@ export const ProductService = {
 
 	async get(id: string): Promise<Product> {
 		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
+	},
+
+	async getBySlug(slug: string): Promise<Product> {
+		const products = await this.fetch();
+		const product = products.find((item) => item.slug === slug);
+
+		if (!product) {
+			throw new ApiError(404, 'Product not found');
+		}
+
+		return await this.get(product._id);
 	},
 
 	async search(query: string): Promise<Product[]> {

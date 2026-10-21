@@ -12,6 +12,9 @@ export type Product = {
 	inStock?: boolean;
 	isBestSeller?: boolean;
 	isNewArrival?: boolean;
+	slug:string;
+	metaTitle:string;
+	metaDescription:string;
 };
 
 export type ProductCategory =

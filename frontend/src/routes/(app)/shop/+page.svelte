@@ -104,7 +104,7 @@
 </script>
 
 <svelte:head>
-	<title>Shop | EasyDeal Furniture</title>
+	<title>Shop</title>
 	<meta
 		name="description"
 		content="Browse EasyDeal Furniture's curated living room, bedroom, office, dining, and outdoor furniture in Nairobi."

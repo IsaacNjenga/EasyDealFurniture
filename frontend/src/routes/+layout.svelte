@@ -32,6 +32,7 @@
 </script>
 
 <svelte:head>
+	<meta name="google-site-verification" content="_w4wwsi4aw_brrrQZ88HoTyA_15GVitk1wdXWdJ-up4" />
 	<title>{siteName} | Modern Furniture in Nairobi</title>
 	<meta name="description" content={description} />
 	<meta name="theme-color" content="#f8f5ef" />

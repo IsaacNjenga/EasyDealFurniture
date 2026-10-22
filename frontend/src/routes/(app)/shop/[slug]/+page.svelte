@@ -252,8 +252,8 @@
 				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->
 				<div class="mt-2 flex w-full flex-col items-center gap-2 pt-4 sm:flex-row">
 					<ChatButton
-						// phoneNumber="254714738997"
-						phoneNumber="254740900061"
+						phoneNumber="254714738997"
+						// phoneNumber="254740900061"
 						message={`Hi EasyDeal Furniture, I'm interested in the ${toTitleCase(product.name)} as advertised on your website. Is it available?`}
 						// message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
 						label="Inquire via WhatsApp"

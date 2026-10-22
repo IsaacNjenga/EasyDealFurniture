@@ -56,7 +56,29 @@
 	<meta name="twitter:title" content={siteName} />
 	<meta name="twitter:description" content={description} />
 	<script type="application/ld+json">
-{@html structuredData}
+{
+		'@context': 'https://schema.org',
+		'@type': 'FurnitureStore',
+		name: siteName,
+		url: siteUrl,
+		logo: `${siteUrl}${favicon}`,
+		image: `${siteUrl}${favicon}`,
+		telephone: '+254118091020',
+		address: {
+			'@type': 'PostalAddress',
+			streetAddress: 'Ngara Road, Opp. Ngara Post Office',
+			addressLocality: 'Nairobi',
+			addressCountry: 'KE'
+		},
+		openingHoursSpecification: [
+			{
+				'@type': 'OpeningHoursSpecification',
+				dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+				opens: '08:00',
+				closes: '18:00'
+			}
+		]
+	}
 	</script>
 </svelte:head>
 <Toaster position="top-right" />

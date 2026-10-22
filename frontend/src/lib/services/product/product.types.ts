@@ -33,6 +33,10 @@ export type ProductListResponse = {
 	totalPages: number;
 };
 
+export type AllProductsResponse={
+	webProducts:Product[]
+}
+
 export type SlugProductResponse = {
 	slugProduct: Product;
 };

@@ -1,11 +1,19 @@
 import { apiClient } from '$lib/services/api/client';
-// import { ApiError } from '$lib/services/api/errors';
-import type { Product, ProductListResponse,SlugProductResponse } from './product.types';
-
+import type {
+	Product,
+	ProductListResponse,
+	SlugProductResponse,
+	AllProductsResponse
+} from './product.types';
 
 export const ProductService = {
 	async fetch(): Promise<Product[]> {
 		const response = await apiClient.get<ProductListResponse>('/web-product/get-web-products');
+		return response.webProducts ?? [];
+	},
+
+	async fetchAll(): Promise<Product[]> {
+		const response = await apiClient.get<AllProductsResponse>('/web-product/get-all-web-products');
 		return response.webProducts ?? [];
 	},
 

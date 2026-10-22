@@ -17,7 +17,6 @@
 	let { data }: PageProps = $props();
 
 	let product = $derived(data.product);
-	let error = $derived(data.error);
 
 	let selectedImgIndex = $state(0);
 	let relatedProducts = $state<Product[]>([]);
@@ -35,8 +34,8 @@
 	);
 
 	$effect(() => {
-		if (error) {
-			toast.error('Failed to load item', { description: error });
+		if (!product) {
+			toast.error('Failed to load item');
 		}
 	});
 
@@ -307,7 +306,7 @@
 				{/if}
 			</section>
 		{/if}
-	{:else if !error}
+	{:else if !product}
 		<div class="flex min-h-100 flex-col items-center justify-center text-center">
 			<p class="text-lg font-medium text-muted-foreground">Loading product details...</p>
 		</div>

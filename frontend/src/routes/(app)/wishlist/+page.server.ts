@@ -5,7 +5,7 @@ import { ProductService } from '$lib/services/product/product.service';
 
 export const load: PageServerLoad = async () => {
     try {
-        const products = await ProductService.fetch();
+        const products = await ProductService.fetchAll();
 
         return { products, error: null };
     } catch (err) {

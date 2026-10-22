@@ -47,12 +47,16 @@
 	let intervalId: ReturnType<typeof setInterval>;
 
 	onMount(() => {
-		intervalId = setInterval(() => {
-			if (!isCarouselPaused) advanceImage();
-		}, 4500);
+		if (hasMultipleImages) {
+			intervalId = setInterval(() => {
+				if (!isCarouselPaused) advanceImage();
+			}, 4500);
+		}
 	});
 
-	onDestroy(() => clearInterval(intervalId));
+	onDestroy(() => {
+		if (intervalId) clearInterval(intervalId);
+	});
 
 	const nextImage = (e: MouseEvent) => {
 		e.stopPropagation();
@@ -96,6 +100,8 @@
 			<img
 				src={images[activeImgIndex]}
 				alt={item.name}
+				loading="lazy"
+				decoding="async"
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
 				transition:fade={{ duration: 450 }}
 			/>
@@ -178,7 +184,7 @@
 	<div class="flex flex-1 flex-col justify-between p-3">
 		<div>
 			<h3
-				class="line-clamp-1 font-roboto text-base font-bold capitalize text-foreground transition-colors group-hover:text-primary"
+				class="line-clamp-1 font-roboto text-base font-bold text-foreground capitalize transition-colors group-hover:text-primary"
 			>
 				{item.name}
 			</h3>
@@ -202,7 +208,7 @@
 				variant="outline"
 				// onclick={handleQuickViewClick}
 				href={`/shop/${item.slug}`}
-				class="w-full rounded-none bg-transparent border-border font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
+				class="w-full rounded-none border-border bg-transparent font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
 				View
 			</Button>

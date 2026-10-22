@@ -8,6 +8,13 @@ export const ProductService = {
 		return response.webProducts ?? [];
 	},
 
+	async fetchPage(page = 1, limit = 10): Promise<ProductListResponse> {
+		const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+		return await apiClient.get<ProductListResponse>(
+			`/web-product/get-web-products?${params.toString()}`
+		);
+	},
+
 	async get(id: string): Promise<Product> {
 		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
 	},

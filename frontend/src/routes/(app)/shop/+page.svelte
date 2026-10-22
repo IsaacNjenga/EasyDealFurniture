@@ -3,13 +3,13 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
-	// import Loader from '$lib/components/common/Loader.svelte';
-	// import { productsData } from '$lib/data/data';
 	import type { Product } from '$lib/services/product/product.types';
 	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
+	import { ApiError } from '$lib/services/api/errors';
+	import { ProductService } from '$lib/services/product/product.service';
 
 	const backgrounds = [
 		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
@@ -53,8 +53,29 @@
 
 	let { data }: PageProps = $props();
 
-	const products = $derived(data.products ?? []);
+	let appendedProducts = $state<Product[]>([]);
+	let additionalPageCount = $state(0);
+	let latestTotalPages = $state<number | null>(null);
+	const products = $derived([...(data.products ?? []), ...appendedProducts]);
+	const currentPage = $derived(data.currentPage + additionalPageCount);
+	const totalPages = $derived(latestTotalPages ?? data.totalPages);
 	const error = $derived(data.error);
+	let isLoadingMore = $state(false);
+	let loadMoreFailed = $state(false);
+	let loadMoreSentinel: HTMLDivElement | undefined;
+	let loadMoreObserver: IntersectionObserver | undefined;
+
+	const hasMoreProducts = $derived(currentPage < totalPages);
+
+	$effect(() => {
+		// data.products;
+		// data.currentPage;
+		// data.totalPages;
+		appendedProducts = [];
+		additionalPageCount = 0;
+		latestTotalPages = null;
+		loadMoreFailed = false;
+	});
 
 	$effect(() => {
 		if (error) {
@@ -64,6 +85,45 @@
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
+
+	const loadMoreProducts = async () => {
+		if (isLoadingMore || !hasMoreProducts) return;
+
+		isLoadingMore = true;
+		loadMoreFailed = false;
+
+		try {
+			const requestedPage = currentPage + 1;
+			const nextPage = await ProductService.fetchPage(requestedPage);
+			if (nextPage.currentPage !== requestedPage) {
+				throw new Error(`Expected product page ${requestedPage}, received ${nextPage.currentPage}`);
+			}
+
+			const existingIds = new Set(products.map((product) => product._id));
+			const newProducts = (nextPage.webProducts ?? []).filter(
+				(product) => !existingIds.has(product._id)
+			);
+			if (newProducts.length === 0 && (nextPage.webProducts ?? []).length > 0) {
+				throw new Error(`Product page ${requestedPage} contained no new products`);
+			}
+
+			appendedProducts = [...appendedProducts, ...newProducts];
+			additionalPageCount = nextPage.currentPage - data.currentPage;
+			latestTotalPages = nextPage.totalPages;
+		} catch (err) {
+			loadMoreFailed = true;
+			if (err instanceof ApiError) {
+				toast.error('Failed to load more items', { description: err.message });
+			} else {
+				console.error('Failed to load more items:', err);
+				toast.error('Failed to load more items', {
+					description: err instanceof Error ? err.message : 'Please try again.'
+				});
+			}
+		} finally {
+			isLoadingMore = false;
+		}
+	};
 
 	// Category filter state ('All' default)
 	let selectedCategory = $state<string>('All');
@@ -93,10 +153,23 @@
 
 	onMount(() => {
 		intervalId = setInterval(nextSlide, 4000);
+
+		if (loadMoreSentinel) {
+			loadMoreObserver = new IntersectionObserver(
+				(entries) => {
+					if (entries.some((entry) => entry.isIntersecting)) {
+						void loadMoreProducts();
+					}
+				},
+				{ rootMargin: '500px 0px' }
+			);
+			loadMoreObserver.observe(loadMoreSentinel);
+		}
 	});
 
 	onDestroy(() => {
 		if (intervalId) clearInterval(intervalId);
+		loadMoreObserver?.disconnect();
 	});
 
 	let selectedProduct = $state<Product | null>(null);
@@ -186,12 +259,6 @@
 	</section>
 </div>
 
-<!-- <div class="m-auto flex flex-col w-full items-center justify-center">
-	<Loader size='lg' speed="normal" />
-	<p class='text-primary'>
-	Loading...</p>
-</div> -->
-
 <div>
 	<section class="px-4 pb-16">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -212,6 +279,36 @@
 					</button>
 				</div>
 			{/if}
+
+			{#if isLoadingMore}
+				<p class="mt-8 text-center text-sm text-muted-foreground" role="status">
+					Loading more items...
+				</p>
+			{:else if loadMoreFailed && hasMoreProducts}
+				<div class="mt-8 flex flex-col items-center gap-3 text-center">
+					<p class="text-sm text-muted-foreground">We couldn't load more items.</p>
+					<button
+						type="button"
+						onclick={() => void loadMoreProducts()}
+						class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+					>
+						Try again
+					</button>
+				</div>
+			{:else if hasMoreProducts}
+				<button
+					type="button"
+					onclick={() => void loadMoreProducts()}
+					class="mx-auto mt-8 block rounded-lg border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10"
+				>
+					Load more items
+				</button>
+			{:else if !hasMoreProducts && !error}
+				<p class="mt-8 text-center text-sm text-muted-foreground" role="status">
+					You're all caught up — more items are coming soon!
+				</p>
+			{/if}
+			<div bind:this={loadMoreSentinel} class="h-px" aria-hidden="true"></div>
 		</div>
 	</section>
 </div>

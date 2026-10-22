@@ -6,27 +6,29 @@ import type { Product } from '$lib/services/product/product.types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { slug } = params;
+
 	let product: Product;
 
 	try {
-		product = /^[a-f\d]{24}$/i.test(slug)
-			? await ProductService.get(slug)
-			: await ProductService.getBySlug(slug);
+		product = (await ProductService.getBySlug(slug)) as unknown as Product;
 	} catch (err) {
 		if (err instanceof ApiError) {
+			console.error('Product API error:', {
+				requestedSlug: slug,
+				status: err.status,
+				message: err.message
+			});
+
 			error(err.status, err.message);
 		}
 
-		console.error(`Error loading product: ${slug}:`, err);
+		console.error(`Unexpected error loading product "${slug}":`, err);
 		error(500, 'Server is currently unreachable');
 	}
 
-	if (product.slug !== slug) {
+	if (product.slug && product.slug !== slug) {
 		redirect(308, `/shop/${product.slug}`);
 	}
 
-	return {
-		product,
-		error: null
-	};
+	return { product };
 };

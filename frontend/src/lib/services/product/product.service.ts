@@ -1,6 +1,7 @@
 import { apiClient } from '$lib/services/api/client';
-import { ApiError } from '$lib/services/api/errors';
-import type { Product, ProductListResponse } from './product.types';
+// import { ApiError } from '$lib/services/api/errors';
+import type { Product, ProductListResponse,SlugProductResponse } from './product.types';
+
 
 export const ProductService = {
 	async fetch(): Promise<Product[]> {
@@ -19,15 +20,10 @@ export const ProductService = {
 		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
 	},
 
-	async getBySlug(slug: string): Promise<Product> {
-		const products = await this.fetch();
-		const product = products.find((item) => item.slug === slug);
-
-		if (!product) {
-			throw new ApiError(404, 'Product not found');
-		}
-
-		return await this.get(product._id);
+	async getBySlug(slug: string): Promise<SlugProductResponse> {
+		return await apiClient.get<SlugProductResponse>(
+			`/web-product/get-web-product/${encodeURIComponent(slug)}`
+		);
 	},
 
 	async search(query: string): Promise<Product[]> {

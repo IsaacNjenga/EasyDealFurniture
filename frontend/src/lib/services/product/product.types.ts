@@ -8,13 +8,13 @@ export type Product = {
 	description?: string;
 	colours: string[];
 	keyFeatures: string[];
-	tags:string[];
+	tags: string[];
 	inStock?: boolean;
 	isBestSeller?: boolean;
 	isNewArrival?: boolean;
-	slug:string;
-	metaTitle:string;
-	metaDescription:string;
+	slug: string;
+	metaTitle: string;
+	metaDescription: string;
 };
 
 export type ProductCategory =
@@ -31,4 +31,8 @@ export type ProductListResponse = {
 	totalWebProducts: number;
 	currentPage: number;
 	totalPages: number;
+};
+
+export type SlugProductResponse = {
+	slugProduct: Product;
 };

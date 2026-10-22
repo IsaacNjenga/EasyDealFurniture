@@ -11,7 +11,7 @@
 	const siteUrl = 'https://easydealfurniture.co.ke';
 	const siteName = 'EasyDeal Furniture';
 	const description =
-		'Contemporary furniture in Nairobi, Kenya, including living room, bedroom, office, dining, and outdoor pieces designed for comfort and everyday living.';
+		"From comy ergonomic chairs to spacious desks and smart storage solutions, we've got everything you need to stay productive and organized.";
 	const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
 	const structuredData = JSON.stringify({
 		'@context': 'https://schema.org',
@@ -27,7 +27,14 @@
 			addressLocality: 'Nairobi',
 			addressCountry: 'KE'
 		},
-		openingHours: 'Mo-Sa 08:00-18:00'
+		openingHoursSpecification: [
+			{
+				'@type': 'OpeningHoursSpecification',
+				dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+				opens: '08:00',
+				closes: '18:00'
+			}
+		]
 	});
 </script>
 

@@ -62,20 +62,24 @@
 			if (queryId === relatedQueryId) isLoadingRelated = false;
 		}
 	}
+
+	const toTitleCase = (str: string) =>
+		str
+			.toLowerCase()
+			.split(' ')
+			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
+
 </script>
 
 <svelte:head>
 	{#if product}
-		{@const pageTitle =
-			product.metaTitle ||
-			`${product.name} | Easy Deal Furniture`}
-			
-			{@const pageDescription =
-			product.metaDescription ||
-			`Buy ${product.name} at Easy Deal Furniture.`}
-			
-			{@const canonicalUrl =
-			`https://easydealfurniture.co.ke/shop/${product.slug}`}
+		{@const pageTitle = product.metaTitle || `${product.name} | Easy Deal Furniture`}
+
+		{@const pageDescription =
+			product.metaDescription || `Buy ${product.name} at Easy Deal Furniture.`}
+
+		{@const canonicalUrl = `https://easydealfurniture.co.ke/shop/${product.slug}`}
 
 		<title>{pageTitle}</title>
 		<meta name="description" content={pageDescription} />
@@ -100,6 +104,7 @@
 	{#if product}
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
 			<!-- Media Section -->
+
 			<div class="flex h-full min-w-0 flex-col gap-4">
 				<div
 					class="group relative aspect-4/3 w-full overflow-hidden rounded-none bg-muted shadow-inner md:aspect-square"
@@ -247,8 +252,10 @@
 				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->
 				<div class="mt-2 flex w-full flex-col items-center gap-2 pt-4 sm:flex-row">
 					<ChatButton
-						phoneNumber="254714738997"
-						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
+						// phoneNumber="254714738997"
+						phoneNumber="254740900061"
+						message={`Hi EasyDeal Furniture, I'm interested in the ${toTitleCase(product.name)} as advertised on your website. Is it available?`}
+						// message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
 						label="Inquire via WhatsApp"
 					/>
 

@@ -45,6 +45,7 @@
 		}
 	});
 
+	
 	// const handleAddToCart = () => {
 	// 	if (product) {
 	// 		onAddToCart?.(product, quantity);
@@ -55,6 +56,7 @@
 
 {#if isOpen && product}
 	<div class="relative grid grid-cols-1 gap-2 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
+	
 		<div class="flex h-full min-w-0 flex-col gap-3">
 			<div
 				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-muted shadow-inner"
@@ -196,7 +198,7 @@
 
 					<ChatButton
 						phoneNumber="254714738997"
-						message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
+						// message={`Hi EasyDeal Furniture, I'm interested in buying "${toTitleCase(product.name)}". Is it available?\n\n${images[0]}`}
 						label="Inquire via WhatsApp"
 					/>
 				</div>

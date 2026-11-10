@@ -1,4 +1,5 @@
 <script lang="ts">
+	import hero from '$lib/assets/images/office_elegance.webp';
 	import type { Product } from '$lib/services/product/product.types';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import Loader from '$lib/components/common/Loader.svelte';
@@ -11,6 +12,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import { onDestroy } from 'svelte';
 	import { SvelteURL } from 'svelte/reactivity';
 	import { getCookie, setCookie } from '$lib/stores/cookies';
 
@@ -44,6 +46,7 @@
 	}
 
 	function useSearchHistory(query: string) {
+		clearTimeout(debounceTimer);
 		searchTerm = query;
 		const searchUrl = new SvelteURL(page.url);
 		searchUrl.pathname = resolve('/search');
@@ -61,12 +64,18 @@
 
 	let debounceTimer: ReturnType<typeof setTimeout>;
 	let activeQueryId = 0;
+	onDestroy(() => {
+		clearTimeout(debounceTimer);
+		activeQueryId++;
+	});
 	let lastSearchedQuery = '';
 
 	$effect(() => {
 		const query = page.url.searchParams.get('query')?.trim() ?? '';
+		searchTerm = query;
 
 		if (!query) {
+			activeQueryId++;
 			lastSearchedQuery = '';
 			searchResults = [];
 			isSearching = false;
@@ -86,6 +95,7 @@
 		searchTerm = input.value;
 
 		clearTimeout(debounceTimer);
+		activeQueryId++;
 
 		const query = searchTerm.trim();
 		if (!query) {
@@ -99,6 +109,10 @@
 		isSearching = true;
 
 		debounceTimer = setTimeout(() => {
+			if ((page.url.searchParams.get('query')?.trim() ?? '') === query) {
+				void executeSearch(query);
+				return;
+			}
 			const searchUrl = new SvelteURL(page.url);
 			searchUrl.pathname = resolve('/search');
 			searchUrl.searchParams.set('query', query);
@@ -152,16 +166,22 @@
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('https://images.unsplash.com/photo-1680503397692-cd0da21a0bec?w=1600');"
+		style="background-image: url({hero});"
 	>
 		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<h1 class="mb-6 text-3xl font-extrabold tracking-tight sm:text-4xl">Search furniture</h1>
-		<div class="w-120 max-w-2xl">
+		<h1 class="mb-6 text-3xl font-extrabold tracking-tight sm:text-4xl">
+			Your perfect piece starts here.
+		</h1>
+		<p class="mb-6 text-white/80">
+			Search by name, room or style. Find a favourite and add it to your quote.
+		</p>
+		<div class="mx-auto w-full max-w-2xl">
 			<InputGroup.Root class="w-full">
 				<InputGroup.Input
+					aria-label="Search furniture"
 					placeholder="Search furniture by name, tag, or category..."
 					oninput={handleInput}
 					value={searchTerm}

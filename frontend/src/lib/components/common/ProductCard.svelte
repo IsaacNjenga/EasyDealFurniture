@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { quote } from '$lib/stores/quote.svelte';
+	import { unitPrice } from '$lib/commerce';
 	import { fade } from 'svelte/transition';
 	import { formatPrice } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -34,29 +35,13 @@
 	const images = $derived(Array.isArray(item.image) ? item.image : [item.image]);
 	const hasMultipleImages = $derived(images.length > 1);
 	const hasDiscount = $derived(item.discount > 0);
-	const discountedPrice = $derived(
-		hasDiscount ? item.price * (1 - item.discount / 100) : item.price
-	);
+	const discountedPrice = $derived(unitPrice(item));
 
 	const advanceImage = () => {
 		if (images.length > 1) {
 			activeImgIndex = (activeImgIndex + 1) % images.length;
 		}
 	};
-
-	let intervalId: ReturnType<typeof setInterval>;
-
-	onMount(() => {
-		if (hasMultipleImages) {
-			intervalId = setInterval(() => {
-				if (!isCarouselPaused) advanceImage();
-			}, 4500);
-		}
-	});
-
-	onDestroy(() => {
-		if (intervalId) clearInterval(intervalId);
-	});
 
 	const nextImage = (e: MouseEvent) => {
 		e.stopPropagation();
@@ -110,7 +95,7 @@
 		<!-- Image Carousel Navigation Controls -->
 		{#if hasMultipleImages}
 			<div
-				class="absolute inset-x-2 top-1/2 flex -translate-y-1/2 justify-between opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+				class="absolute inset-x-2 top-1/2 flex -translate-y-1/2 justify-between opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-within:opacity-100 max-sm:opacity-100"
 			>
 				<button
 					type="button"
@@ -157,7 +142,8 @@
 				type="button"
 				// onclick={toggleWishlist}
 				onclick={() => wishlist.toggleFavorite(item._id)}
-				aria-label="Add to wishlist"
+				aria-label={isLiked ? `Remove ${item.name} from wishlist` : `Save ${item.name} to wishlist`}
+				aria-pressed={isLiked}
 				class="flex h-7 w-7 items-center justify-center rounded-full bg-card/90 text-foreground shadow-md backdrop-blur-xs transition-all hover:bg-card hover:text-red-500"
 			>
 				<Heart
@@ -203,15 +189,18 @@
 		</div>
 
 		<!-- Transparent Action Button -->
-		<div class="mt-4">
+		<div class="mt-4 space-y-2">
 			<Button
 				variant="outline"
 				// onclick={handleQuickViewClick}
 				href={`/shop/${item.slug}`}
 				class="w-full rounded-none border-border bg-transparent font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
-				View
+				View details
 			</Button>
+			<Button onclick={() => quote.add(item)} class="w-full rounded-none font-semibold"
+				>Add to quote</Button
+			>
 		</div>
 	</div>
 </div>

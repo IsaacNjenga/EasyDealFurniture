@@ -11,7 +11,7 @@
 	const siteUrl = 'https://easydealfurniture.co.ke';
 	const siteName = 'EasyDeal Furniture';
 	const description =
-		"From comfy ergonomic chairs to spacious desks and smart storage solutions, we've got everything you need to stay productive and organized.";
+		'Furniture for home and office in Nairobi. Explore the EasyDeal collection, plan your budget with a quote and visit our Ngara Road showroom.';
 	const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
 </script>
 
@@ -20,7 +20,12 @@
 	<title>{siteName} | Modern Furniture in Nairobi</title>
 	<meta name="description" content={description} />
 	<meta name="theme-color" content="#f8f5ef" />
-	<meta name="robots" content="index, follow" />
+	<meta
+		name="robots"
+		content={['/quote', '/wishlist', '/search'].includes(page.url.pathname)
+			? 'noindex, follow'
+			: 'index, follow'}
+	/>
 	<link rel="canonical" href={canonicalUrl} />
 	<link rel="icon" href={favicon} />
 	<meta property="og:type" content="website" />

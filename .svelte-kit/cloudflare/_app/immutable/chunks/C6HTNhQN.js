@@ -1,0 +1,1 @@
+var e=``+new URL(`../assets/modern_living.D-6N-L0n.webp`,import.meta.url).href;export{e as t};

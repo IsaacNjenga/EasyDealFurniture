@@ -10,6 +10,7 @@
 		ChevronLeft,
 		ChevronRight
 	} from '@lucide/svelte';
+	import { SALES_WHATSAPP, unitPrice } from '$lib/commerce';
 	import ChatButton from '$lib/components/common/ChatButton.svelte';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 
@@ -34,9 +35,7 @@
 		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
 	);
 	const hasDiscount = $derived(product ? product.discount > 0 : false);
-	const discountedPrice = $derived(
-		product && hasDiscount ? product.price * (1 - product.discount / 100) : (product?.price ?? 0)
-	);
+	const discountedPrice = $derived(product ? unitPrice(product) : 0);
 
 	$effect(() => {
 		if (product) {
@@ -45,7 +44,6 @@
 		}
 	});
 
-	
 	// const handleAddToCart = () => {
 	// 	if (product) {
 	// 		onAddToCart?.(product, quantity);
@@ -56,7 +54,6 @@
 
 {#if isOpen && product}
 	<div class="relative grid grid-cols-1 gap-2 p-2 sm:gap-8 sm:p-2 md:grid-cols-2">
-	
 		<div class="flex h-full min-w-0 flex-col gap-3">
 			<div
 				class="group relative aspect-4/3 h-full w-full overflow-hidden rounded-none bg-muted shadow-inner"
@@ -164,7 +161,11 @@
 
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
 					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
-						In Stock & Ready for delivery
+						{product.inStock === true
+							? 'In stock - confirm delivery with our team'
+							: product.inStock === false
+								? 'Currently out of stock - ask about availability'
+								: 'Contact us to confirm availability'}
 					</p>
 				</div>
 			</div>
@@ -197,7 +198,7 @@
 					</Button> -->
 
 					<ChatButton
-						phoneNumber="254714738997"
+						phoneNumber={SALES_WHATSAPP}
 						// message={`Hi EasyDeal Furniture, I'm interested in buying "${toTitleCase(product.name)}". Is it available?\n\n${images[0]}`}
 						label="Inquire via WhatsApp"
 					/>

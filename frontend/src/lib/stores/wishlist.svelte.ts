@@ -8,7 +8,8 @@ function loadWishlistFromCookie(): string[] {
 	const raw = getCookie(WISHLIST_COOKIE);
 	if (!raw) return [];
 	try {
-		return JSON.parse(raw);
+		const saved: unknown = JSON.parse(raw);
+		return Array.isArray(saved) ? saved.filter((id): id is string => typeof id === 'string') : [];
 	} catch {
 		return [];
 	}

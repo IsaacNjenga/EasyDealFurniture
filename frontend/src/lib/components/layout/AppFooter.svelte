@@ -24,6 +24,8 @@
 		{ name: 'Home', href: '/home' },
 		{ name: 'Shop', href: '/shop' },
 		{ name: 'My Wishlist', href: '/wishlist' },
+		{ name: 'My Quote', href: '/quote' },
+		{ name: 'Buying FAQs', href: '/faqs' },
 		{ name: 'Contact Us', href: '/contact' }
 	];
 
@@ -48,8 +50,9 @@
 					</span>
 				</div>
 				<p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-					Crafting premium ergonomic office chairs, velvet living room sets, and handcrafted dining
-					tables in Nairobi. Quality furniture engineered for comfort and modern aesthetic.
+					Furniture for everyday living and better workdays. Explore pieces for your home and
+					office, build a quote, or visit our Ngara Road showroom to find the right fit for your
+					space.
 				</p>
 
 				<!-- Newsletter Subscription Form
@@ -159,34 +162,6 @@
 			<p class="text-xs text-muted-foreground">
 				&copy; {new Date().getFullYear()} EasyDeal Furniture. All rights reserved.
 			</p>
-
-			<!-- Social Links -->
-			<div class="flex items-center gap-4 text-slate-400">
-				<a
-					href="https://facebook.com"
-					target="_blank"
-					aria-label="Facebook"
-					class="transition-colors hover:text-white"
-				>
-					<!-- <Facebook class="h-5 w-5" /> -->
-				</a>
-				<a
-					href="https://instagram.com"
-					target="_blank"
-					aria-label="Instagram"
-					class="transition-colors hover:text-white"
-				>
-					<!-- <Instagram class="h-5 w-5" /> -->
-				</a>
-				<a
-					href="https://twitter.com"
-					target="_blank"
-					aria-label="Twitter"
-					class="transition-colors hover:text-white"
-				>
-					<!-- <Twitter class="h-5 w-5" /> -->
-				</a>
-			</div>
 		</div>
 	</div>
 </footer>

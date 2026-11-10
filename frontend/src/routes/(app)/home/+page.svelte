@@ -1,38 +1,49 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { ArrowRight } from '@lucide/svelte';
-	import { resolve } from '$app/paths';
 	import { onMount, onDestroy } from 'svelte';
+	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
-	import type { Product } from '$lib/services/product/product.types';
-	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
-	import Modal from '$lib/components/common/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
+	import Home_Img from '$lib/assets/images/home_img.webp';
+	import Home_Img3 from '$lib/assets/images/home_img3.webp';
+	import Home_Img4 from '$lib/assets/images/home_img4.webp';
+	import modern_living from '$lib/assets/images/modern_living.webp';
+	import office_elegance from '$lib/assets/images/office_elegance.webp';
+	import outdoor_comfort from '$lib/assets/images/outdoor_comfort.webp';
+	import classic_touch from '$lib/assets/images/classic_touch.webp';
 
-	const backgrounds = [
-		'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600',
-		'https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?w=1600',
-		'https://images.unsplash.com/photo-1688578735352-9a6f2ac3b70a?w=1600',
-		'https://images.unsplash.com/photo-1681418659069-eef28d44aeab?w=1600'
-	];
+	// const backgrounds = [
+	// 	'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600',
+	// 	'https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?w=1600',
+	// 	'https://images.unsplash.com/photo-1688578735352-9a6f2ac3b70a?w=1600',
+	// 	'https://images.unsplash.com/photo-1681418659069-eef28d44aeab?w=1600'
+	// ];
+
+	const local_backgrounds = [Home_Img,  Home_Img3, Home_Img4];
+
 	const featuredCollection = [
 		{
-			img: 'https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?w=1600',
+			// img: 'https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?w=1600',
+			img: modern_living,
 			title: 'Modern Living'
 		},
 		{
-			img: 'https://images.unsplash.com/photo-1718220216044-006f43e3a9b1?w=1600',
+			// img: 'https://images.unsplash.com/photo-1718220216044-006f43e3a9b1?w=1600',
+			img: office_elegance,
 			title: 'Office Elegance'
 		},
 		{
-			img: 'https://images.unsplash.com/photo-1600210492090-a159ffa3aeaf?w=1600',
+			// img: 'https://images.unsplash.com/photo-1600210492090-a159ffa3aeaf?w=1600',
+			img: outdoor_comfort,
 			title: 'Outdoor Comfort'
 		},
 		{
-			img: 'https://plus.unsplash.com/premium_photo-1688125414593-391cf90f3103?w=1600',
+			// img: 'https://plus.unsplash.com/premium_photo-1688125414593-391cf90f3103?w=1600',
+			img: classic_touch,
 			title: 'Classic Touch'
 		}
 	];
@@ -45,18 +56,14 @@
 
 	$effect(() => {
 		if (error) {
-			toast.error('Failed to load shops', { description: error });
+			toast.error('Failed to load furniture', { description: error });
 		}
 	});
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
-
-	let isDetailModalOpen = $state(false);
-	let selectedProduct = $state<Product | null>(null);
-
-	const nextSlide = () => {
-		currentSlide = (currentSlide + 1) % backgrounds.length;
+const nextSlide = () => {
+		currentSlide = (currentSlide + 1) % local_backgrounds.length;
 	};
 
 	onMount(() => {
@@ -69,7 +76,8 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Furniture for You</title>
+	<link rel="preload" as="image" href={Home_Img} />
 	<meta
 		name="description"
 		content="Discover modern furniture for every space from EasyDeal Furniture in Nairobi, with curated living, office, bedroom, dining, outdoor and second-hand pieces."
@@ -77,58 +85,61 @@
 </svelte:head>
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
 	<!-- Carousel Background Images -->
-	{#each backgrounds as bgUrl, i (i)}
+	{#each local_backgrounds as bgUrl, i (i)}
 		{#if currentSlide === i}
 			<div
 				class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
 				style="background-image: url({bgUrl});"
 				transition:fade={{ duration: 1250, easing: cubicInOut }}
 			>
-				<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
+				<div class="absolute inset-0 bg-black/20 dark:bg-black/40"></div>
 			</div>
 		{/if}
 	{/each}
 
-	<!-- Both Content Sections Displayed Simultaneously -->
 	<div
 		class="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center gap-12 px-5 pt-32 pb-16 sm:px-6 sm:pt-28 lg:px-8"
 	>
 		<!-- Section 1: Top Left -->
 		<div class="flex max-w-xl flex-col gap-3 self-start text-white">
 			<p class="text-md font-bold tracking-widest text-primary uppercase">
-				MINIMAL MEETS FUNCTIONAL
+				MAKE ROOM FOR BETTER LIVING
 			</p>
 			<h1 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
-				Modern Furniture for Every Space
+				Love the space you come home to.
 			</h1>
 			<p class="text-base text-slate-100 md:text-lg">
-				Discover curated pieces that blend artistry, emotion, and everyday comfort.
+				Create a workspace that reflects your work, find furniture that fits your life,
+				your room and your budget.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
+					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 "
 					href={resolve('/shop')}
 				>
-					Explore <ArrowRight class="ml-2 h-4 w-4" />
+					Find your next piece
 				</Button>
 			</div>
 		</div>
 
 		<!-- Section 2: Bottom Right -->
 		<div class="flex max-w-xl flex-col items-end self-end text-right text-white sm:mt-10">
-			<p class="text-md font-bold tracking-widest text-primary uppercase">TIMELESS ELEGANCE</p>
+			<p class="text-md font-bold tracking-widest text-primary uppercase">
+				minimal meets functional
+			</p>
 			<h2 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
-				Redefine Comfort and Luxury
+				Build a workspace that means business.
 			</h2>
 			<p class="text-base text-slate-100 md:text-lg">
-				Thoughtfully designed pieces that evoke sophistication and emotional depth.
+				Bring desks, seating and storage together. Shortlist your favourites, choose your quantities
+				and start with a clear furniture estimate.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
-					href={resolve('/shop')}
+					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
+					href={resolve('/quote')}
 				>
-					Shop the Collection
+					Build My Quote
 				</Button>
 			</div>
 		</div>
@@ -159,6 +170,10 @@
 							<!-- Image with Blur Transition -->
 							<img
 								src={item.img}
+								loading="lazy"
+								decoding="async"
+								width="224"
+								height="224"
 								alt={item.title}
 								class="h-full w-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:blur-sm"
 							/>
@@ -207,10 +222,14 @@
 </div>
 
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
-	<div
-		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-		style="background-image: url('https://images.unsplash.com/photo-1704655295066-681e61ecca6b?w=1600');"
-	>
+	<div class="absolute inset-0 z-0">
+		<img
+			src={modern_living}
+			alt=""
+			loading="lazy"
+			decoding="async"
+			class="absolute inset-0 h-full w-full object-cover"
+		/>
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>
 
@@ -224,17 +243,18 @@
 				PREMIUM QUALITY PRODUCTS
 			</p>
 			<h2 class="font-roboto text-3xl leading-tight font-extrabold sm:text-4xl md:text-5xl">
-				Unique Designs For Every Space
+				One room. A fresh perspective.
 			</h2>
 			<p class="text-base text-slate-100 md:text-lg">
-				Elevate your style with our curated essentials. Limited-time offers on new arrivals.
+				Explore a new direction for your space. Compare finishes, save your favourites and ask our
+				team about the details that matter to you.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90"
+					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
 					href={resolve('/shop')}
 				>
-					View Items <ArrowRight class="ml-2 h-4 w-4" />
+					Browse Our Items
 				</Button>
 			</div>
 		</div>
@@ -268,10 +288,14 @@
 </div>
 
 <div class="relative min-h-screen w-full overflow-hidden bg-background">
-	<div
-		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-		style="background-image: url('https://images.unsplash.com/photo-1705909772783-64f1c22befcf?w=1600');"
-	>
+	<div class="absolute inset-0 z-0">
+		<img
+			src={office_elegance}
+			alt=""
+			loading="lazy"
+			decoding="async"
+			class="absolute inset-0 h-full w-full object-cover"
+		/>
 		<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
 	</div>
 
@@ -286,18 +310,44 @@
 			</p>
 
 			<Button
-				class="rounded-none border border-white bg-transparent px-6 py-5 text-sm font-medium text-white shadow-lg hover:bg-slate-900"
-				href={resolve('/shop')}
-				>Discover now
+				class="rounded-none border border-white bg-transparent px-6 py-5 text-md font-semibold text-white shadow-xs hover:bg-slate-900"
+				href={resolve('/contact')}
+				>Plan your visit
 			</Button>
 		</div>
 	</div>
 </div>
 
-<Modal bind:open={isDetailModalOpen}>
-	{#if selectedProduct}
-		<div>
-			<ProductDetails product={selectedProduct} isOpen={isDetailModalOpen} />
-		</div>
-	{/if}
-</Modal>
+<section class="mx-auto max-w-7xl px-6 py-20">
+	<p class="text-sm font-bold tracking-widest text-primary uppercase">From inspiration to a plan</p>
+	<h2 class="mt-3 text-3xl font-extrabold">A little planning. A much better fit.</h2>
+	<div class="mt-8 grid gap-8 md:grid-cols-3">
+		<article>
+			<span class="text-sm font-bold text-primary">01 / MEASURE</span>
+			<h3 class="mt-3 text-xl font-bold">Start with your space</h3>
+			<p class="mt-3 leading-relaxed text-muted-foreground">
+				Measure your room and doorways. Leave space for movement, open drawers and pulled-out
+				chairs. Ask our team to confirm product dimensions before you order.
+			</p>
+		</article>
+		<article>
+			<span class="text-sm font-bold text-primary">02 / CHOOSE</span>
+			<h3 class="mt-3 text-xl font-bold">Make a shortlist that works</h3>
+			<p class="mt-3 leading-relaxed text-muted-foreground">
+				Filter by room, colour and budget. Save favourites while you compare, then add the pieces
+				you want to your quote and set the quantities you need.
+			</p>
+		</article>
+		<article>
+			<span class="text-sm font-bold text-primary">03 / CONFIRM</span>
+			<h3 class="mt-3 text-xl font-bold">Talk through the details</h3>
+			<p class="mt-3 leading-relaxed text-muted-foreground">
+				Share your estimate with our team to confirm stock, finishes, final pricing and delivery
+				arrangements. Prefer to try before choosing? Visit our showroom.
+			</p>
+		</article>
+	</div>
+	<a href={resolve("/faqs")} class="mt-8 inline-block font-semibold underline"
+		>Read our FAQs</a
+	>
+</section>

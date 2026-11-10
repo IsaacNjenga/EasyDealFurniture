@@ -12,6 +12,8 @@
 	import { ApiError } from '$lib/services/api/errors';
 	import { ProductService } from '$lib/services/product/product.service';
 	import { Button } from '$lib/components/ui/button';
+	import { quote } from '$lib/stores/quote.svelte';
+	import { SALES_WHATSAPP, unitPrice } from '$lib/commerce';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
 
 	let { data }: PageProps = $props();
@@ -29,9 +31,7 @@
 		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
 	);
 	const hasDiscount = $derived(product ? product.discount > 0 : false);
-	const discountedPrice = $derived(
-		product && hasDiscount ? product.price * (1 - product.discount / 100) : (product?.price ?? 0)
-	);
+	const discountedPrice = $derived(product ? unitPrice(product) : 0);
 
 	$effect(() => {
 		if (!product) {
@@ -68,15 +68,14 @@
 			.split(' ')
 			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(' ');
-
 </script>
 
 <svelte:head>
 	{#if product}
-		{@const pageTitle = product.metaTitle || `${product.name} | Easy Deal Furniture`}
+		{@const pageTitle = product.metaTitle || `${product.name} | EasyDeal Furniture`}
 
 		{@const pageDescription =
-			product.metaDescription || `Buy ${product.name} at Easy Deal Furniture.`}
+			product.metaDescription || `Buy ${product.name} at EasyDeal Furniture.`}
 
 		{@const canonicalUrl = `https://easydealfurniture.co.ke/shop/${product.slug}`}
 
@@ -93,7 +92,7 @@
 			<meta property="og:image" content={images[0]} />
 		{/if}
 	{:else}
-		<title>Product Details | Easy Deal Furniture</title>
+		<title>Product Details | EasyDeal Furniture</title>
 	{/if}
 </svelte:head>
 
@@ -154,7 +153,13 @@
 									? 'border-primary ring-2 ring-primary/20'
 									: 'border-transparent opacity-60 hover:opacity-100'}"
 							>
-								<img src={img} alt="" class="h-full w-full object-cover" />
+								<img
+									src={img}
+									alt=""
+									loading="lazy"
+									decoding="async"
+									class="h-full w-full object-cover"
+								/>
 							</button>
 						{/each}
 					</div>
@@ -187,6 +192,13 @@
 						{/if}
 					</div>
 
+					<p class="text-sm font-medium">
+						{product.inStock === true
+							? 'In stock - confirm delivery and quantity with our team.'
+							: product.inStock === false
+								? 'Currently out of stock - ask about availability.'
+								: 'Contact our team to confirm availability.'}
+					</p>
 					<!-- Description -->
 					<p class="text-justify text-base leading-relaxed text-muted-foreground">
 						{product.description ||
@@ -237,7 +249,7 @@
 									<Badge
 										variant="outline"
 										class="cursor-pointer whitespace-nowrap"
-										onclick={() => goto(resolve(`/search?query=${tag}`))}
+										onclick={() => goto(`${resolve('/search')}?query=${encodeURIComponent(tag)}`)}
 									>
 										<Tag class="size-3 text-foreground" />
 										{tag}
@@ -248,10 +260,20 @@
 					{/if}
 				</div>
 
+				<div class="mt-6 rounded-lg border bg-card p-5">
+					<p class="mb-3 text-sm text-muted-foreground">
+						Planning a room or workspace? Add this piece to your estimate and adjust quantities in
+						My Quote. Confirm dimensions, finish and availability with our team before ordering.
+					</p>
+					<Button class="w-full" onclick={() => quote.add(product)}>Add to quote</Button><a
+						class="mt-3 block text-center text-sm underline"
+						href="/quote">Review my quote</a
+					>
+				</div>
 				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->
 				<div class="mt-2 flex w-full flex-col items-center gap-2 pt-4 sm:flex-row">
 					<ChatButton
-						phoneNumber="254714738997"
+						phoneNumber={SALES_WHATSAPP}
 						// phoneNumber="254740900061"
 						message={`Hi EasyDeal Furniture, I'm interested in the ${toTitleCase(product.name)} as advertised on your website. Is it available?`}
 						// message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}

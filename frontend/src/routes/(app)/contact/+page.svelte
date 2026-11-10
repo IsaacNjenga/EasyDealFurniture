@@ -1,4 +1,7 @@
 <script lang="ts">
+	import hero from '$lib/assets/images/modern_living.webp';
+	import { SALES_WHATSAPP } from '$lib/commerce';
+
 	import StoreMap from '$lib/components/common/StoreMap.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Phone, Clock, MapPin } from '@lucide/svelte';
@@ -35,12 +38,12 @@
 	async function sendMessage(event: SubmitEvent) {
 		event.preventDefault();
 
-		const phoneNumber = '254740900061';
+		const phoneNumber = SALES_WHATSAPP;
 		const payload = `Hi EasyDeal Furniture, my name is ${name}. ${message}`;
 
 		const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(payload)}`;
 
-		window.open(whatsappUrl, '_blank');
+		window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 	}
 </script>
 
@@ -57,13 +60,15 @@
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('https://plus.unsplash.com/premium_photo-1661964014750-963a28aeddea?w=1600');"
+		style="background-image: url({hero});"
 	>
 		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Get In Touch</h1>
+		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+			Let’s bring your space to life.
+		</h1>
 		<p class="mt-4 text-base text-slate-200 sm:text-lg">
 			Have questions about custom pieces, delivery, or pricing? Reach out to our team or visit our
 			showroom.
@@ -90,6 +95,7 @@
 
 				<!-- First Info Line -->
 				{#if item.href}
+				<!-- eslint-disable-next-line -->
 					<a href={item.href} class="block text-sm text-muted-foreground hover:text-foreground">
 						{item.info}
 					</a>
@@ -100,6 +106,7 @@
 				<!-- Second Info Line -->
 				{#if item.info2}
 					{#if item.href2}
+				<!-- eslint-disable-next-line -->
 						<a href={item.href2} class="block text-sm text-muted-foreground hover:text-foreground">
 							{item.info2}
 						</a>
@@ -127,7 +134,7 @@
 				</p>
 			</div>
 
-			<form class="mt-3 flex flex-col gap-6" onsubmit={sendMessage}>
+			<form class="flex flex-col gap-4" onsubmit={sendMessage}>
 				<div>
 					<label for="name" class="block text-xs font-bold text-foreground uppercase"
 						>Full Name</label
@@ -136,7 +143,7 @@
 						id="name"
 						bind:value={name}
 						type="text"
-						class="mt-1.5 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+						class="mt-1.5 w-full  border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required
 					/>
 				</div>
@@ -148,7 +155,7 @@
 					<input
 						id="email"
 						type="email"
-						class="mt-1.5 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+						class="mt-1.5 w-full border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required
 					/>
 				</div> -->
@@ -162,15 +169,14 @@
 						rows="4"
 						bind:value={message}
 						placeholder="Tell us what you're looking for..."
-						class="mt-1.5 w-full resize-none rounded-lg border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+						class="mt-1.5 w-full resize-none  border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required></textarea>
 				</div>
 
 				<Button
 					type="submit"
-					class="mt-2 gap-2 rounded-lg bg-primary py-6 text-sm font-bold text-primary-foreground shadow-md hover:bg-primary/90"
-				>
-					Send
+					class="mt-2 gap-2 bg-primary py-6 text-sm font-bold text-primary-foreground shadow-md hover:bg-primary/90"
+				>Send
 				</Button>
 			</form>
 		</div>
@@ -185,6 +191,12 @@
 			</div>
 			<div class="h-full">
 				<StoreMap {storeLat} {storeLng} />
+				<a
+					class="mt-4 inline-block text-sm underline"
+					href="https://www.google.com/maps/dir/?api=1&destination=-1.276502,36.826517"
+					target="_blank"
+					rel="noopener noreferrer">Open directions in Google Maps</a
+				>
 			</div>
 		</div>
 	</section>

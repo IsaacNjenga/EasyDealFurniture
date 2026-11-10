@@ -1,0 +1,1 @@
+var e=``+new URL(`../assets/classic_touch.3uSvQPDb.webp`,import.meta.url).href;export{e as t};

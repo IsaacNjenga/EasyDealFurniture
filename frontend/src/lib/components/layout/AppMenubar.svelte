@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import { quote } from '$lib/stores/quote.svelte';
 	import { onMount } from 'svelte';
 
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import { navigationItems } from '$lib/config/navigation';
 	import { toggleMode } from 'mode-watcher';
-	import { Search, MoonIcon, SunIcon, Menu, X } from '@lucide/svelte';
+	import { Search, MoonIcon, SunIcon, Menu, X, Calculator } from '@lucide/svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
 
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -17,11 +18,15 @@
 	let isMobileMenuOpen = $state(false);
 	let isSearchModalOpen = $state(false);
 
+	// <Calculator />
+
 	onMount(() => {
+		quote.init();
 		const handleScroll = () => {
 			isScrolled = window.scrollY > 20;
 		};
 
+		handleScroll();
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		return () => window.removeEventListener('scroll', handleScroll);
 	});
@@ -30,7 +35,7 @@
 <header
 	class="w-full transition-all duration-300 ease-in-out {isScrolled
 		? 'border-b border-border/70 bg-background/90 py-2.5 shadow-md backdrop-blur-md'
-		: 'border-b border-transparent bg-transparent py-5'}"
+		: 'border-b border-transparent bg-transparent py-3'}"
 >
 	<div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
 		<!-- Left: Brand Logo & Title -->
@@ -58,7 +63,7 @@
 
 		<!-- Center: Navigation Menu -->
 		<NavigationMenu.Root
-			class="relative z-10000 hidden max-w-max flex-1 items-center justify-center md:flex"
+			class="relative z-10000 hidden max-w-max flex-1 items-center justify-center lg:flex"
 		>
 			<NavigationMenu.List
 				class="group flex flex-1 list-none items-center justify-center gap-1 sm:gap-2"
@@ -78,7 +83,9 @@
 									? 'font-extrabold text-amber-600'
 									: 'text-foreground hover:bg-accent'}"
 							>
-								<span>{item.title}</span>
+								<span
+									>{item.title}</span
+								>
 								{#if isActive}
 									<span class="absolute right-3 bottom-0 left-3 h-0.5 rounded-full bg-amber-600"
 									></span>
@@ -92,22 +99,32 @@
 
 		<!-- Right: Action Buttons (Search & Cart) -->
 		<div class="flex shrink-0 items-center gap-1 sm:gap-4">
+			
+			<Button
+				href="/quote"
+				aria-label="Quote"
+				variant="ghost"
+				class="rounded-full p-2 text-foreground transition-all duration-200 hover:bg-accent hover:text-primary"
+			>
+				<Calculator class="h-5 w-5 stroke-[2.2]" />
+			</Button>
+			
 			<Button
 				href="/search"
 				aria-label="Search"
 				variant="ghost"
-				// onclick={() => (isSearchModalOpen = true)}
 				class="rounded-full p-2 text-foreground transition-all duration-200 hover:bg-accent hover:text-primary"
 			>
 				<Search class="h-5 w-5 stroke-[2.2]" />
 			</Button>
+
 
 			<button
 				type="button"
 				aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
 				aria-expanded={isMobileMenuOpen}
 				onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
-				class="rounded-full p-2 text-foreground transition-all hover:bg-accent hover:text-primary md:hidden"
+				class="rounded-full p-2 text-foreground transition-all hover:bg-accent hover:text-primary lg:hidden"
 			>
 				{#if isMobileMenuOpen}<X class="h-5 w-5" />{:else}<Menu class="h-5 w-5" />{/if}
 			</button>
@@ -126,7 +143,7 @@
 				</span>
 			</button> -->
 
-			<button class="cursor-pointer gap-2" onclick={toggleMode}>
+			<button aria-label="Toggle colour theme" class="cursor-pointer gap-2" onclick={toggleMode}>
 				<div class="relative flex size-4 shrink-0 items-center justify-center">
 					<SunIcon class="size-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
 					<MoonIcon
@@ -138,7 +155,7 @@
 	</div>
 	{#if isMobileMenuOpen}
 		<nav
-			class="border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md md:hidden"
+			class="border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md lg:hidden"
 		>
 			<div class="mx-auto flex max-w-7xl flex-col gap-1">
 				{#each navigationItems as item (item.href)}

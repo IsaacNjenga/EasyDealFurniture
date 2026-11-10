@@ -1,322 +1,229 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-	import { fade } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
+	import { matchesProduct } from '$lib/catalogue';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
-	import type { Product } from '$lib/services/product/product.types';
-	import ProductDetails from '$lib/components/common/ProductDetails.svelte';
-	import Modal from '$lib/components/common/Modal.svelte';
-	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
-	import { ApiError } from '$lib/services/api/errors';
-	import { ProductService } from '$lib/services/product/product.service';
-
-	const backgrounds = [
-		'https://images.unsplash.com/photo-1758630737900-a28682c5aa69?w=1600',
-		'https://images.unsplash.com/photo-1787496994477-e260648f7af4?w=1600',
-		'https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600'
-	];
-
-	// Added explicit rawCategory values matching product data structure
-	const categories = [
-		{
-			img: 'https://images.unsplash.com/photo-1705909770198-7e83c24e1616?w=1600',
-			title: 'Office Furniture',
-			rawCategory: 'Office'
-		},
-		{
-			img: 'https://images.unsplash.com/photo-1632829401795-2745c905ac77?w=1600',
-			title: 'Bedroom Furniture',
-			rawCategory: 'Bedroom'
-		},
-		{
-			img: 'https://images.unsplash.com/photo-1632583824020-937ae9564495?w=1600',
-			title: 'Kitchen Furniture',
-			rawCategory: 'Kitchen'
-		},
-		{
-			img: 'https://images.unsplash.com/photo-1621506821957-1b50ab7787a4?w=1600',
-			title: 'Outdoor Furniture',
-			rawCategory: 'Outdoor'
-		},
-		{
-			img: 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=1600',
-			title: 'Living Room Furniture',
-			rawCategory: 'Living Room'
-		},
-		{
-			img: 'https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?w=1600',
-			title: 'Second-Hand Items',
-			rawCategory: 'Second-Hand'
-		}
-	];
-
+	import { categoryName, unitPrice } from '$lib/commerce';
+	import { resolve } from '$app/paths';
+	import { formatPrice } from '$lib/utils';
+	import hero from '$lib/assets/images/office_elegance.webp';
 	let { data }: PageProps = $props();
-
-	let appendedProducts = $state<Product[]>([]);
-	let additionalPageCount = $state(0);
-	let latestTotalPages = $state<number | null>(null);
-	const products = $derived([...(data.products ?? []), ...appendedProducts]);
-	const currentPage = $derived(data.currentPage + additionalPageCount);
-	const totalPages = $derived(latestTotalPages ?? data.totalPages);
-	const error = $derived(data.error);
-	let isLoadingMore = $state(false);
-	let loadMoreFailed = $state(false);
-	let loadMoreSentinel: HTMLDivElement | undefined;
-	let loadMoreObserver: IntersectionObserver | undefined;
-
-	const hasMoreProducts = $derived(currentPage < totalPages);
-
-	$effect(() => {
-		// data.products;
-		// data.currentPage;
-		// data.totalPages;
-		appendedProducts = [];
-		additionalPageCount = 0;
-		latestTotalPages = null;
-		loadMoreFailed = false;
-	});
-
-	$effect(() => {
-		if (error) {
-			toast.error('Failed to load items', { description: error });
-		}
-	});
-
-	let currentSlide = $state(0);
-	let intervalId: ReturnType<typeof setInterval>;
-
-	const loadMoreProducts = async () => {
-		if (isLoadingMore || !hasMoreProducts) return;
-
-		isLoadingMore = true;
-		loadMoreFailed = false;
-
-		try {
-			const requestedPage = currentPage + 1;
-			const nextPage = await ProductService.fetchPage(requestedPage);
-			if (nextPage.currentPage !== requestedPage) {
-				throw new Error(`Expected product page ${requestedPage}, received ${nextPage.currentPage}`);
-			}
-
-			const existingIds = new Set(products.map((product) => product._id));
-			const newProducts = (nextPage.webProducts ?? []).filter(
-				(product) => !existingIds.has(product._id)
-			);
-			if (newProducts.length === 0 && (nextPage.webProducts ?? []).length > 0) {
-				throw new Error(`Product page ${requestedPage} contained no new products`);
-			}
-
-			appendedProducts = [...appendedProducts, ...newProducts];
-			additionalPageCount = nextPage.currentPage - data.currentPage;
-			latestTotalPages = nextPage.totalPages;
-		} catch (err) {
-			loadMoreFailed = true;
-			if (err instanceof ApiError) {
-				toast.error('Failed to load more items', { description: err.message });
-			} else {
-				console.error('Failed to load more items:', err);
-				toast.error('Failed to load more items', {
-					description: err instanceof Error ? err.message : 'Please try again.'
-				});
-			}
-		} finally {
-			isLoadingMore = false;
-		}
-	};
-
-	// Category filter state ('All' default)
-	let selectedCategory = $state<string>('All');
-
-	// Reactive filtering using Svelte 5 $derived
-	let filteredProducts = $derived(
-		selectedCategory === 'All'
-			? products
-			: products.filter(
-					(p) =>
-						p.category?.toLowerCase() === selectedCategory.toLowerCase() ||
-						p.category?.toLowerCase().includes(selectedCategory.toLowerCase())
-				)
+	let category = $state('All');
+	let colour = $state('All');
+	let query = $state('');
+	let minPrice = $state<number | undefined>();
+	let maxPrice = $state<number | undefined>();
+	let availability = $state('all');
+	let sort = $state('featured');
+	let visibleCount = $state(24);
+	const products = $derived(data.products ?? []);
+	const filters = $derived({ category, colour, query, minPrice, maxPrice, availability });
+	const matches = (product: (typeof products)[number], omit = '') =>
+		matchesProduct(product, filters, omit);
+	const categories = $derived([...new Set(products.map((p) => categoryName(p.category)))].sort());
+	const colours = $derived(
+		[...new Set(products.flatMap((p) => (p.colours ?? []).map((c) => c.toLowerCase())))].sort()
 	);
-
-	const toggleCategory = (rawCategory: string) => {
-		if (selectedCategory === rawCategory) {
-			selectedCategory = 'All'; // Deselect if clicked twice
-		} else {
-			selectedCategory = rawCategory;
-		}
-	};
-
-	const nextSlide = () => {
-		currentSlide = (currentSlide + 1) % backgrounds.length;
-	};
-
-	onMount(() => {
-		intervalId = setInterval(nextSlide, 4000);
-
-		if (loadMoreSentinel) {
-			loadMoreObserver = new IntersectionObserver(
-				(entries) => {
-					if (entries.some((entry) => entry.isIntersecting)) {
-						void loadMoreProducts();
-					}
-				},
-				{ rootMargin: '500px 0px' }
-			);
-			loadMoreObserver.observe(loadMoreSentinel);
-		}
+	const categoryCounts = $derived(
+		Object.fromEntries(
+			categories.map((c) => [
+				c,
+				products.filter((p) => categoryName(p.category) === c && matches(p, 'category')).length
+			])
+		)
+	);
+	const colourCounts = $derived(
+		Object.fromEntries(
+			colours.map((c) => [
+				c,
+				products.filter(
+					(p) => (p.colours ?? []).some((v) => v.toLowerCase() === c) && matches(p, 'colour')
+				).length
+			])
+		)
+	);
+	const filtered = $derived.by(() => {
+		const result = products.filter((p) => matches(p));
+		if (sort === 'price-asc') result.sort((a, b) => unitPrice(a) - unitPrice(b));
+		if (sort === 'price-desc') result.sort((a, b) => unitPrice(b) - unitPrice(a));
+		if (sort === 'name') result.sort((a, b) => a.name.localeCompare(b.name));
+		return result;
 	});
-
-	onDestroy(() => {
-		if (intervalId) clearInterval(intervalId);
-		loadMoreObserver?.disconnect();
+	const activeCount = $derived(
+		Number(category !== 'All') +
+			Number(colour !== 'All') +
+			Number(!!query.trim()) +
+			Number(minPrice != null) +
+			Number(maxPrice != null) +
+			Number(availability !== 'all')
+	);
+	$effect(() => {
+		void category;
+		void colour;
+		void query;
+		void minPrice;
+		void maxPrice;
+		void availability;
+		void sort;
+		visibleCount = 24;
 	});
-
-	let selectedProduct = $state<Product | null>(null);
-	let isDetailModalOpen = $state(false);
+	function reset() {
+		category = 'All';
+		colour = 'All';
+		query = '';
+		minPrice = undefined;
+		maxPrice = undefined;
+		availability = 'all';
+	}
 </script>
 
 <svelte:head>
 	<title>Shop</title>
 	<meta
 		name="description"
-		content="Browse EasyDeal Furniture's curated living room, bedroom, office, dining, and outdoor furniture in Nairobi."
+		content="Find furniture for your home and office in Nairobi. Filter by room, colour and budget, then build an itemised estimate with EasyDeal Furniture."
 	/>
 </svelte:head>
-
-<div class="relative min-h-90 w-full overflow-hidden bg-background sm:min-h-150">
-	{#each backgrounds as bgUrl, i (i)}
-		{#if currentSlide === i}
-			<div
-				class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all"
-				style="background-image: url({bgUrl});"
-				transition:fade={{ duration: 1200, easing: cubicInOut }}
-			>
-				<div class="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
+<section class="relative overflow-hidden bg-foreground px-6 pt-44 pb-20 text-white">
+	<img src={hero} alt="" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
+	<div class="relative min-h-20 w-full overflow-hidden bg-transparent sm:min-h-30">
+		<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
+			<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
+				<h1 class=" text-3xl font-bold tracking-tight text-white">Shop Now</h1>
 			</div>
-		{/if}
-	{/each}
-
-	<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
-		<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
-			<h1 class="mt-56 text-3xl font-bold tracking-tight text-white sm:mt-70">Shop Now</h1>
 		</div>
 	</div>
-</div>
-
-<div>
-	<section class="py-8">
-		<div class="mx-auto flex max-w-7xl items-center justify-between px-8 pb-4">
-			<h2 class="text-xl font-bold tracking-tight">Browse Categories</h2>
-			{#if selectedCategory !== 'All'}
-				<button
-					onclick={() => (selectedCategory = 'All')}
-					class="text-xs font-semibold text-primary hover:underline"
-				>
-					Clear Filter ({selectedCategory})
-				</button>
-			{/if}
-		</div>
-
-		<div class="mx-8 grid grid-cols-2 gap-1 px-2 sm:mx-4 sm:grid-cols-3 lg:grid-cols-6 lg:px-10">
-			{#each categories as item (item.title)}
-				{@const isActive = selectedCategory === item.rawCategory}
-				<button
-					type="button"
-					onclick={() => toggleCategory(item.rawCategory)}
-					class="flex flex-col items-center justify-center text-left focus:outline-hidden"
-				>
-					<!-- Circle Image Container -->
-					<div
-						class="group relative flex aspect-square w-full max-w-40 items-center justify-center overflow-hidden rounded-md border shadow-md transition-all duration-300 hover:cursor-pointer hover:shadow-xl {isActive
-							? 'border-primary ring-1 ring-primary/20'
-							: 'border-transparent hover:border-primary/50'}"
-					>
-						<img
-							src={item.img}
-							alt={item.title}
-							class="h-full w-full object-cover transition-all duration-300 group-hover:scale-110 {isActive
-								? 'brightness-85'
-								: 'group-hover:blur-xs'}"
-						/>
-
-						<!-- Overlay Backdrop + Centered Title -->
-						<div
-							class="absolute inset-0 flex items-center justify-center p-4 transition-all duration-300 {isActive
-								? 'bg-primary/40'
-								: 'bg-black/30 group-hover:bg-black/50'}"
-						>
-							<span
-								class="text-center font-sans text-sm font-extrabold tracking-wider text-white uppercase sm:text-base"
-							>
-								{item.title}
-							</span>
-						</div>
-					</div>
-				</button>
-			{/each}
-		</div>
-	</section>
-</div>
-
-<div>
-	<section class="px-4 pb-16">
-		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			{#if filteredProducts.length > 0}
-				<div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-					{#each filteredProducts as item (item._id)}
-						<ProductCard {item} />
-					{/each}
-				</div>
-			{:else}
-				<div class="flex flex-col items-center justify-center py-16 text-center">
-					<p class="text-lg text-muted-foreground">No products found in "{selectedCategory}".</p>
-					<button
-						onclick={() => (selectedCategory = 'All')}
-						class="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-					>
-						View All Products
-					</button>
-				</div>
-			{/if}
-
-			{#if isLoadingMore}
-				<p class="mt-8 text-center text-sm text-muted-foreground" role="status">
-					Loading more items...
-				</p>
-			{:else if loadMoreFailed && hasMoreProducts}
-				<div class="mt-8 flex flex-col items-center gap-3 text-center">
-					<p class="text-sm text-muted-foreground">We couldn't load more items.</p>
-					<button
-						type="button"
-						onclick={() => void loadMoreProducts()}
-						class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-					>
-						Try again
-					</button>
-				</div>
-			{:else if hasMoreProducts}
-				<button
-					type="button"
-					onclick={() => void loadMoreProducts()}
-					class="mx-auto mt-8 block rounded-lg border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10"
-				>
-					Load more items
-				</button>
-			{:else if !hasMoreProducts && !error}
-				<p class="mt-8 text-center text-sm text-muted-foreground" role="status">
-					You're all caught up — more items are coming soon!
-				</p>
-			{/if}
-			<div bind:this={loadMoreSentinel} class="h-px" aria-hidden="true"></div>
-		</div>
-	</section>
-</div>
-
-<Modal bind:open={isDetailModalOpen}>
-	{#if selectedProduct}
+</section>
+<section class="mx-auto max-w-7xl px-1 py-6 sm:px-1">
+	<div class="mb-4 flex flex-wrap items-end justify-between gap-4">
 		<div>
-			<ProductDetails product={selectedProduct} isOpen={isDetailModalOpen} />
+			<p class="text-sm font-bold text-primary uppercase">Furniture that fits your plans</p>
+			<h2 class="mt-2 text-3xl font-bold">Explore the collection</h2>
+		</div>
+	</div>
+	{#if data.error}
+		<div role="alert" class="rounded-lg border p-8">
+			<h3 class="text-xl font-bold">The collection is temporarily unavailable.</h3>
+			<p class="my-3 text-muted-foreground">
+				Please refresh to try again, or contact our team for help finding a piece.
+			</p>
+			<a href={resolve('/contact')} class="underline">Contact Us</a>
+		</div>
+	{:else}
+		<div class="flex w-full items-start gap-2">
+			<div class="h-auto w-[22%] shrink-0 space-y-2 border bg-card p-2">
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<button aria-label="l" class="display-none"></button>
+					<button onclick={reset} class="cursor-pointer text-sm underline" disabled={!activeCount}
+						>Clear filters{activeCount ? ` (${activeCount})` : ''}</button
+					>
+				</div>
+				<div class="flex flex-col gap-2">
+					<label class="text-sm font-medium"
+						>Search<input
+							class="mt-2 w-full rounded border bg-background p-3"
+							type="search"
+							placeholder="Name, room or style"
+							bind:value={query}
+						/></label
+					>
+					<label class="text-sm font-medium"
+						>Room / category<select
+							class="mt-2 w-full rounded border bg-background p-3"
+							bind:value={category}
+							><option value="All">All categories</option>{#each categories as c (c)}<option
+									value={c}
+									disabled={!categoryCounts[c] && category !== c}>{c} ({categoryCounts[c]})</option
+								>{/each}</select
+						></label
+					>
+					<label class="text-sm font-medium"
+						>Colour<select
+							class="mt-2 w-full rounded border bg-background p-3 capitalize"
+							bind:value={colour}
+							><option value="All">All colours</option>{#each colours as c (c)}<option
+									value={c}
+									disabled={!colourCounts[c] && colour !== c}>{c} ({colourCounts[c]})</option
+								>{/each}</select
+						></label
+					>
+					<label class="text-sm font-medium"
+						>Availability<select
+							class="mt-2 w-full rounded border bg-background p-3"
+							bind:value={availability}
+							><option value="all">All items</option><option value="stock"
+								>Confirmed in stock</option
+							></select
+						></label
+					>
+					<label class="text-sm font-medium"
+						>Minimum price (KES)<input
+							class="mt-2 w-full rounded border bg-background p-3"
+							type="number"
+							min="0"
+							placeholder="No minimum"
+							bind:value={minPrice}
+						/></label
+					>
+					<label class="text-sm font-medium"
+						>Maximum price (KES)<input
+							class="mt-2 w-full rounded border bg-background p-3"
+							type="number"
+							min="0"
+							placeholder="No maximum"
+							bind:value={maxPrice}
+						/></label
+					>
+					<label class="text-sm font-medium"
+						>Sort by<select class="mt-2 w-full rounded border bg-background p-3" bind:value={sort}
+							><option value="featured">Featured order</option><option value="price-asc"
+								>Price: low to high</option
+							><option value="price-desc">Price: high to low</option><option value="name"
+								>Name: A to Z</option
+							></select
+						></label
+					>
+				</div>
+				{#if minPrice != null && maxPrice != null && minPrice > maxPrice}<p
+						role="alert"
+						class="text-sm text-destructive"
+					>
+						Maximum price must be at least the minimum price.
+					</p>{/if}
+				<p class="text-sm text-muted-foreground" aria-live="polite">
+					{filtered.length} of {products.length} items match{category !== 'All'
+						? ` in ${category}`
+						: ''}.<br />
+					{#if filtered.length}
+						Prices from {formatPrice(Math.min(...filtered.map(unitPrice)))}.
+					{/if}
+				</p>
+			</div>
+
+			<div class="flex-1">
+				{#if filtered.length}
+					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+						{#each filtered.slice(0, visibleCount) as item (item._id)}<ProductCard {item} />{/each}
+					</div>
+					{#if visibleCount < filtered.length}<div class="mt-8 text-center">
+							<p class="mb-4 text-sm text-muted-foreground">
+								Showing {Math.min(visibleCount, filtered.length)} of {filtered.length}
+							</p>
+							<button
+								class="rounded-md border px-6 py-3 font-semibold hover:bg-accent"
+								onclick={() => (visibleCount += 24)}>Show more furniture</button
+							>
+						</div>{/if}
+				{:else}<div class="border border-dashed p-12 text-center">
+						<h3 class="text-xl font-bold">No pieces match this combination yet.</h3>
+						<p class="my-4 text-muted-foreground">
+							Try a broader budget, another colour or a different room.
+						</p>
+						<button
+							class="rounded-md bg-primary px-5 py-3 font-bold text-primary-foreground"
+							onclick={reset}>Reset filters</button
+						>
+					</div>{/if}
+			</div>
 		</div>
 	{/if}
-</Modal>
+</section>

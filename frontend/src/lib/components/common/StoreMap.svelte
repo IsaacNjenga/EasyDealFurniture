@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { Navigation } from '@lucide/svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toast } from 'svelte-sonner';
@@ -15,6 +15,11 @@
 	const cookies = new Cookies();
 	let mapElement: HTMLDivElement;
 	let map: any;
+	let disposed = false;
+	onDestroy(() => {
+		disposed = true;
+		map?.remove();
+	});
 	let L: any;
 	let userLocation = $state<{ lat: number; lng: number } | null>(null);
 	let isLocating = $state(false);
@@ -63,6 +68,7 @@
 		// Dynamically import Leaflet
 		L = (await import('leaflet')).default;
 		await import('leaflet-routing-machine');
+		if (disposed) return;
 
 		// Leaflet CSS Injection
 		if (!document.getElementById('leaflet-css')) {
@@ -76,7 +82,10 @@
 		// Initialize Map
 		map = L.map(mapElement).setView([storeLat, storeLng], 15);
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution:
+				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
 
 		// Store Custom Pin
 		const storeIcon = L.divIcon({

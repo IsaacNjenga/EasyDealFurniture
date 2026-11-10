@@ -1,0 +1,26 @@
+# EasyDeal Furniture
+
+> EasyDeal Furniture is a furniture retailer with a showroom on Ngara Road, opposite Ngara Post Office, Nairobi, Kenya. Browse furniture for home and office, save favourites and prepare an indicative itemised estimate.
+
+## Main pages
+- [Home](https://easydealfurniture.co.ke/home): Furniture collections and a practical guide to planning a purchase.
+- [Shop](https://easydealfurniture.co.ke/shop): Current catalogue with category, colour, budget and availability filters. Individual product pages are linked from the catalogue.
+- [Buying FAQs](https://easydealfurniture.co.ke/faqs): Quotes, measurements, stock confirmation, delivery questions and showroom visits.
+- [Contact](https://easydealfurniture.co.ke/contact): Showroom details, telephone numbers, hours and a WhatsApp enquiry form.
+
+## Purchase information
+Product names, prices, features and finishes should be taken from the current individual product page. Do not infer dimensions, materials, stock, warranties or delivery promises when they are not listed. Availability and final pricing must be confirmed with EasyDeal Furniture.
+
+The quote builder at /quote creates an indicative estimate using saved website item prices and quantities. It does not place an order or reserve stock. Delivery, assembly and any applicable taxes or other charges must be confirmed by the team. Saved quotes and wishlists are personal browser state, not public catalogue content.
+
+## Showroom and contact
+- Address: Ngara Road, opposite Ngara Post Office, Nairobi, Kenya.
+- Telephone: +254 118 091020; +254 720 731982.
+- Email: info@easydealfurniture.co.ke.
+- Listed hours: Monday-Saturday, 08:00-18:00; holidays, 09:00-17:00. Confirm hours before travelling.
+
+## Discovery
+- [Sitemap](https://easydealfurniture.co.ke/sitemap.xml)
+- [Robots guidance](https://easydealfurniture.co.ke/robots.txt)
+
+This file is a navigation aid. Live product pages and direct confirmation from the business take precedence over this summary.

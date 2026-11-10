@@ -1,0 +1,1 @@
+var e=``+new URL(`../assets/office_elegance.BnhNO9Ow.webp`,import.meta.url).href;export{e as t};

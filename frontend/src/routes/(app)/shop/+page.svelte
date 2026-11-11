@@ -8,7 +8,7 @@
 	import { categoryName, unitPrice } from '$lib/commerce';
 	import { resolve } from '$app/paths';
 	import { formatPrice } from '$lib/utils';
-	import hero from '$lib/assets/images/office_elegance.webp';
+	import hero from '$lib/assets/images/image_7.webp';
 	let { data }: PageProps = $props();
 	let category = $state('All');
 	let colour = $state('All');
@@ -86,16 +86,25 @@
 		content="Find furniture for your home and office in Nairobi. Filter by room, colour and budget, then build an itemised estimate with EasyDeal Furniture."
 	/>
 </svelte:head>
-<section class="relative overflow-hidden bg-foreground px-6 pt-44 pb-20 text-white">
-	<img src={hero} alt="" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
-	<div class="relative min-h-20 w-full overflow-hidden bg-transparent sm:min-h-30">
-		<div class="relative z-10 mx-auto max-w-full flex-col justify-center">
-			<div class="flex max-w-full flex-col items-center justify-center gap-5 text-center">
-				<h1 class=" text-3xl font-bold tracking-tight text-white">Shop Now</h1>
-			</div>
-		</div>
+
+<div
+	class="relative flex min-h-128 w-full items-center justify-center overflow-hidden bg-background pt-20"
+>
+	<div
+		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+		style="background-image: url({hero});"
+	>
+		<div class="absolute inset-0 bg-black/30 dark:bg-black/40"></div>
 	</div>
-</section>
+
+	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
+		<h1 class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
+			Shop Now
+		</h1>
+	</div>
+</div>
+
+
 <section class="mx-auto max-w-7xl px-1 py-4 sm:px-1">
 	<div class="mb-4 flex flex-wrap items-end justify-between gap-4">
 		<div>
@@ -113,15 +122,17 @@
 		</div>
 	{:else}
 		<div class="flex w-full flex-col gap-2 md:flex-row md:items-start">
-			<div class="h-auto w-[20%] shrink-0 space-y-2 border bg-card p-2">
+			<div class="h-auto w-full shrink-0 space-y-2 border bg-card p-2 md:w-[20%]">
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<button aria-label="l" class="display-none"></button>
 					<button onclick={reset} class="cursor-pointer text-sm underline" disabled={!activeCount}
 						>Clear filters{activeCount ? ` (${activeCount})` : ''}</button
 					>
 				</div>
-				<div class="flex h-auto w-full shrink-0 flex-row gap-2 md:w-auto lg:flex-col">
-					<div>
+				<div
+					class="grid h-auto w-full shrink-0 grid-cols-1 gap-3 sm:grid-cols-2 md:flex md:w-auto md:flex-row md:gap-2 lg:flex-col"
+				>
+					<div class="min-w-0">
 						<Label for="search" class="text-sm font-medium">Search</Label>
 						<Input
 							class="mt-2 w-full rounded border bg-background p-2"
@@ -131,7 +142,7 @@
 						/>
 					</div>
 
-					<div>
+					<div class="min-w-0">
 						<Label for="category" class="text-sm font-medium">Category</Label>
 						<Select.Root type="single" bind:value={category}>
 							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
@@ -150,7 +161,7 @@
 						</Select.Root>
 					</div>
 
-					<div>
+					<div class="min-w-0">
 						<Label for="colour" class="text-sm font-medium">Colour</Label>
 						<Select.Root type="single" bind:value={colour}>
 							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
@@ -169,7 +180,7 @@
 						</Select.Root>
 					</div>
 
-					<div>
+					<div class="min-w-0">
 						<Label for="minPrice" class="text-sm font-medium">Maximum price (KES)</Label>
 						<Input
 							class="mt-2 w-full rounded border bg-background p-2"
@@ -180,7 +191,7 @@
 						/>
 					</div>
 
-					<div>
+					<div class="min-w-0">
 						<Label for="minPrice" class="text-sm font-medium">Minimum price (KES)</Label>
 						<Input
 							class="mt-2 w-full rounded border bg-background p-2"
@@ -191,7 +202,7 @@
 						/>
 					</div>
 
-					<div>
+					<div class="min-w-0">
 						<Label for="sort" class="text-sm font-medium">Sort By</Label>
 						<Select.Root type="single" bind:value={sort}>
 							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import hero from '$lib/assets/images/home_img.webp';
+	import hero from '$lib/assets/images/image_1.webp';
 
 	const faqs = [
 		{
@@ -59,7 +59,7 @@
 >
 
 <div
-	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
+	class="relative flex min-h-128 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
@@ -69,7 +69,7 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+		<h1 class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
 			Great furniture. Clearer answers.
 		</h1>
 		<p class="mt-5 text-lg text-white/80">From measuring your room to building your quote, here’s what to know before you make your next

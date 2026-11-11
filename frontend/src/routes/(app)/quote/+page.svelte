@@ -80,8 +80,12 @@
 		<div class="grid gap-4 lg:grid-cols-[2fr_1fr]">
 			<div class="space-y-2">
 				{#each quote.items as item (item.id)}
-					<article class="flex flex-wrap items-center justify-between border gap-3 bg-card p-3">
-						<div class="ml-3 flex w-auto flex-row items-center gap-4">
+					<article
+						class="flex flex-wrap items-center justify-between gap-3 border bg-card p-3 max-sm:flex-col max-sm:items-stretch"
+					>
+						<div
+							class="ml-3 flex w-auto min-w-0 flex-row items-center gap-4 max-sm:ml-0 max-sm:w-full"
+						>
 							<div>
 								{#if item.image.length > 0}
 									<img
@@ -98,16 +102,18 @@
 									</div>
 								{/if}
 							</div>
-							<div>
+							<div class="min-w-0">
 								<a
-									class="font-bold uppercase hover:underline"
+									class="font-bold break-words uppercase hover:underline"
 									href={resolve(`/shop/${encodeURIComponent(item.slug)}`)}>{item.name}</a
 								>
 								<p class="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
 							</div>
 						</div>
 
-						<div class="flex flex-row items-center justify-between gap-6">
+						<div
+							class="flex flex-row items-center justify-between gap-6 max-sm:w-full max-sm:gap-3"
+						>
 							<div class="flex items-center">
 								<Label for="search" class="text-sm">Qty</Label>
 								<Input

@@ -107,6 +107,9 @@ class Quote {
 	get count() {
 		return this.items.reduce((total, item) => total + item.quantity, 0);
 	}
+	isAdded(productId: string): boolean {
+		return this.items.some((item) => item.id === productId);
+	}
 }
 
 export const quote = new Quote();

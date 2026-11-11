@@ -26,6 +26,7 @@
 	let relatedQueryId = 0;
 
 	const isLiked = $derived(wishlist.isFavorited(product._id));
+	const isInQuote = $derived(quote.isAdded(product._id));
 
 	const images = $derived(
 		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
@@ -258,9 +259,11 @@
 						Planning a room or workspace? Add this piece to your estimate and adjust quantities in
 						My Quote. Confirm dimensions, finish and availability with our team before ordering.
 					</p>
-					<Button class="w-full" onclick={() => quote.add(product)}>Add to quote</Button><a
+					<Button class="w-full" onclick={() => quote.add(product)}>
+						{isInQuote ? 'Added to quote' : 'Add to quote'}
+					</Button><a
 						class="mt-3 block text-center text-sm underline"
-						href="/quote">Review my quote</a
+						href={resolve("/quote")}>Review my quote</a
 					>
 				</div>
 				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->

@@ -31,6 +31,7 @@
 	let isCarouselPaused = $state(false);
 
 	const isLiked = $derived(wishlist.isFavorited(item._id));
+	const isInQuote = $derived(quote.isAdded(item._id));
 
 	const images = $derived(Array.isArray(item.image) ? item.image : [item.image]);
 	const hasMultipleImages = $derived(images.length > 1);
@@ -69,7 +70,7 @@
 </script>
 
 <div
-	class="group relative flex flex-col overflow-hidden rounded-none border border-border bg-card shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-xl"
+	class="group relative flex flex-col overflow-hidden rounded-none border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-xs"
 >
 	<!-- Product Image & Carousel Area -->
 	<div
@@ -198,9 +199,9 @@
 			>
 				View details
 			</Button>
-			<Button onclick={() => quote.add(item)} class="w-full rounded-none font-semibold"
-				>Add to quote</Button
-			>
+			<Button onclick={() => quote.add(item)} class="w-full rounded-none font-semibold">
+				{isInQuote ? 'Added to quote' : 'Add to quote'}
+			</Button>
 		</div>
 	</div>
 </div>

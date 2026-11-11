@@ -10,6 +10,8 @@
 	import type { PageProps } from './$types';
 	import Home_Img from '$lib/assets/images/home_img.webp';
 	import Home_Img3 from '$lib/assets/images/home_img3.webp';
+	import Home_Img2 from '$lib/assets/images/image_2.webp';
+	import Home_Img5 from '$lib/assets/images/home_img3.webp';
 	import Home_Img4 from '$lib/assets/images/home_img4.webp';
 	import modern_living from '$lib/assets/images/modern_living.webp';
 	import office_elegance from '$lib/assets/images/office_elegance.webp';
@@ -23,7 +25,7 @@
 	// 	'https://images.unsplash.com/photo-1681418659069-eef28d44aeab?w=1600'
 	// ];
 
-	const local_backgrounds = [Home_Img,  Home_Img3, Home_Img4];
+	const local_backgrounds = [Home_Img,Home_Img2,  Home_Img3, Home_Img4,Home_Img5];
 
 	const featuredCollection = [
 		{

@@ -51,7 +51,7 @@
 				</div>
 				<p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
 					Furniture for everyday living and better workdays. Explore pieces for your home and
-					office, build a quote, or visit our Ngara Road showroom to find the right fit for your
+					office, build a quote, or visit our showroom to find the right fit for your
 					space.
 				</p>
 

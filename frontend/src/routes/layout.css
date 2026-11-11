@@ -136,6 +136,31 @@ html {
     scroll-behavior: smooth;
 }
 
+/* For Webkit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 3px;  /* Thickness for vertical scrollbars */
+  height: 3px; /* Thickness for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b6e71; /* Color of the draggable scrollbar handle (Tailwind gray-300) */
+  border-radius: 9999px; /* Fully rounded edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* Color when hovering over the scrollbar (Tailwind gray-400) */
+}
+
+/* For Firefox */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent; /* thumb color and track color */
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

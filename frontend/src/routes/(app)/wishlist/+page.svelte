@@ -1,5 +1,5 @@
 <script lang="ts">
-	import hero from '$lib/assets/images/classic_touch.webp';
+	import hero from '$lib/assets/images/image_5.webp';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import { resolve } from '$app/paths';
@@ -32,7 +32,7 @@
 </svelte:head>
 
 <div
-	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
+	class="relative flex min-h-128 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
 	<div
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
@@ -42,7 +42,7 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+		<h1 class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
 			Good taste deserves a shortlist.
 		</h1>
 		<p class="mt-5 text-lg text-white/80">

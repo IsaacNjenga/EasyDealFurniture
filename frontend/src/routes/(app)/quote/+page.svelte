@@ -4,6 +4,8 @@
 	import { quote } from '$lib/stores/quote.svelte';
 	import { formatPrice } from '$lib/utils';
 	import { resolve } from '$app/paths';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { SALES_WHATSAPP } from '$lib/commerce';
 
 	let customer = $state('');
@@ -36,12 +38,7 @@
 	}
 </script>
 
-<svelte:head
-	><title>My Quote | EasyDeal Furniture</title><meta
-		name="robots"
-		content="noindex, follow"
-	/></svelte:head
->
+<svelte:head><title>My Quote</title><meta name="robots" content="noindex, follow" /></svelte:head>
 <div
 	class="relative flex min-h-112 w-full items-center justify-center overflow-hidden bg-background pt-20"
 >
@@ -49,7 +46,7 @@
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
 		style="background-image: url({hero});"
 	>
-		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
+		<div class="absolute inset-0 bg-black/40 dark:bg-black/45"></div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
@@ -62,7 +59,7 @@
 		</p>
 	</div>
 </div>
-<div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+<div class="mx-auto max-w-6xl px-2 py-6 sm:px-2">
 	<div class="mx-auto max-w-6xl py-4 sm:py-6">
 		<p class="text-sm font-bold tracking-widest text-primary uppercase">
 			Plan your space. Know your budget.
@@ -80,46 +77,59 @@
 			>
 		</div>
 	{:else}
-		<div class="grid gap-8 lg:grid-cols-[2fr_1fr]">
-			<div class="space-y-4">
+		<div class="grid gap-4 lg:grid-cols-[2fr_1fr]">
+			<div class="space-y-2">
 				{#each quote.items as item (item.id)}
-					<article class="flex flex-wrap items-center justify-between gap-4 border bg-card p-4">
-						<div class="ml-3 w-auto gap-4">
-							{#if item.image.length > 0}
-								<img class="h-20 w-20 rounded object-cover" src={item.image[0]} alt={item.name} />
-							{:else}
-								<div
-									class="flex h-20 w-20 items-center justify-center rounded bg-muted text-center text-xs text-muted-foreground"
-									aria-label={`Image unavailable for ${item.name}`}
+					<article class="flex flex-wrap items-center justify-between border gap-3 bg-card p-3">
+						<div class="ml-3 flex w-auto flex-row items-center gap-4">
+							<div>
+								{#if item.image.length > 0}
+									<img
+										class="h-20 w-20 rounded-none object-cover"
+										src={item.image[0]}
+										alt={item.name}
+									/>
+								{:else}
+									<div
+										class="flex h-20 w-20 items-center justify-center rounded bg-muted text-center text-xs text-muted-foreground"
+										aria-label={`Image unavailable for ${item.name}`}
+									>
+										Image unavailable
+									</div>
+								{/if}
+							</div>
+							<div>
+								<a
+									class="font-bold uppercase hover:underline"
+									href={resolve(`/shop/${encodeURIComponent(item.slug)}`)}>{item.name}</a
 								>
-									Image unavailable
-								</div>
-							{/if}
-							<a
-								class="font-bold uppercase hover:underline"
-								href={resolve(`/shop/${encodeURIComponent(item.slug)}`)}>{item.name}</a
-							>
-							<p class="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
+								<p class="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
+							</div>
 						</div>
-						<label class="text-sm"
-							>Quantity<input
-								aria-label={`Quantity for ${item.name}`}
-								class="ml-2 w-16 rounded border bg-background p-2"
-								type="number"
-								min="1"
-								max="999"
-								value={item.quantity}
-								onchange={(event) => {
-									quote.update(item.id, event.currentTarget.valueAsNumber);
-									event.currentTarget.value = String(item.quantity);
-								}}
-							/></label
-						>
-						<strong>{formatPrice(item.price * item.quantity)}</strong><button
-							class="text-sm underline"
-							onclick={() => quote.remove(item.id)}
-							>Remove<span class="sr-only"> {item.name}</span></button
-						>
+
+						<div class="flex flex-row items-center justify-between gap-6">
+							<div class="flex items-center">
+								<Label for="search" class="text-sm">Qty</Label>
+								<Input
+									aria-label={`Quantity for ${item.name}`}
+									class="ml-2 w-14 rounded border bg-background p-2"
+									type="number"
+									min="1"
+									max="999"
+									value={item.quantity}
+									onchange={(event) => {
+										quote.update(item.id, event.currentTarget.valueAsNumber);
+										event.currentTarget.value = String(item.quantity);
+									}}
+								/>
+							</div>
+
+							<strong>{formatPrice(item.price * item.quantity)}</strong><button
+								class="text-sm underline"
+								onclick={() => quote.remove(item.id)}
+								>Remove<span class="sr-only"> {item.name}</span></button
+							>
+						</div>
 					</article>
 				{/each}
 				<div class="flex justify-between">
@@ -136,8 +146,7 @@
 				</p>
 				<p class="text-sm leading-relaxed text-muted-foreground">
 					This is an estimate based on saved website prices, not a confirmed order. Our team will
-					confirm current prices, stock, delivery, assembly and any applicable taxes or other
-					charges.
+					confirm current prices, stock, delivery, assembly and any other applicable charges.
 				</p>
 				<label class="block text-sm"
 					>Your name (optional)<input

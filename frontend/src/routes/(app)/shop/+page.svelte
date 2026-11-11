@@ -2,6 +2,9 @@
 	import { matchesProduct } from '$lib/catalogue';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
 	import type { PageProps } from './$types';
+	import * as Select from '$lib/components/ui/select/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { categoryName, unitPrice } from '$lib/commerce';
 	import { resolve } from '$app/paths';
 	import { formatPrice } from '$lib/utils';
@@ -93,7 +96,7 @@
 		</div>
 	</div>
 </section>
-<section class="mx-auto max-w-7xl px-1 py-6 sm:px-1">
+<section class="mx-auto max-w-7xl px-1 py-4 sm:px-1">
 	<div class="mb-4 flex flex-wrap items-end justify-between gap-4">
 		<div>
 			<p class="text-sm font-bold text-primary uppercase">Furniture that fits your plans</p>
@@ -109,79 +112,99 @@
 			<a href={resolve('/contact')} class="underline">Contact Us</a>
 		</div>
 	{:else}
-		<div class="flex w-full items-start gap-2">
-			<div class="h-auto w-[22%] shrink-0 space-y-2 border bg-card p-2">
+		<div class="flex w-full flex-col gap-2 md:flex-row md:items-start">
+			<div class="h-auto w-[20%] shrink-0 space-y-2 border bg-card p-2">
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<button aria-label="l" class="display-none"></button>
 					<button onclick={reset} class="cursor-pointer text-sm underline" disabled={!activeCount}
 						>Clear filters{activeCount ? ` (${activeCount})` : ''}</button
 					>
 				</div>
-				<div class="flex flex-col gap-2">
-					<label class="text-sm font-medium"
-						>Search<input
-							class="mt-2 w-full rounded border bg-background p-3"
+				<div class="flex h-auto w-full shrink-0 flex-row gap-2 md:w-auto lg:flex-col">
+					<div>
+						<Label for="search" class="text-sm font-medium">Search</Label>
+						<Input
+							class="mt-2 w-full rounded border bg-background p-2"
 							type="search"
 							placeholder="Name, room or style"
 							bind:value={query}
-						/></label
-					>
-					<label class="text-sm font-medium"
-						>Room / category<select
-							class="mt-2 w-full rounded border bg-background p-3"
-							bind:value={category}
-							><option value="All">All categories</option>{#each categories as c (c)}<option
-									value={c}
-									disabled={!categoryCounts[c] && category !== c}>{c} ({categoryCounts[c]})</option
-								>{/each}</select
-						></label
-					>
-					<label class="text-sm font-medium"
-						>Colour<select
-							class="mt-2 w-full rounded border bg-background p-3 capitalize"
-							bind:value={colour}
-							><option value="All">All colours</option>{#each colours as c (c)}<option
-									value={c}
-									disabled={!colourCounts[c] && colour !== c}>{c} ({colourCounts[c]})</option
-								>{/each}</select
-						></label
-					>
-					<label class="text-sm font-medium"
-						>Availability<select
-							class="mt-2 w-full rounded border bg-background p-3"
-							bind:value={availability}
-							><option value="all">All items</option><option value="stock"
-								>Confirmed in stock</option
-							></select
-						></label
-					>
-					<label class="text-sm font-medium"
-						>Minimum price (KES)<input
-							class="mt-2 w-full rounded border bg-background p-3"
-							type="number"
-							min="0"
-							placeholder="No minimum"
-							bind:value={minPrice}
-						/></label
-					>
-					<label class="text-sm font-medium"
-						>Maximum price (KES)<input
-							class="mt-2 w-full rounded border bg-background p-3"
+						/>
+					</div>
+
+					<div>
+						<Label for="category" class="text-sm font-medium">Category</Label>
+						<Select.Root type="single" bind:value={category}>
+							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
+								<Select.Value placeholder="All Categories" />
+							</Select.Trigger>
+							<Select.Content class="mt-1 w-full rounded-none border bg-background p-1 capitalize">
+								<Select.Group>
+									<Select.Label>All Categories</Select.Label>
+									{#each categories as c (c)}
+										<Select.Item value={c} label={c}>
+											{c} ({categoryCounts[c]})
+										</Select.Item>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+						</Select.Root>
+					</div>
+
+					<div>
+						<Label for="colour" class="text-sm font-medium">Colour</Label>
+						<Select.Root type="single" bind:value={colour}>
+							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
+								<Select.Value placeholder="All Colours" />
+							</Select.Trigger>
+							<Select.Content class="mt-1 w-full rounded-none border bg-background p-1 capitalize">
+								<Select.Group
+									><Select.Label>All Colours</Select.Label>
+									{#each colours as c (c)}
+										<Select.Item value={c} label={c}>
+											{c} ({colourCounts[c]})
+										</Select.Item>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+						</Select.Root>
+					</div>
+
+					<div>
+						<Label for="minPrice" class="text-sm font-medium">Maximum price (KES)</Label>
+						<Input
+							class="mt-2 w-full rounded border bg-background p-2"
 							type="number"
 							min="0"
 							placeholder="No maximum"
 							bind:value={maxPrice}
-						/></label
-					>
-					<label class="text-sm font-medium"
-						>Sort by<select class="mt-2 w-full rounded border bg-background p-3" bind:value={sort}
-							><option value="featured">Featured order</option><option value="price-asc"
-								>Price: low to high</option
-							><option value="price-desc">Price: high to low</option><option value="name"
-								>Name: A to Z</option
-							></select
-						></label
-					>
+						/>
+					</div>
+
+					<div>
+						<Label for="minPrice" class="text-sm font-medium">Minimum price (KES)</Label>
+						<Input
+							class="mt-2 w-full rounded border bg-background p-2"
+							type="number"
+							min="0"
+							placeholder="No minimum"
+							bind:value={minPrice}
+						/>
+					</div>
+
+					<div>
+						<Label for="sort" class="text-sm font-medium">Sort By</Label>
+						<Select.Root type="single" bind:value={sort}>
+							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
+								<Select.Value placeholder="Featured Order" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="featured">Featured Order</Select.Item>
+								<Select.Item value="price-asc">Price: Low to High</Select.Item>
+								<Select.Item value="price-desc">Price: High to Low</Select.Item>
+								<Select.Item value="name">Name: A to Z</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
 				</div>
 				{#if minPrice != null && maxPrice != null && minPrice > maxPrice}<p
 						role="alert"
@@ -199,7 +222,7 @@
 				</p>
 			</div>
 
-			<div class="flex-1">
+			<div class="h-auto w-full md:flex-1">
 				{#if filtered.length}
 					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
 						{#each filtered.slice(0, visibleCount) as item (item._id)}<ProductCard {item} />{/each}

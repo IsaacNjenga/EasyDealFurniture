@@ -168,16 +168,13 @@
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
 		style="background-image: url({hero});"
 	>
-		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
+		<div class="absolute inset-0 bg-black/40 dark:bg-black/45"></div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
 		<h1 class="mb-6 text-3xl font-extrabold tracking-tight sm:text-4xl">
 			Your perfect piece starts here.
 		</h1>
-		<p class="mb-6 text-white/80">
-			Search by name, room or style. Find a favourite and add it to your quote.
-		</p>
 		<div class="mx-auto w-full max-w-2xl">
 			<InputGroup.Root class="w-full">
 				<InputGroup.Input
@@ -228,7 +225,7 @@
 		<section class="pb-16">
 			<div class="mx-auto max-w-7xl">
 				{#if searchResults.length > 0}
-					<div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+					<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 						{#each searchResults as item (item._id)}
 							<ProductCard {item} />
 						{/each}

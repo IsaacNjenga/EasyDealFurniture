@@ -62,7 +62,7 @@
 		class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
 		style="background-image: url({hero});"
 	>
-		<div class="absolute inset-0 bg-black/60 dark:bg-black/75"></div>
+		<div class="absolute inset-0 bg-black/40 dark:bg-black/45"></div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">

@@ -192,13 +192,6 @@
 						{/if}
 					</div>
 
-					<p class="text-sm font-medium">
-						{product.inStock === true
-							? 'In stock - confirm delivery and quantity with our team.'
-							: product.inStock === false
-								? 'Currently out of stock - ask about availability.'
-								: 'Contact our team to confirm availability.'}
-					</p>
 					<!-- Description -->
 					<p class="text-justify text-base leading-relaxed text-muted-foreground">
 						{product.description ||
@@ -320,7 +313,7 @@
 						{/each}
 					</div>
 				{:else if relatedProducts.length > 0}
-					<div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+					<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 						{#each relatedProducts as item (item._id)}
 							<ProductCard {item} />
 						{/each}

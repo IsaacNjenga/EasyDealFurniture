@@ -104,7 +104,7 @@
 							</div>
 							<div class="min-w-0">
 								<a
-									class="font-bold break-words uppercase hover:underline"
+									class="font-bold wrap-break-word uppercase hover:underline"
 									href={resolve(`/shop/${encodeURIComponent(item.slug)}`)}>{item.name}</a
 								>
 								<p class="text-sm text-muted-foreground">{formatPrice(item.price)}</p>

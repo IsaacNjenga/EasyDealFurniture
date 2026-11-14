@@ -9,12 +9,12 @@ import type {
 export const ProductService = {
 	async fetch(): Promise<Product[]> {
 		const response = await apiClient.get<ProductListResponse>('/catalog/get-catalog-products');
-		return response.webProducts ?? [];
+		return response.catalog ?? [];
 	},
 
 	async fetchAll(): Promise<Product[]> {
 		const response = await apiClient.get<AllProductsResponse>('/catalog/get-all-catalog-products');
-		return response.webProducts ?? [];
+		return response.catalog ?? [];
 	},
 
 	async fetchPage(page = 1, limit = 10): Promise<ProductListResponse> {

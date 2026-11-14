@@ -48,14 +48,14 @@ export type ProductCategory =
 	| 'Bedroom Furniture';
 
 export type ProductListResponse = {
-	webProducts: Product[];
-	totalWebProducts: number;
+	catalog: Product[];
+	totalCatalog: number;
 	currentPage: number;
 	totalPages: number;
 };
 
 export type AllProductsResponse = {
-	webProducts: Product[];
+	catalog: Product[];
 };
 
 export type SlugProductResponse = {

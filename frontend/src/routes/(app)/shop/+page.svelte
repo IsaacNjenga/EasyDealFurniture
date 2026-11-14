@@ -22,7 +22,7 @@
 	const filters = $derived({ category, colour, query, minPrice, maxPrice, availability });
 	const matches = (product: (typeof products)[number], omit = '') =>
 		matchesProduct(product, filters, omit);
-	const categories = $derived([...new Set(products.map((p) => categoryName(p.category)))].sort());
+	const categories = $derived([...new Set(products.map((p) => categoryName(p.category.name)))].sort());
 	const colours = $derived(
 		[...new Set(products.flatMap((p) => (p.colours ?? []).map((c) => c.toLowerCase())))].sort()
 	);
@@ -30,7 +30,7 @@
 		Object.fromEntries(
 			categories.map((c) => [
 				c,
-				products.filter((p) => categoryName(p.category) === c && matches(p, 'category')).length
+				products.filter((p) => categoryName(p.category.name) === c && matches(p, 'category')).length
 			])
 		)
 	);

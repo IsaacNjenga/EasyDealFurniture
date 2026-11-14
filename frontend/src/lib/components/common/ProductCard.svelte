@@ -28,12 +28,12 @@
 	// let isWishlisted = $state(false);
 	// let isCarted = $state(false);
 	let activeImgIndex = $state(0);
-	let isCarouselPaused = $state(false);
+	// let isCarouselPaused = $state(false);
 
 	const isLiked = $derived(wishlist.isFavorited(item._id));
 	const isInQuote = $derived(quote.isAdded(item._id));
 
-	const images = $derived(Array.isArray(item.image) ? item.image : [item.image]);
+	const images = $derived(Array.isArray(item.images) ? item.images : [item.images]);
 	const hasMultipleImages = $derived(images.length > 1);
 	const hasDiscount = $derived(item.discount > 0);
 	const discountedPrice = $derived(unitPrice(item));
@@ -77,10 +77,10 @@
 		class="relative aspect-4/4 w-full overflow-hidden bg-muted"
 		role="group"
 		aria-label={`${item.name} image carousel`}
-		onmouseenter={() => (isCarouselPaused = true)}
-		onmouseleave={() => (isCarouselPaused = false)}
-		onfocusin={() => (isCarouselPaused = true)}
-		onfocusout={() => (isCarouselPaused = false)}
+		// onmouseenter={() => (isCarouselPaused = true)}
+		// onmouseleave={() => (isCarouselPaused = false)}
+		// onfocusin={() => (isCarouselPaused = true)}
+		// onfocusout={() => (isCarouselPaused = false)}
 	>
 		{#key images[activeImgIndex]}
 			<img
@@ -183,7 +183,7 @@
 				</span>
 				{#if hasDiscount}
 					<span class="text-sm font-medium text-muted-foreground line-through">
-						{formatPrice(item.price)}
+						{formatPrice(item.pricing.basePrice)}
 					</span>
 				{/if}
 			</div>

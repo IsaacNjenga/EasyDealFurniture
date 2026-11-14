@@ -8,34 +8,34 @@ import type {
 
 export const ProductService = {
 	async fetch(): Promise<Product[]> {
-		const response = await apiClient.get<ProductListResponse>('/web-product/get-web-products');
+		const response = await apiClient.get<ProductListResponse>('/catalog/get-catalog-products');
 		return response.webProducts ?? [];
 	},
 
 	async fetchAll(): Promise<Product[]> {
-		const response = await apiClient.get<AllProductsResponse>('/web-product/get-all-web-products');
+		const response = await apiClient.get<AllProductsResponse>('/catalog/get-all-catalog-products');
 		return response.webProducts ?? [];
 	},
 
 	async fetchPage(page = 1, limit = 10): Promise<ProductListResponse> {
 		const params = new URLSearchParams({ page: String(page), limit: String(limit) });
 		return await apiClient.get<ProductListResponse>(
-			`/web-product/get-web-products?${params.toString()}`
+			`/catalog/get-catalog-products?${params.toString()}`
 		);
 	},
 
 	async get(id: string): Promise<Product> {
-		return await apiClient.get<Product>(`/web-product/get-web-product/${id}`);
+		return await apiClient.get<Product>(`/catalog/get-catalog-product-by-id/${id}`);
 	},
 
 	async getBySlug(slug: string): Promise<SlugProductResponse> {
 		return await apiClient.get<SlugProductResponse>(
-			`/web-product/get-web-product/${encodeURIComponent(slug)}`
+			`/catalog/get-catalog-product/${encodeURIComponent(slug)}`
 		);
 	},
 
 	async search(query: string): Promise<Product[]> {
-		return await apiClient.get<Product[]>(`/web-product/search?query=${encodeURIComponent(query)}`);
+		return await apiClient.get<Product[]>(`/catalog/search?query=${encodeURIComponent(query)}`);
 	},
 	async getRelated(product: Product): Promise<Product[]> {
 		const queryParts = [product.category, ...(product.tags ?? []).slice(0, 2)].filter(Boolean);
@@ -54,10 +54,10 @@ export const ProductService = {
 			.map(({ item }) => item);
 	},
 	async getBestSelling(): Promise<Product[]> {
-		return await apiClient.get<Product[]>('/web-product/get-best-selling-product');
+		return await apiClient.get<Product[]>('/catalog/get-best-selling-product');
 	},
 
 	async getNewArrival(): Promise<Product[]> {
-		return await apiClient.get<Product[]>('/web-product/get-new-arrival-product');
+		return await apiClient.get<Product[]>('/catalog/get-new-arrival-product');
 	}
 };

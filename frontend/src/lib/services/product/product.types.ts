@@ -1,20 +1,42 @@
+export type CatalogPricing = {
+	currency: string;
+	basePrice: number;
+	compareAtPrice: number | null;
+};
+
+export type CatalogCategory = {
+	_id: string;
+	name: string;
+	slug: string;
+	image?: string;
+};
+
+export type CatalogMerchandising = {
+	isFeatured: boolean;
+	isBestSeller: boolean;
+	isNewArrival: boolean;
+	sortOrder: number;
+};
+
+export type CatalogSEO = {
+	metaTitle?: string;
+	metaDescription?: string;
+};
+
 export type Product = {
 	_id: string;
-	image: string[];
+	images: string[];
 	name: string;
-	price: number;
+	pricing: CatalogPricing;
 	discount: number;
-	category?: string;
+	category: CatalogCategory;
 	description?: string;
 	colours: string[];
 	keyFeatures: string[];
 	tags: string[];
-	inStock?: boolean;
-	isBestSeller?: boolean;
-	isNewArrival?: boolean;
+	merchandising: CatalogMerchandising;
 	slug: string;
-	metaTitle: string;
-	metaDescription: string;
+	seo: CatalogSEO;
 };
 
 export type ProductCategory =
@@ -23,7 +45,6 @@ export type ProductCategory =
 	| 'Living Room Furniture'
 	| 'Outdoor Furniture'
 	| 'Second-hand Furniture'
-	| 'Second-Hand Items'
 	| 'Bedroom Furniture';
 
 export type ProductListResponse = {
@@ -33,9 +54,9 @@ export type ProductListResponse = {
 	totalPages: number;
 };
 
-export type AllProductsResponse={
-	webProducts:Product[]
-}
+export type AllProductsResponse = {
+	webProducts: Product[];
+};
 
 export type SlugProductResponse = {
 	slugProduct: Product;

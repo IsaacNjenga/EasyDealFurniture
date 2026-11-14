@@ -29,7 +29,7 @@
 	const isInQuote = $derived(quote.isAdded(product._id));
 
 	const images = $derived(
-		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
+		product ? (Array.isArray(product.images) ? product.images : [product.images]) : []
 	);
 	const hasDiscount = $derived(product ? product.discount > 0 : false);
 	const discountedPrice = $derived(product ? unitPrice(product) : 0);
@@ -73,10 +73,10 @@
 
 <svelte:head>
 	{#if product}
-		{@const pageTitle = product.metaTitle || `${product.name} | EasyDeal Furniture`}
+		{@const pageTitle = product.seo.metaTitle || `${product.name} | EasyDeal Furniture`}
 
 		{@const pageDescription =
-			product.metaDescription || `Buy ${product.name} at EasyDeal Furniture.`}
+			product.seo.metaDescription || `Buy ${product.name} at EasyDeal Furniture.`}
 
 		{@const canonicalUrl = `https://easydealfurniture.co.ke/shop/${product.slug}`}
 
@@ -172,7 +172,7 @@
 				<div class="space-y-4">
 					<div>
 						<span class="text-xs font-bold tracking-widest text-primary uppercase">
-							{product.category || 'Furniture'}
+							{product.category.name || 'Furniture'}
 						</span>
 						<h1
 							class="mt-1 font-roboto text-2xl font-extrabold text-foreground capitalize sm:text-3xl lg:text-4xl"
@@ -188,7 +188,7 @@
 						</span>
 						{#if hasDiscount}
 							<span class="text-lg text-red-400 line-through">
-								{formatPrice(product.price)}
+								{formatPrice(product.pricing.basePrice)}
 							</span>
 						{/if}
 					</div>
@@ -243,7 +243,7 @@
 									<Badge
 										variant="outline"
 										class="cursor-pointer whitespace-nowrap"
-										onclick={() => goto(`${resolve('/search')}?query=${encodeURIComponent(tag)}`)}
+										onclick={() => goto(resolve(`/search?query=${encodeURIComponent(tag)}`))}
 									>
 										<Tag class="size-3 text-foreground" />
 										{tag}

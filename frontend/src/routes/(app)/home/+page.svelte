@@ -78,7 +78,7 @@ const nextSlide = () => {
 </script>
 
 <svelte:head>
-	<title>Furniture for You</title>
+	<title>Furniture For You</title>
 	<link rel="preload" as="image" href={Home_Img} />
 	<meta
 		name="description"

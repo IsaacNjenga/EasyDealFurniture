@@ -32,7 +32,7 @@
 	// let quantity = $state(1);
 
 	const images = $derived(
-		product ? (Array.isArray(product.image) ? product.image : [product.image]) : []
+		product ? (Array.isArray(product.images) ? product.images : [product.images]) : []
 	);
 	const hasDiscount = $derived(product ? product.discount > 0 : false);
 	const discountedPrice = $derived(product ? unitPrice(product) : 0);
@@ -126,7 +126,7 @@
 					</span>
 					{#if hasDiscount}
 						<span class="text-base text-red-400 line-through">
-							{formatPrice(product.price)}
+							{formatPrice(product.pricing.basePrice)}
 						</span>
 					{/if}
 				</div>
@@ -160,13 +160,13 @@
 				</p>
 
 				<div class="mt-4 space-y-2 text-xs text-foreground/80">
-					<p class="flex items-center gap-1.5 font-semibold text-emerald-600">
+					<!-- <p class="flex items-center gap-1.5 font-semibold text-emerald-600">
 						{product.inStock === true
 							? 'In stock - confirm delivery with our team'
 							: product.inStock === false
 								? 'Currently out of stock - ask about availability'
 								: 'Contact us to confirm availability'}
-					</p>
+					</p> -->
 				</div>
 			</div>
 

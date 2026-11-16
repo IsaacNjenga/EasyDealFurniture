@@ -9,7 +9,19 @@
 	import { resolve } from '$app/paths';
 	import { formatPrice } from '$lib/utils';
 	import hero from '$lib/assets/images/image_7.webp';
+	// import { trackEvent } from '$lib/services/analytics/track-event';
+
+	// async function testTracking() {
+	// 	const success = await trackEvent({
+	// 		eventName: 'page_view',
+	// 		pagePath: '/analytics-test'
+	// 	});
+
+	// 	console.log('Analytics event sent:', success);
+	// }
+
 	let { data }: PageProps = $props();
+
 	let category = $state('All');
 	let colour = $state('All');
 	let query = $state('');
@@ -18,14 +30,21 @@
 	let availability = $state('all');
 	let sort = $state('featured');
 	let visibleCount = $state(24);
+
 	const products = $derived(data.products ?? []);
 	const filters = $derived({ category, colour, query, minPrice, maxPrice, availability });
+
 	const matches = (product: (typeof products)[number], omit = '') =>
 		matchesProduct(product, filters, omit);
-	const categories = $derived([...new Set(products.map((p) => categoryName(p.category.name)))].sort());
+
+	const categories = $derived(
+		[...new Set(products.map((p) => categoryName(p.category.name)))].sort()
+	);
+
 	const colours = $derived(
 		[...new Set(products.flatMap((p) => (p.colours ?? []).map((c) => c.toLowerCase())))].sort()
 	);
+
 	const categoryCounts = $derived(
 		Object.fromEntries(
 			categories.map((c) => [
@@ -34,6 +53,7 @@
 			])
 		)
 	);
+
 	const colourCounts = $derived(
 		Object.fromEntries(
 			colours.map((c) => [
@@ -44,6 +64,7 @@
 			])
 		)
 	);
+
 	const filtered = $derived.by(() => {
 		const result = products.filter((p) => matches(p));
 		if (sort === 'price-asc') result.sort((a, b) => unitPrice(a) - unitPrice(b));
@@ -98,12 +119,9 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center text-white">
-		<h1 class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
-			Shop Now
-		</h1>
+		<h1 class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">Shop Now</h1>
 	</div>
 </div>
-
 
 <section class="mx-auto max-w-7xl px-1 py-4 sm:px-1">
 	<div class="mb-4 flex flex-wrap items-end justify-between gap-4">
@@ -231,6 +249,13 @@
 						Prices from {formatPrice(Math.min(...filtered.map(unitPrice)))}.
 					{/if}
 				</p>
+
+				<!-- <div>
+					<button
+						class="rounded-md bg-primary px-5 py-3 font-bold text-primary-foreground"
+						onclick={testTracking}>Test</button
+					>
+				</div> -->
 			</div>
 
 			<div class="h-auto w-full md:flex-1">

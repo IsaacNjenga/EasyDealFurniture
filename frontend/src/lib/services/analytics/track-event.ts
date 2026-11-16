@@ -1,54 +1,85 @@
 
-import { hasAnalyticsConsent } from "../../consent";
+import { PUBLIC_SERVER_URL } from "$env/static/public";
+import { hasAnalyticsConsent } from "$lib/consent";
+import { getAnalyticsIdentity } from "$lib/identity";
 
 export type AnalyticsEventName =
   | "page_view"
-  | "product_impression"
-  | "product_click"
   | "product_view"
-  | "banner_impression"
-  | "banner_click"
-  | "category_click"
+  | "product_click"
   | "search"
   | "quote_start"
-  | "quote_submit"
-  | "quote_whatsapp_click"
-  | "quote_phone_click";
+  | "quote_submit";
 
 export interface TrackEventPayload {
   eventName: AnalyticsEventName;
-  pagePath: string;
+
+  pagePath?: string;
+
   entityType?: "CATALOG" | "CATEGORY" | "BANNER" | "PAGE" | "NONE";
   entityId?: string;
+
   searchQuery?: string;
   searchResultsCount?: number;
+
   placement?: string;
   position?: number;
+
   interactionChannel?: "WHATSAPP" | "PHONE" | "WEBSITE" | "OTHER";
-  occurredAt?: string;
 }
 
 export async function trackEvent(
   event: TrackEventPayload
-): Promise<void> {
-  // Central consent check: deny by default.
+): Promise<boolean> {
+  // Never track without explicit consent.
   if (!hasAnalyticsConsent()) {
-    return;
+    return false;
   }
 
   try {
-    await fetch("/api/analytics/events", { //placeholder for the actual endpoint
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ...event,
-        occurredAt: event.occurredAt ?? new Date().toISOString()
-      })
-    });
+    const identity = getAnalyticsIdentity();
+
+    const payload = {
+      ...event,
+
+      eventId: crypto.randomUUID(),
+
+      visitorId: identity.visitorId,
+      sessionId: identity.sessionId,
+
+      pagePath: event.pagePath ?? window.location.pathname,
+
+      occurredAt: new Date().toISOString()
+    };
+
+    const response = await fetch(
+      `${PUBLIC_SERVER_URL.replace(/\/+$/, "")}/analytics/events`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        keepalive: true,
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      console.warn(
+        "Analytics event rejected:",
+        response.status
+      );
+
+      return false;
+    }
+
+    return true;
+
   } catch (error) {
-    // Analytics should never interrupt the shopping experience.
-    console.error("Analytics event could not be sent:", error);
+    // Analytics must never interrupt the shopping experience.
+    console.error("Analytics tracking failed:", error);
+
+    return false;
   }
 }

@@ -4,6 +4,7 @@
 	import { ModeWatcher } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import NavigationLoader from '$lib/components/common/NavigationLoader.svelte';
+	import AnalyticsConsentBanner from '$lib/components/common/ConsentBanner.svelte';
 	import { page } from '$app/state';
 
 	let { children } = $props();
@@ -64,4 +65,5 @@
 <Toaster position="top-right" />
 <ModeWatcher />
 <NavigationLoader />
+<AnalyticsConsentBanner />
 {@render children()}

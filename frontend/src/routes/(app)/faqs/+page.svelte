@@ -21,7 +21,7 @@
 		{
 			question: 'What should I measure before buying furniture?',
 			answer:
-				'Measure the available floor space, doorways, stairs and lifts. Allow clearance for chair movement, doors and drawers. Confirm the product’s exact dimensions with the team, especially for larger desks, sofas and storage units.'
+				'Measure the available floor space, doorways, stairs and lifts. Allow clearance for chair movement, doors and drawers. Confirm the product’s exact dimensions with the team, especially for larger desks and storage units.'
 		},
 		{
 			question: 'Can I discuss a different colour, size or finish?',

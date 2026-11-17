@@ -249,8 +249,8 @@
 						Prices from {formatPrice(Math.min(...filtered.map(unitPrice)))}.
 					{/if}
 				</p>
-
-				<!-- <div>
+<!-- 
+				<div>
 					<button
 						class="rounded-md bg-primary px-5 py-3 font-bold text-primary-foreground"
 						onclick={testTracking}>Test</button

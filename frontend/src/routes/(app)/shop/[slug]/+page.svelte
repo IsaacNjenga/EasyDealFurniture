@@ -14,7 +14,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { quote } from '$lib/stores/quote.svelte';
 	import { SALES_WHATSAPP, unitPrice } from '$lib/commerce';
+	import { SvelteSet } from 'svelte/reactivity';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
+	import { onMount } from 'svelte';
+	import { hasAnalyticsConsent } from '$lib/consent';
+	import { trackEvent } from '$lib/services/analytics/track-event';
 
 	let { data }: PageProps = $props();
 
@@ -44,6 +48,7 @@
 		if (product) {
 			selectedImgIndex = 0;
 			loadRelatedProducts(product);
+			void trackProductView(product);
 		}
 	});
 
@@ -69,6 +74,58 @@
 			.split(' ')
 			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(' ');
+
+	let lastTrackedProductId: string | null = null;
+	const pendingProductViewIds = new SvelteSet<string>();
+
+	async function trackProductView(currentProduct: Product) {
+		if (!hasAnalyticsConsent()) return;
+
+		const productId = String(currentProduct._id);
+
+		// Prevent duplicate views for the same product.
+		if (lastTrackedProductId === productId || pendingProductViewIds.has(productId)) {
+			return;
+		}
+
+		pendingProductViewIds.add(productId);
+
+		try {
+			const success = await trackEvent({
+				eventName: 'product_view',
+				entityType: 'CATALOG',
+				entityId: productId,
+				pagePath: window.location.pathname
+			});
+
+			if (success) {
+				lastTrackedProductId = productId;
+			}
+		} finally {
+			pendingProductViewIds.delete(productId);
+		}
+	}
+
+	onMount(() => {
+		function handleConsentChange(event: Event) {
+			const consent = (event as CustomEvent<'accepted' | 'rejected'>).detail;
+
+			if (consent === 'rejected') {
+				lastTrackedProductId = null;
+				return;
+			}
+
+			if (consent === 'accepted' && product) {
+				void trackProductView(product);
+			}
+		}
+
+		window.addEventListener('analytics-consent-changed', handleConsentChange);
+
+		return () => {
+			window.removeEventListener('analytics-consent-changed', handleConsentChange);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -261,9 +318,8 @@
 					</p>
 					<Button class="w-full" onclick={() => quote.add(product)}>
 						{isInQuote ? 'Added to quote' : 'Add to quote'}
-					</Button><a
-						class="mt-3 block text-center text-sm underline"
-						href={resolve("/quote")}>Review my quote</a
+					</Button><a class="mt-3 block text-center text-sm underline" href={resolve('/quote')}
+						>Review my quote</a
 					>
 				</div>
 				<!-- <div class="mt-2 flex items-end justify-end border-t border-border pt-4"> -->
@@ -318,7 +374,7 @@
 				{:else if relatedProducts.length > 0}
 					<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 						{#each relatedProducts as item (item._id)}
-							<ProductCard {item} />
+							<ProductCard {item} placement='shop_listing'/>
 						{/each}
 					</div>
 				{/if}

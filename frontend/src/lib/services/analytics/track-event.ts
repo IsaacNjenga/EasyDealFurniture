@@ -1,85 +1,66 @@
-
-import { PUBLIC_SERVER_URL } from "$env/static/public";
-import { hasAnalyticsConsent } from "$lib/consent";
-import { getAnalyticsIdentity } from "$lib/identity";
+import { PUBLIC_SERVER_URL } from '$env/static/public';
+import { hasAnalyticsConsent } from '$lib/consent';
+import { getAnalyticsIdentity } from '$lib/identity';
 
 export type AnalyticsEventName =
-  | "page_view"
-  | "product_view"
-  | "product_click"
-  | "search"
-  | "quote_start"
-  | "quote_submit";
+	'page_view' | 'product_view' | 'product_click' | 'search' | 'quote_start' | 'quote_submit';
 
 export interface TrackEventPayload {
-  eventName: AnalyticsEventName;
+	eventName: AnalyticsEventName;
 
-  pagePath?: string;
+	pagePath?: string;
 
-  entityType?: "CATALOG" | "CATEGORY" | "BANNER" | "PAGE" | "NONE";
-  entityId?: string;
+	entityType?: 'CATALOG' | 'CATEGORY' | 'BANNER' | 'PAGE' | 'NONE';
+	entityId?: string;
 
-  searchQuery?: string;
-  searchResultsCount?: number;
+	searchQuery?: string;
+	searchResultsCount?: number;
 
-  placement?: string;
-  position?: number;
+	placement?: string;
+	position?: number;
 
-  interactionChannel?: "WHATSAPP" | "PHONE" | "WEBSITE" | "OTHER";
+	interactionChannel?: 'WHATSAPP' | 'PHONE' | 'WEBSITE' | 'OTHER';
 }
 
-export async function trackEvent(
-  event: TrackEventPayload
-): Promise<boolean> {
-  // Never track without explicit consent.
-  if (!hasAnalyticsConsent()) {
-    return false;
-  }
+export async function trackEvent(event: TrackEventPayload): Promise<boolean> {
+	if (!hasAnalyticsConsent()) {
+		// Never track without explicit consent.
+		return false;
+	}
 
-  try {
-    const identity = getAnalyticsIdentity();
+	try {
+		const identity = getAnalyticsIdentity();
 
-    const payload = {
-      ...event,
+		const payload = {
+			...event,
+			eventId: crypto.randomUUID(),
+			visitorId: identity.visitorId,
+			sessionId: identity.sessionId,
+			pagePath: event.pagePath ?? window.location.pathname,
+			occurredAt: new Date().toISOString()
+		};
 
-      eventId: crypto.randomUUID(),
+		const response = await fetch(`${PUBLIC_SERVER_URL.replace(/\/+$/, '')}/analytics/events`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include',
+			keepalive: true,
+			body: JSON.stringify(payload)
+		});
 
-      visitorId: identity.visitorId,
-      sessionId: identity.sessionId,
+		if (!response.ok) {
+			console.warn('Analytics event rejected:', response.status);
 
-      pagePath: event.pagePath ?? window.location.pathname,
+			return false;
+		}
 
-      occurredAt: new Date().toISOString()
-    };
+		return true;
+	} catch (error) {
+		// Analytics must never interrupt the shopping experience.
+		console.error('Analytics tracking failed:', error);
 
-    const response = await fetch(
-      `${PUBLIC_SERVER_URL.replace(/\/+$/, "")}/analytics/events`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        keepalive: true,
-        body: JSON.stringify(payload)
-      }
-    );
-
-    if (!response.ok) {
-      console.warn(
-        "Analytics event rejected:",
-        response.status
-      );
-
-      return false;
-    }
-
-    return true;
-
-  } catch (error) {
-    // Analytics must never interrupt the shopping experience.
-    console.error("Analytics tracking failed:", error);
-
-    return false;
-  }
+		return false;
+	}
 }

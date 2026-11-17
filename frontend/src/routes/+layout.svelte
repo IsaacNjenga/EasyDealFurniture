@@ -6,8 +6,72 @@
 	import NavigationLoader from '$lib/components/common/NavigationLoader.svelte';
 	import AnalyticsConsentBanner from '$lib/components/common/ConsentBanner.svelte';
 	import { page } from '$app/state';
+	import { afterNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { SvelteSet } from 'svelte/reactivity';
+	import { hasAnalyticsConsent } from '$lib/consent';
+	import { trackEvent } from '$lib/services/analytics/track-event';
 
 	let { children } = $props();
+	let lastTrackedPagePath: string | null = null;
+
+	const pendingPageViews = new SvelteSet<string>();
+
+	async function recordPageView(force = false): Promise<void> {
+		if (!hasAnalyticsConsent()) return;
+
+		const pagePath = window.location.pathname;
+
+		// Avoid duplicate events when consent is accepted on an
+		// already-tracked page.
+		if (!force && lastTrackedPagePath === pagePath) return;
+
+		// Avoid sending the same page view twice while a request is pending.
+		if (pendingPageViews.has(pagePath)) return;
+
+		pendingPageViews.add(pagePath);
+
+		try {
+			const success = await trackEvent({
+				eventName: 'page_view',
+				pagePath,
+				entityType: 'PAGE'
+			});
+
+			if (success) {
+				lastTrackedPagePath = pagePath;
+			}
+		} finally {
+			pendingPageViews.delete(pagePath);
+		}
+	}
+
+	// Initial page load and subsequent SvelteKit navigation.
+	afterNavigate(() => {
+		void recordPageView(true);
+	});
+
+	// Handle consent changes without requiring a page reload.
+	onMount(() => {
+		function handleConsentChange(event: Event) {
+			const consent = (event as CustomEvent<'accepted' | 'rejected'>).detail;
+
+			if (consent === 'rejected') {
+				lastTrackedPagePath = null;
+				return;
+			}
+
+			if (consent === 'accepted') {
+				void recordPageView();
+			}
+		}
+
+		window.addEventListener('analytics-consent-changed', handleConsentChange);
+
+		return () => {
+			window.removeEventListener('analytics-consent-changed', handleConsentChange);
+		};
+	});
 
 	const siteUrl = 'https://easydealfurniture.co.ke';
 	const siteName = 'EasyDeal Furniture';

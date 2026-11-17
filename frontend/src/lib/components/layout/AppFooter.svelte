@@ -2,7 +2,7 @@
 	import {
 		MapPin,
 		Phone,
-		Mail,
+		// Mail,
 		Clock,
 		Smartphone
 		// Send
@@ -138,12 +138,12 @@
 							<a href="tel:+254793953833" class="hover:text-foreground">+254 793 953-833</a>
 						</div>
 					</li>
-					<li class="flex items-center gap-2.5">
+					<!-- <li class="flex items-center gap-2.5">
 						<Mail class="h-4 w-4 shrink-0 text-primary" />
 						<a href="mailto:info@easydealfurniture.co.ke" class="hover:text-foreground"
 							>info@easydealfurniture.co.ke</a
 						>
-					</li>
+					</li> -->
 					<li class="flex items-start gap-2.5 pt-1">
 						<Clock class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
 						<div class="text-xs leading-tight">

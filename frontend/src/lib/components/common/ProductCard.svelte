@@ -13,14 +13,17 @@
 	import type { Product } from '$lib/services/product/product.types';
 	// import { actionStore } from '$lib/stores/actions.svelte';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
+	import { trackEvent } from '$lib/services/analytics/track-event';
 
 	type Props = {
 		item: Product;
+		placement?: string;
 		// handleQuickView?: (product: Product) => void;
 	};
 
 	let {
-		item
+		item,
+		placement = 'product_card'
 		// handleQuickView
 	}: Props = $props();
 
@@ -54,6 +57,15 @@
 		activeImgIndex = (activeImgIndex - 1 + images.length) % images.length;
 	};
 
+function handleProductClick() {
+    void trackEvent({
+        eventName: 'product_click',
+        entityType: 'CATALOG',
+        entityId: String(item._id),
+        placement
+    });
+}
+
 	// async function toggleWishlist() {
 	// 	isWishlisted = !isWishlisted;
 	// 	await actionStore.handleWishlistToggle(isWishlisted);
@@ -77,10 +89,6 @@
 		class="relative aspect-4/4 w-full overflow-hidden bg-muted"
 		role="group"
 		aria-label={`${item.name} image carousel`}
-		// onmouseenter={() => (isCarouselPaused = true)}
-		// onmouseleave={() => (isCarouselPaused = false)}
-		// onfocusin={() => (isCarouselPaused = true)}
-		// onfocusout={() => (isCarouselPaused = false)}
 	>
 		{#key images[activeImgIndex]}
 			<img
@@ -137,7 +145,7 @@
 			</span>
 		{/if}
 
-		<!-- Action Overlay Icons (Top Right Stack) -->
+		<!-- Overlay Icon -->
 		<div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
 			<button
 				type="button"
@@ -176,7 +184,7 @@
 				{item.name}
 			</h3>
 
-			<!-- Pricing Section -->
+			<!-- Pricing -->
 			<div class="mt-2 flex items-baseline gap-2">
 				<span class="text-lg font-extrabold text-primary">
 					{formatPrice(discountedPrice)}
@@ -189,12 +197,12 @@
 			</div>
 		</div>
 
-		<!-- Transparent Action Button -->
+		<!-- Action Button -->
 		<div class="mt-4 space-y-2">
 			<Button
 				variant="outline"
-				// onclick={handleQuickViewClick}
 				href={`/shop/${item.slug}`}
+				onclick={handleProductClick}
 				class="w-full rounded-none border-border bg-transparent font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
 			>
 				View details

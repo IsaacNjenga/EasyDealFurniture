@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 	import {
 		MapPin,
 		Phone,
@@ -51,8 +52,7 @@
 				</div>
 				<p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
 					Furniture for everyday living and better workdays. Explore pieces for your home and
-					office, build a quote, or visit our showroom to find the right fit for your
-					space.
+					office, build a quote, or visit our showroom to find the right fit for your space.
 				</p>
 
 				<!-- Newsletter Subscription Form
@@ -128,14 +128,47 @@
 					<li class="flex items-center gap-2.5">
 						<Phone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
-							<a href="tel:+254118091020" class="hover:text-foreground">+254 118 091-020</a>
+							<a
+								onclick={() => {
+									void recordWebsiteEvent({
+										eventName: 'quote_phone_click',
+										entityType: 'PAGE',
+										placement: 'footer_contact',
+										interactionChannel: 'PHONE'
+									});
+								}}
+								href="tel:+254118091020"
+								class="hover:text-foreground">+254 118 091-020</a
+							>
 						</div>
 					</li>
 					<li class="flex items-center gap-2.5">
 						<Smartphone class="h-4 w-4 shrink-0 text-primary" />
 						<div class="flex flex-col">
-							<a href="tel:+254720731982" class="hover:text-foreground">+254 720 731-982</a>
-							<a href="tel:+254793953833" class="hover:text-foreground">+254 793 953-833</a>
+							<a
+								onclick={() => {
+									void recordWebsiteEvent({
+										eventName: 'quote_phone_click',
+										entityType: 'PAGE',
+										placement: 'footer_contact',
+										interactionChannel: 'PHONE'
+									});
+								}}
+								href="tel:+254720731982"
+								class="hover:text-foreground">+254 720 731-982</a
+							>
+							<a
+								onclick={() => {
+									void recordWebsiteEvent({
+										eventName: 'quote_phone_click',
+										entityType: 'PAGE',
+										placement: 'footer_contact',
+										interactionChannel: 'PHONE'
+									});
+								}}
+								href="tel:+254793953833"
+								class="hover:text-foreground">+254 793 953-833</a
+							>
 						</div>
 					</li>
 					<!-- <li class="flex items-center gap-2.5">

@@ -1,17 +1,22 @@
 <script lang="ts">
 	// import { resolve } from '$app/paths';
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 	import Button from '../ui/button/button.svelte';
 
 	type Props = {
 		phoneNumber: string; // e.g., "254712345678"
 		message?: string; // Pre-filled message text
 		label?: string;
+		entityId?: string;
+		placement?: string;
 	};
 
 	let {
 		phoneNumber,
 		message = 'Hello! I have an inquiry about EasyDeal Furniture.',
-		label = 'Chat on WhatsApp'
+		label = 'Chat on WhatsApp',
+		entityId,
+		placement = 'product_quick_view'
 	}: Props = $props();
 
 	const cleanNumber = $derived(phoneNumber.replace(/[^0-9]/g, ''));
@@ -22,6 +27,15 @@
 
 <Button
 	href={whatsappUrl}
+	onclick={() => {
+		void recordWebsiteEvent({
+			eventName: 'quote_whatsapp_click',
+			entityType: entityId ? 'CATALOG' : 'PAGE',
+			entityId,
+			placement,
+			interactionChannel: 'WHATSAPP'
+		});
+	}}
 	target="_blank"
 	rel="noopener noreferrer"
 	variant="outline"

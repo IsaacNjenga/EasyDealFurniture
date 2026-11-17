@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 	import hero from '$lib/assets/images/modern_living.webp';
 	import { SALES_WHATSAPP } from '$lib/commerce';
 
@@ -43,6 +44,12 @@
 
 		const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(payload)}`;
 
+		void recordWebsiteEvent({
+			eventName: 'quote_whatsapp_click',
+			entityType: 'PAGE',
+			placement: 'contact_form',
+			interactionChannel: 'WHATSAPP'
+		});
 		window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 	}
 </script>
@@ -95,10 +102,23 @@
 
 				<!-- First Info Line -->
 				{#if item.href}
-				<!-- eslint-disable-next-line -->
-					<a href={item.href} class="block text-sm text-muted-foreground hover:text-foreground">
+					<!-- Phone destinations are external tel: links. -->
+					<!-- eslint-disable svelte/no-navigation-without-resolve -->
+					<a
+						onclick={() => {
+							void recordWebsiteEvent({
+								eventName: 'quote_phone_click',
+								entityType: 'PAGE',
+								placement: 'contact_details',
+								interactionChannel: 'PHONE'
+							});
+						}}
+						href={item.href}
+						class="block text-sm text-muted-foreground hover:text-foreground"
+					>
 						{item.info}
 					</a>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
 				{:else}
 					<p class="text-sm text-muted-foreground">{item.info}</p>
 				{/if}
@@ -106,10 +126,23 @@
 				<!-- Second Info Line -->
 				{#if item.info2}
 					{#if item.href2}
-				<!-- eslint-disable-next-line -->
-						<a href={item.href2} class="block text-sm text-muted-foreground hover:text-foreground">
+						<!-- Phone destinations are external tel: links. -->
+						<!-- eslint-disable svelte/no-navigation-without-resolve -->
+						<a
+							onclick={() => {
+								void recordWebsiteEvent({
+									eventName: 'quote_phone_click',
+									entityType: 'PAGE',
+									placement: 'contact_details',
+									interactionChannel: 'PHONE'
+								});
+							}}
+							href={item.href2}
+							class="block text-sm text-muted-foreground hover:text-foreground"
+						>
 							{item.info2}
 						</a>
+						<!-- eslint-enable svelte/no-navigation-without-resolve -->
 					{:else}
 						<p class="text-sm text-muted-foreground">{item.info2}</p>
 					{/if}
@@ -143,7 +176,7 @@
 						id="name"
 						bind:value={name}
 						type="text"
-						class="mt-1.5 w-full  border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+						class="mt-1.5 w-full border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required
 					/>
 				</div>
@@ -169,14 +202,14 @@
 						rows="4"
 						bind:value={message}
 						placeholder="Tell us what you're looking for..."
-						class="mt-1.5 w-full resize-none  border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+						class="mt-1.5 w-full resize-none border border-input bg-background px-4 py-3 text-sm font-medium text-foreground transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
 						required></textarea>
 				</div>
 
 				<Button
 					type="submit"
 					class="mt-2 gap-2 bg-primary py-6 text-sm font-bold text-primary-foreground shadow-md hover:bg-primary/90"
-				>Send
+					>Send
 				</Button>
 			</form>
 		</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { searchResults as observeSearchResults } from '$lib/services/analytics/website-events';
 	import hero from '$lib/assets/images/office_elegance.webp';
 	import type { Product } from '$lib/services/product/product.types';
 	import ProductCard from '$lib/components/common/ProductCard.svelte';
@@ -51,6 +52,8 @@
 		const searchUrl = new SvelteURL(page.url);
 		searchUrl.pathname = resolve('/search');
 		searchUrl.searchParams.set('query', query);
+		// searchUrl.pathname was resolved above; retain its query parameters.
+		// eslint-disable-next-line svelte/no-navigation-without-resolve
 		goto(searchUrl, { replaceState: true, keepFocus: true, noScroll: true });
 	}
 
@@ -60,6 +63,7 @@
 
 	let searchTerm = $state(page.url.searchParams.get('query') ?? '');
 	let isSearching = $state(false);
+	let completedQuery = $state('');
 	let searchResults = $state<Product[]>([]);
 
 	let debounceTimer: ReturnType<typeof setTimeout>;
@@ -116,12 +120,15 @@
 			const searchUrl = new SvelteURL(page.url);
 			searchUrl.pathname = resolve('/search');
 			searchUrl.searchParams.set('query', query);
+			// searchUrl.pathname was resolved above; retain its query parameters.
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
 			goto(searchUrl, { replaceState: true, keepFocus: true, noScroll: true });
 		}, 300);
 	}
 
 	async function executeSearch(query: string) {
 		const currentQueryId = ++activeQueryId;
+		completedQuery = '';
 		saveSearch(query);
 
 		try {
@@ -131,6 +138,7 @@
 			if (currentQueryId !== activeQueryId) return;
 
 			searchResults = res;
+			completedQuery = query;
 		} catch (err) {
 			if (currentQueryId !== activeQueryId) return;
 
@@ -210,7 +218,15 @@
 	</div>
 </div>
 
-<div class="space-y-4 p-8">
+<div
+	class="space-y-4 p-8"
+	use:observeSearchResults={{
+		query: completedQuery,
+		count: searchResults.length,
+		ready: !isSearching && completedQuery === searchTerm.trim(),
+		placement: 'search_results'
+	}}
+>
 	{#if isSearching && searchResults.length === 0}
 		<div class="flex items-center justify-center py-12">
 			<Loader size="sm" />
@@ -226,8 +242,8 @@
 			<div class="mx-auto max-w-7xl">
 				{#if searchResults.length > 0}
 					<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-						{#each searchResults as item (item._id)}
-							<ProductCard {item} />
+						{#each searchResults as item, index (item._id)}
+							<ProductCard {item} placement="search_results" position={index} />
 						{/each}
 					</div>
 				{:else if !isSearching}

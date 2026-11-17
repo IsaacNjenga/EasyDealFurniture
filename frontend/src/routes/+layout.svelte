@@ -8,69 +8,53 @@
 	import { page } from '$app/state';
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { SvelteSet } from 'svelte/reactivity';
-	import { hasAnalyticsConsent } from '$lib/consent';
-	import { trackEvent } from '$lib/services/analytics/track-event';
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 
 	let { children } = $props();
-	let lastTrackedPagePath: string | null = null;
+	let activePath: string | null = null;
+	let visit = 0;
+	let tracked = false;
+	let pending = false;
 
-	const pendingPageViews = new SvelteSet<string>();
-
-	async function recordPageView(force = false): Promise<void> {
-		if (!hasAnalyticsConsent()) return;
-
-		const pagePath = window.location.pathname;
-
-		// Avoid duplicate events when consent is accepted on an
-		// already-tracked page.
-		if (!force && lastTrackedPagePath === pagePath) return;
-
-		// Avoid sending the same page view twice while a request is pending.
-		if (pendingPageViews.has(pagePath)) return;
-
-		pendingPageViews.add(pagePath);
-
-		try {
-			const success = await trackEvent({
-				eventName: 'page_view',
-				pagePath,
-				entityType: 'PAGE'
-			});
-
-			if (success) {
-				lastTrackedPagePath = pagePath;
-			}
-		} finally {
-			pendingPageViews.delete(pagePath);
+	async function recordPageView() {
+		if (tracked || pending || !activePath) return;
+		const currentVisit = visit;
+		pending = true;
+		const success = await recordWebsiteEvent({
+			eventName: 'page_view',
+			pagePath: activePath,
+			entityType: 'PAGE',
+			placement: 'page'
+		});
+		if (currentVisit === visit) {
+			tracked = success;
+			pending = false;
 		}
 	}
 
-	// Initial page load and subsequent SvelteKit navigation.
 	afterNavigate(() => {
-		void recordPageView(true);
+		const path = window.location.pathname;
+		// Query edits and hash jumps are interactions within the same page.
+		if (path === activePath) return;
+		activePath = path;
+		visit++;
+		tracked = false;
+		pending = false;
+		void recordPageView();
 	});
 
-	// Handle consent changes without requiring a page reload.
 	onMount(() => {
 		function handleConsentChange(event: Event) {
-			const consent = (event as CustomEvent<'accepted' | 'rejected'>).detail;
-
-			if (consent === 'rejected') {
-				lastTrackedPagePath = null;
+			visit++;
+			pending = false;
+			if ((event as CustomEvent).detail === 'rejected') {
+				tracked = false;
 				return;
 			}
-
-			if (consent === 'accepted') {
-				void recordPageView();
-			}
+			void recordPageView();
 		}
-
 		window.addEventListener('analytics-consent-changed', handleConsentChange);
-
-		return () => {
-			window.removeEventListener('analytics-consent-changed', handleConsentChange);
-		};
+		return () => window.removeEventListener('analytics-consent-changed', handleConsentChange);
 	});
 
 	const siteUrl = 'https://easydealfurniture.co.ke';

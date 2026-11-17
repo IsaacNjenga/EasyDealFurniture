@@ -54,8 +54,8 @@
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 	{#if favoritedProducts.length > 0}
 		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-			{#each favoritedProducts as item (item._id)}
-				<ProductCard {item} />
+			{#each favoritedProducts as item, index (item._id)}
+				<ProductCard {item} placement="wishlist" position={index} />
 			{/each}
 		</div>
 	{:else}

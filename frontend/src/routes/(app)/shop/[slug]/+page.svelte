@@ -14,11 +14,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { quote } from '$lib/stores/quote.svelte';
 	import { SALES_WHATSAPP, unitPrice } from '$lib/commerce';
-	import { SvelteSet } from 'svelte/reactivity';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
-	import { onMount } from 'svelte';
-	import { hasAnalyticsConsent } from '$lib/consent';
-	import { trackEvent } from '$lib/services/analytics/track-event';
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 
 	let { data }: PageProps = $props();
 
@@ -48,7 +45,6 @@
 		if (product) {
 			selectedImgIndex = 0;
 			loadRelatedProducts(product);
-			void trackProductView(product);
 		}
 	});
 
@@ -75,55 +71,42 @@
 			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(' ');
 
-	let lastTrackedProductId: string | null = null;
-	const pendingProductViewIds = new SvelteSet<string>();
-
-	async function trackProductView(currentProduct: Product) {
-		if (!hasAnalyticsConsent()) return;
-
-		const productId = String(currentProduct._id);
-
-		// Prevent duplicate views for the same product.
-		if (lastTrackedProductId === productId || pendingProductViewIds.has(productId)) {
-			return;
-		}
-
-		pendingProductViewIds.add(productId);
-
-		try {
-			const success = await trackEvent({
+	$effect(() => {
+		const productId = String(product._id);
+		const pagePath = window.location.pathname;
+		let tracked = false;
+		let pending = false;
+		let generation = 0;
+		async function recordView() {
+			if (tracked || pending) return;
+			pending = true;
+			const current = generation;
+			const success = await recordWebsiteEvent({
 				eventName: 'product_view',
 				entityType: 'CATALOG',
 				entityId: productId,
-				pagePath: window.location.pathname
+				pagePath,
+				placement: 'product_detail'
 			});
-
-			if (success) {
-				lastTrackedProductId = productId;
+			if (current === generation) {
+				tracked = success;
+				pending = false;
 			}
-		} finally {
-			pendingProductViewIds.delete(productId);
 		}
-	}
-
-	onMount(() => {
-		function handleConsentChange(event: Event) {
-			const consent = (event as CustomEvent<'accepted' | 'rejected'>).detail;
-
-			if (consent === 'rejected') {
-				lastTrackedProductId = null;
+		function consentChanged(event: Event) {
+			generation++;
+			pending = false;
+			if ((event as CustomEvent).detail === 'rejected') {
+				tracked = false;
 				return;
 			}
-
-			if (consent === 'accepted' && product) {
-				void trackProductView(product);
-			}
+			void recordView();
 		}
-
-		window.addEventListener('analytics-consent-changed', handleConsentChange);
-
+		void recordView();
+		window.addEventListener('analytics-consent-changed', consentChanged);
 		return () => {
-			window.removeEventListener('analytics-consent-changed', handleConsentChange);
+			generation++;
+			window.removeEventListener('analytics-consent-changed', consentChanged);
 		};
 	});
 </script>
@@ -316,7 +299,21 @@
 						Planning a room or workspace? Add this piece to your estimate and adjust quantities in
 						My Quote. Confirm dimensions, finish and availability with our team before ordering.
 					</p>
-					<Button class="w-full" onclick={() => quote.add(product)}>
+					<Button
+						class="w-full"
+						onclick={() => {
+							const starting = quote.items.length === 0;
+							quote.add(product);
+							if (starting)
+								void recordWebsiteEvent({
+									eventName: 'quote_start',
+									entityType: 'CATALOG',
+									entityId: String(product._id),
+									placement: 'product_detail',
+									interactionChannel: 'WEBSITE'
+								});
+						}}
+					>
 						{isInQuote ? 'Added to quote' : 'Add to quote'}
 					</Button><a class="mt-3 block text-center text-sm underline" href={resolve('/quote')}
 						>Review my quote</a
@@ -326,6 +323,8 @@
 				<div class="mt-2 flex w-full flex-col items-center gap-2 pt-4 sm:flex-row">
 					<ChatButton
 						phoneNumber={SALES_WHATSAPP}
+						entityId={String(product._id)}
+						placement="product_detail"
 						// phoneNumber="254740900061"
 						message={`Hi EasyDeal Furniture, I'm interested in the ${toTitleCase(product.name)} as advertised on your website. Is it available?`}
 						// message={`Hi EasyDeal Furniture, I'm interested in buying "${product.name}". Is it available?`}
@@ -373,8 +372,8 @@
 					</div>
 				{:else if relatedProducts.length > 0}
 					<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-						{#each relatedProducts as item (item._id)}
-							<ProductCard {item} placement='shop_listing'/>
+						{#each relatedProducts as item, index (item._id)}
+							<ProductCard {item} placement="product_related" position={index} />
 						{/each}
 					</div>
 				{/if}

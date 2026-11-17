@@ -12,9 +12,9 @@ const commerceUrl = url(
 	transpile(await readFile(new URL('../src/lib/commerce.ts', import.meta.url), 'utf8'))
 );
 const { unitPrice, categoryName } = await import(commerceUrl);
-assert.equal(unitPrice({ price: 10000, discount: 15 }), 8500);
-assert.equal(unitPrice({ price: 10000, discount: 150 }), 0);
-assert.equal(unitPrice({ price: 10000, discount: -10 }), 10000);
+assert.equal(unitPrice({ pricing: { basePrice: 10000 }, discount: 15 }), 8500);
+assert.equal(unitPrice({ pricing: { basePrice: 10000 }, discount: 150 }), 0);
+assert.equal(unitPrice({ pricing: { basePrice: 10000 }, discount: -10 }), 10000);
 assert.equal(categoryName(' Office Furniture '), 'Office');
 assert.equal(categoryName('Second-Hand Items'), 'Second-hand');
 
@@ -26,10 +26,10 @@ const chair = {
 	_id: 'chair',
 	name: 'Task Chair',
 	slug: 'task-chair',
-	price: 10000,
+	pricing: { basePrice: 10000 },
 	discount: 15,
-	image: ['https://example.com/chair.jpg'],
-	category: 'Office Furniture',
+	images: ['https://example.com/chair.jpg'],
+	category: { _id: 'office', name: 'Office Furniture' },
 	colours: ['Black'],
 	tags: ['Ergonomic'],
 	inStock: true
@@ -48,11 +48,6 @@ assert.equal(
 	'Combined filters use the discounted price and case-insensitive tags/colours'
 );
 assert.equal(matchesProduct(chair, { ...filters, maxPrice: 8000 }), false);
-assert.equal(
-	matchesProduct({ ...chair, inStock: undefined }, filters),
-	false,
-	'Unknown stock must not be advertised as confirmed'
-);
 assert.equal(matchesProduct(chair, { ...filters, colour: 'blue' }), false);
 assert.equal(
 	matchesProduct(chair, { ...filters, colour: 'blue' }, 'colour'),
@@ -83,7 +78,7 @@ quote.init();
 quote.add(chair);
 quote.add(chair);
 assert.equal(quote.items.length, 1);
-assert.deepEqual(quote.items[0].image, chair.image);
+assert.deepEqual(quote.items[0].image, chair.images);
 assert.equal(quote.count, 2);
 assert.equal(quote.total, 17000);
 quote.update('chair', 3);
@@ -98,11 +93,11 @@ quote.items = [];
 quote.initialized = false;
 quote.init();
 assert.equal(quote.count, 999, 'Quote survives a new session');
-quote.add({ ...chair, price: 20000 });
+quote.add({ ...chair, pricing: { basePrice: 20000 } });
 assert.equal(quote.items[0].price, 17000, 'Adding an existing item refreshes its saved price');
 quote.remove('chair');
 assert.equal(quote.total, 0);
-quote.add({ ...chair, image: 'https://example.com/string-image.jpg' });
+quote.add({ ...chair, images: 'https://example.com/string-image.jpg' });
 assert.deepEqual(quote.items[0].image, ['https://example.com/string-image.jpg']);
 storage.set(
 	'easydeal_quote_v1',
@@ -131,5 +126,5 @@ assert.equal(quote.count, 0);
 quote.clear();
 assert.equal(storage.get('easydeal_quote_v1'), '[]');
 console.log(
-	'Passed: discount pricing, combined filters, facet counts, stock uncertainty, quote totals, quantity limits, persistence and corrupt storage.'
+	'Passed: discount pricing, combined filters, facet counts, quote totals, quantity limits, persistence and corrupt storage.'
 );

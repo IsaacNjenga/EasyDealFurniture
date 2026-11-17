@@ -199,6 +199,8 @@
 
 					<ChatButton
 						phoneNumber={SALES_WHATSAPP}
+						entityId={String(product._id)}
+						placement="product_quick_view"
 						// message={`Hi EasyDeal Furniture, I'm interested in buying "${toTitleCase(product.name)}". Is it available?\n\n${images[0]}`}
 						label="Inquire via WhatsApp"
 					/>

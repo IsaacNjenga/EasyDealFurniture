@@ -25,7 +25,7 @@
 	// 	'https://images.unsplash.com/photo-1681418659069-eef28d44aeab?w=1600'
 	// ];
 
-	const local_backgrounds = [Home_Img,Home_Img2,  Home_Img3, Home_Img4,Home_Img5];
+	const local_backgrounds = [Home_Img, Home_Img2, Home_Img3, Home_Img4, Home_Img5];
 
 	const featuredCollection = [
 		{
@@ -64,7 +64,7 @@
 
 	let currentSlide = $state(0);
 	let intervalId: ReturnType<typeof setInterval>;
-const nextSlide = () => {
+	const nextSlide = () => {
 		currentSlide = (currentSlide + 1) % local_backgrounds.length;
 	};
 
@@ -111,12 +111,12 @@ const nextSlide = () => {
 				Love the space you come home to.
 			</h1>
 			<p class="text-base text-slate-100 md:text-lg">
-				Create a workspace that reflects your work, find furniture that fits your life,
-				your room and your budget.
+				Create a workspace that reflects your work, find furniture that fits your life, your room
+				and your budget.
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 "
+					class="text-md rounded-md bg-primary px-6 py-5 font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 "
 					href={resolve('/shop')}
 				>
 					Find your next piece
@@ -138,7 +138,7 @@ const nextSlide = () => {
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
+					class="text-md rounded-md bg-primary px-6 py-5 font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
 					href={resolve('/quote')}
 				>
 					Build My Quote
@@ -215,8 +215,8 @@ const nextSlide = () => {
 
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-				{#each bestSellers as item (item._id)}
-					<ProductCard {item} />
+				{#each bestSellers as item, index (item._id)}
+					<ProductCard {item} placement="home_best_sellers" position={index} />
 				{/each}
 			</div>
 		</div>
@@ -253,7 +253,7 @@ const nextSlide = () => {
 			</p>
 			<div>
 				<Button
-					class="rounded-md bg-primary px-6 py-5 text-md font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
+					class="text-md rounded-md bg-primary px-6 py-5 font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
 					href={resolve('/shop')}
 				>
 					Browse Our Items
@@ -280,8 +280,8 @@ const nextSlide = () => {
 
 			<!-- Product Grid -->
 			<div class="mt-12 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-				{#each freshDesigns as item (item.name)}
-					<ProductCard {item} />
+				{#each freshDesigns as item, index (item.name)}
+					<ProductCard {item} placement="home_fresh_designs" position={index} />
 				{/each}
 			</div>
 		</div>
@@ -312,7 +312,7 @@ const nextSlide = () => {
 			</p>
 
 			<Button
-				class="rounded-none border border-white bg-transparent px-6 py-5 text-md font-semibold text-white shadow-xs hover:bg-slate-900"
+				class="text-md rounded-none border border-white bg-transparent px-6 py-5 font-semibold text-white shadow-xs hover:bg-slate-900"
 				href={resolve('/contact')}
 				>Plan your visit
 			</Button>
@@ -349,7 +349,5 @@ const nextSlide = () => {
 			</p>
 		</article>
 	</div>
-	<a href={resolve("/faqs")} class="mt-8 inline-block font-semibold underline"
-		>Read our FAQs</a
-	>
+	<a href={resolve('/faqs')} class="mt-8 inline-block font-semibold underline">Read our FAQs</a>
 </section>

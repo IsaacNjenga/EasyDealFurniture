@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { recordWebsiteEvent } from '$lib/services/analytics/website-events';
 	import hero from '$lib/assets/images/outdoor_comfort.webp';
 	import { onMount } from 'svelte';
 	import { quote } from '$lib/stores/quote.svelte';
@@ -79,7 +80,7 @@
 	{:else}
 		<div class="grid gap-4 lg:grid-cols-[2fr_1fr]">
 			<div class="space-y-2">
-				{#each quote.items as item (item.id)}
+				{#each quote.items as item, index (item.id)}
 					<article
 						class="flex flex-wrap items-center justify-between gap-3 border bg-card p-3 max-sm:flex-col max-sm:items-stretch"
 					>
@@ -105,6 +106,15 @@
 							<div class="min-w-0">
 								<a
 									class="font-bold wrap-break-word uppercase hover:underline"
+									onclick={() => {
+										void recordWebsiteEvent({
+											eventName: 'product_click',
+											entityType: 'CATALOG',
+											entityId: item.id,
+											placement: 'quote_items',
+											position: index
+										});
+									}}
 									href={resolve(`/shop/${encodeURIComponent(item.slug)}`)}>{item.name}</a
 								>
 								<p class="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
@@ -172,6 +182,14 @@
 				>
 				<a
 					class="block rounded-md bg-primary p-3 text-center font-bold text-primary-foreground"
+					onclick={() => {
+						void recordWebsiteEvent({
+							eventName: 'quote_whatsapp_click',
+							entityType: 'PAGE',
+							placement: 'quote_summary',
+							interactionChannel: 'WHATSAPP'
+						});
+					}}
 					href={`https://wa.me/${SALES_WHATSAPP}?text=${encodeURIComponent(text)}`}
 					target="_blank"
 					rel="noopener noreferrer">Request final quote on WhatsApp</a

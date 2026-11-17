@@ -78,7 +78,7 @@ class Quote {
 		} else
 			this.items.push({
 				id: product._id,
-				image: normalizeImages(product.image),
+				image: normalizeImages(product.images),
 				name: product.name,
 				slug: product.slug,
 				price: unitPrice(product),

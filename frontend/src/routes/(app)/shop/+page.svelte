@@ -9,16 +9,7 @@
 	import { resolve } from '$app/paths';
 	import { formatPrice } from '$lib/utils';
 	import hero from '$lib/assets/images/image_7.webp';
-	// import { trackEvent } from '$lib/services/analytics/track-event';
-
-	// async function testTracking() {
-	// 	const success = await trackEvent({
-	// 		eventName: 'page_view',
-	// 		pagePath: '/analytics-test'
-	// 	});
-
-	// 	console.log('Analytics event sent:', success);
-	// }
+	import { searchResults, recordWebsiteEvent } from '$lib/services/analytics/website-events';
 
 	let { data }: PageProps = $props();
 
@@ -90,6 +81,7 @@
 		void sort;
 		visibleCount = 24;
 	});
+
 	function reset() {
 		category = 'All';
 		colour = 'All';
@@ -123,7 +115,15 @@
 	</div>
 </div>
 
-<section class="mx-auto max-w-7xl px-1 py-4 sm:px-1">
+<section
+	class="mx-auto max-w-7xl px-1 py-4 sm:px-1"
+	use:searchResults={{
+		query,
+		count: filtered.length,
+		ready: !data.error,
+		placement: 'shop_listing'
+	}}
+>
 	<div class="mb-4 flex flex-wrap items-end justify-between gap-4">
 		<div>
 			<p class="text-sm font-bold text-primary uppercase">Furniture that fits your plans</p>
@@ -162,7 +162,23 @@
 
 					<div class="min-w-0">
 						<Label for="category" class="text-sm font-medium">Category</Label>
-						<Select.Root type="single" bind:value={category}>
+						<Select.Root
+							type="single"
+							bind:value={category}
+							onValueChange={(value) => {
+								const selected = products.find(
+									(item) => categoryName(item.category.name) === value
+								)?.category;
+								if (selected)
+									void recordWebsiteEvent({
+										eventName: 'category_click',
+										entityType: 'CATEGORY',
+										entityId: selected._id,
+										placement: 'shop_category_filter',
+										interactionChannel: 'WEBSITE'
+									});
+							}}
+						>
 							<Select.Trigger class="mt-2 w-full rounded-none border bg-background p-2 capitalize">
 								<Select.Value placeholder="All Categories" />
 							</Select.Trigger>
@@ -249,7 +265,7 @@
 						Prices from {formatPrice(Math.min(...filtered.map(unitPrice)))}.
 					{/if}
 				</p>
-<!-- 
+				<!--
 				<div>
 					<button
 						class="rounded-md bg-primary px-5 py-3 font-bold text-primary-foreground"
@@ -261,7 +277,11 @@
 			<div class="h-auto w-full md:flex-1">
 				{#if filtered.length}
 					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-						{#each filtered.slice(0, visibleCount) as item (item._id)}<ProductCard {item} />{/each}
+						{#each filtered.slice(0, visibleCount) as item, index (item._id)}<ProductCard
+								{item}
+								placement="shop_listing"
+								position={index}
+							/>{/each}
 					</div>
 					{#if visibleCount < filtered.length}<div class="mt-8 text-center">
 							<p class="mb-4 text-sm text-muted-foreground">

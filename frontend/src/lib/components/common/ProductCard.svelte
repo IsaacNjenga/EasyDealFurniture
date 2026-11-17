@@ -13,17 +13,23 @@
 	import type { Product } from '$lib/services/product/product.types';
 	// import { actionStore } from '$lib/stores/actions.svelte';
 	import { wishlist } from '$lib/stores/wishlist.svelte';
-	import { trackEvent } from '$lib/services/analytics/track-event';
+	import {
+		recordWebsiteEvent,
+		productImpression,
+		type ProductPlacement
+	} from '$lib/services/analytics/website-events';
 
 	type Props = {
 		item: Product;
-		placement?: string;
+		placement: ProductPlacement;
+		position: number;
 		// handleQuickView?: (product: Product) => void;
 	};
 
 	let {
 		item,
-		placement = 'product_card'
+		placement,
+		position
 		// handleQuickView
 	}: Props = $props();
 
@@ -57,14 +63,15 @@
 		activeImgIndex = (activeImgIndex - 1 + images.length) % images.length;
 	};
 
-function handleProductClick() {
-    void trackEvent({
-        eventName: 'product_click',
-        entityType: 'CATALOG',
-        entityId: String(item._id),
-        placement
-    });
-}
+	function handleProductClick() {
+		void recordWebsiteEvent({
+			eventName: 'product_click',
+			entityType: 'CATALOG',
+			entityId: String(item._id),
+			placement,
+			position
+		});
+	}
 
 	// async function toggleWishlist() {
 	// 	isWishlisted = !isWishlisted;
@@ -82,6 +89,7 @@ function handleProductClick() {
 </script>
 
 <div
+	use:productImpression={{ entityId: String(item._id), placement, position }}
 	class="group relative flex flex-col overflow-hidden rounded-none border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-xs"
 >
 	<!-- Product Image & Carousel Area -->
@@ -207,7 +215,22 @@ function handleProductClick() {
 			>
 				View details
 			</Button>
-			<Button onclick={() => quote.add(item)} class="w-full rounded-none font-semibold">
+			<Button
+				onclick={() => {
+					const starting = quote.items.length === 0;
+					quote.add(item);
+					if (starting)
+						void recordWebsiteEvent({
+							eventName: 'quote_start',
+							entityType: 'CATALOG',
+							entityId: String(item._id),
+							placement,
+							position,
+							interactionChannel: 'WEBSITE'
+						});
+				}}
+				class="w-full rounded-none font-semibold"
+			>
 				{isInQuote ? 'Added to quote' : 'Add to quote'}
 			</Button>
 		</div>
